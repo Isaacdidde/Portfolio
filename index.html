@@ -526,7 +526,7 @@ footer{
   <div class="wrap">
     <div class="hero-inner">
       <div>
-        <div class="hero-status fi">Open to Work · Hyderabad</div>
+        <div class="hero-status fi">Open to Work</div>
         <h1 class="hero-name fi d1">
           Didde<span>Isaac</span>
         </h1>
@@ -766,12 +766,25 @@ footer{
         <p class="lab-desc">Identified reflected XSS payloads in HTTP logs. Documented IOCs, mapped to ATT&CK, and produced alert tuning notes for detection logic.</p>
         <div class="lab-foot"><span>HTTP Log Review</span><span class="mitre">T1059.007</span></div>
       </a>
-      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/IDOR" target="_blank" rel="noopener">
-        <div class="lab-head"><span class="lbadge lb-v">Analysis</span><div class="lab-ext">↗</div></div>
-        <p class="lab-title">IDOR — Unauthorized Object Access</p>
-        <p class="lab-desc">Identified IDOR vulnerabilities via object reference manipulation in DVWA. Documented affected endpoints and proposed access-control detection controls.</p>
-        <div class="lab-foot"><span>DVWA · Manual Testing</span><span class="mitre">OWASP A01</span></div>
-      </a>
+      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected" target="_blank" rel="noopener">
+  <div class="lab-head">
+    <span class="lbadge lb-v">Investigation</span>
+    <div class="lab-ext">↗</div>
+  </div>
+
+  <p class="lab-title">
+    SOC169 — Possible IDOR Attack Detected
+  </p>
+
+  <p class="lab-desc">
+    Investigated user ID enumeration against a public-facing web application. Analyzed HTTP traffic, response patterns, endpoint activity, and determined likely successful IDOR exploitation with no host-level compromise.
+  </p>
+
+  <div class="lab-foot">
+    <span>IDOR · Web Attacks · SOC Analysis</span>
+    <span class="mitre">OWASP A01</span>
+  </div>
+</a>
       <a class="lab-card fi d1" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener">
         <div class="lab-head"><span class="lbadge lb-t">Automation</span><div class="lab-ext">↗</div></div>
         <p class="lab-title">Bash Log Monitoring & Alert Parsing</p>
