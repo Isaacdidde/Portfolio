@@ -935,19 +935,42 @@ footer{
     </div>
 
     <!-- LFI Callout -->
-    <div class="lfi-callout fi d1">
-      <p class="lfi-callout-title">🛡️ LFI Attack Investigation — SOC170</p>
-      <p class="lfi-callout-sub">SOC170 — Passwd Found in Requested URL</p>
-      <div class="lfi-rule"></div>
-      <div class="lfi-grid">
-        <div class="lfi-item"><span class="lfi-key">Technique</span><span class="lfi-val">Local File Inclusion (LFI)</span></div>
-        <div class="lfi-item"><span class="lfi-key">MITRE</span><span class="lfi-val">T1190</span></div>
-        <div class="lfi-item"><span class="lfi-key">Target File</span><span class="lfi-val">/etc/passwd</span></div>
-        <div class="lfi-item"><span class="lfi-key">Outcome</span><span class="lfi-val">Attack Failed</span></div>
-        <div class="lfi-item"><span class="lfi-key">Verdict</span><span class="lfi-val"><span class="avail-badge" style="--green:#0f766e;--green-bg:#f0fdfa;--green-bdr:#99f6e4">True Positive</span></span></div>
-      </div>
+  <p class="section-sub">
+  Individual cases from the Suricata-Splunk lab and Web Attacks repo — each linked to its source and MITRE reference.
+</p>
+
+<div class="labs-grid">
+
+  <a class="lab-card fi"
+     href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/LFI"
+     target="_blank"
+     rel="noopener">
+
+    <div class="lab-head">
+      <span class="lbadge lb-v">Investigation</span>
+      <div class="lab-ext">↗</div>
     </div>
 
+    <p class="lab-title">
+      LFI Attack Investigation — SOC170
+    </p>
+
+    <p class="lab-desc">
+      Investigated a Local File Inclusion (LFI) attempt where an attacker tried
+      to access the sensitive <code>/etc/passwd</code> file through a manipulated
+      URL parameter. Analyzed web requests, validated attack indicators, and
+      confirmed the activity as a True Positive LFI attack attempt. The request
+      was unsuccessful and no sensitive data exposure occurred.
+    </p>
+
+    <div class="lab-foot">
+      <span>Target: /etc/passwd · Attack Failed</span>
+      <span class="mitre">T1190</span>
+    </div>
+
+  </a>
+
+</div>
   </div>
 </section>
 
