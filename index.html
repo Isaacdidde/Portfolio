@@ -700,6 +700,12 @@ footer{
   .hero-headline{font-size:clamp(2.2rem,10vw,3rem)}
   .impact-row{gap:.9rem}
 }
+.tool-ctx {
+  font-size: .68rem;
+  color: var(--ink-dim);
+  font-weight: 400;
+  margin-left: .2rem;
+}
 </style>
 </head>
 <body>
@@ -732,7 +738,7 @@ footer{
   </ul>
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
-    <a class="nav-hire" href="mailto:diddeisaac@gmail.com">Hire Me →</a>
+    <!-- <a class="nav-hire" href="mailto:diddeisaac@gmail.com">Hire Me →</a> -->
   </div>
 </nav>
 
@@ -787,7 +793,7 @@ footer{
       <div class="profile-card fi d2">
         <div class="pc-avatar-wrap">
           <div class="pc-avatar-inner">
-            <img src="C:\Users\didde\OneDrive\Desktop\Isaac_Portfolio\Isaac_Profile.jpeg" alt="Didde Isaac" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+            <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
             <span class="pc-avatar-placeholder" style="display:none">🛡️</span>
           </div>
         </div>
@@ -844,7 +850,8 @@ footer{
 
 <hr class="divider"/>
 
-<!-- SKILLS -->
+<!-- Skills -->
+ <!-- SKILLS -->
 <section id="skills" class="section">
   <div class="wrap">
     <div class="sh fi">
@@ -853,42 +860,43 @@ footer{
       <p class="section-sub">Deployed in production homelabs, tested against real attack scenarios.</p>
     </div>
     <div class="skills-grid">
+
       <div class="sk-card fi">
-        <div class="sk-ico ico-b">📡</div>
-        <p class="sk-name">SIEM &amp; Detection Engineering</p>
-        <p class="sk-desc">Splunk SPL queries, correlation rules, and dashboards. Wazuh agent deployment and rule tuning. Suricata IDS/IPS YAML rules with full eve.json pipeline.</p>
-        <div class="tags"><span class="tag t-b">Splunk</span><span class="tag t-b">Wazuh</span><span class="tag t-b">Suricata</span><span class="tag t-b">SPL</span></div>
+        <p class="sk-name">SIEM & Log Analysis</p>
+        <p class="sk-desc">Ingested eve.json logs from Suricata into Splunk, built SPL correlation searches, and created dashboards to investigate 200+ simulated security events. Deployed Wazuh agents, tuned detection rules, and analysed alerts via the Wazuh dashboard in a live web-attack lab.</p>
+        <div class="tags"><span class="tag t-b">Splunk</span><span class="tag t-b">SPL</span><span class="tag t-b">Wazuh</span><span class="tag t-b">eve.json</span><span class="tag t-b">Log Correlation</span></div>
       </div>
+
       <div class="sk-card fi d1">
-        <div class="sk-ico ico-r">🌐</div>
-        <p class="sk-name">Web Attack Investigation</p>
-        <p class="sk-desc">SQL Injection, XSS, IDOR, and Command Injection — HTTP log analysis, raw request inspection, and DVWA lab work from both attack and detection sides.</p>
-        <div class="tags"><span class="tag t-r">SQLi</span><span class="tag t-r">XSS</span><span class="tag t-r">IDOR</span><span class="tag t-r">OWASP Top 10</span></div>
+        <p class="sk-name">Intrusion Detection & Network Forensics</p>
+        <p class="sk-desc">Wrote 15+ custom Suricata IDS/IPS rules in YAML, validated alert generation, and captured network traffic with Wireshark to analyse Nmap reconnaissance and malicious payloads at the packet level. Used TCPdump for live capture and log review.</p>
+        <div class="tags"><span class="tag t-b">Suricata</span><span class="tag t-b">Wireshark</span><span class="tag t-b">TCPdump</span><span class="tag t-b">Nmap</span><span class="tag t-b">IDS/IPS Rules</span></div>
       </div>
+
       <div class="sk-card fi d2">
-        <div class="sk-ico ico-a">🔬</div>
-        <p class="sk-name">Threat Intelligence &amp; IR</p>
-        <p class="sk-desc">Alert triage, IOC extraction, phishing analysis, and OSINT. Full IR lifecycle with MITRE ATT&amp;CK and Cyber Kill Chain mapping on every documented investigation.</p>
-        <div class="tags"><span class="tag t-a">MITRE ATT&amp;CK</span><span class="tag t-a">IOC</span><span class="tag t-a">Kill Chain</span><span class="tag t-a">OSINT</span></div>
+        <p class="sk-name">Alert Triage & Incident Response</p>
+        <p class="sk-desc">Triaged and validated alerts from SIEM dashboards, extracted IOCs, reconstructed attack timelines from Apache and Windows Event Logs, and produced structured incident documentation with escalation notes. Applied the full IR lifecycle — detection through post-incident review.</p>
+        <div class="tags"><span class="tag t-r">Alert Triage</span><span class="tag t-r">IOC Extraction</span><span class="tag t-r">Incident Documentation</span><span class="tag t-r">Windows Event Logs</span><span class="tag t-r">Sysmon</span></div>
       </div>
+
       <div class="sk-card fi">
-        <div class="sk-ico ico-t">🖧</div>
-        <p class="sk-name">Network &amp; Endpoint Security</p>
-        <p class="sk-desc">Wireshark and TCPdump for traffic analysis. Nmap for recon simulation. TCP/IP, DNS, HTTP/S. Windows Event Logs, Sysmon, and Linux CLI.</p>
-        <div class="tags"><span class="tag t-t">Wireshark</span><span class="tag t-t">Nmap</span><span class="tag t-t">Sysmon</span><span class="tag t-t">Linux CLI</span></div>
+        <p class="sk-name">Threat Intelligence & MITRE ATT&CK Mapping</p>
+        <p class="sk-desc">Mapped lab findings to MITRE ATT&CK techniques — T1595 (Active Scanning), T1046 (Network Service Discovery), T1190 (Exploit Public-Facing Application) — and applied the Cyber Kill Chain to document full attack narratives with evidence in published GitHub writeups.</p>
+        <div class="tags"><span class="tag t-a">MITRE ATT&CK</span><span class="tag t-a">Cyber Kill Chain</span><span class="tag t-a">TTP Mapping</span><span class="tag t-a">OSINT</span></div>
       </div>
+
       <div class="sk-card fi d1">
-        <div class="sk-ico ico-v">🐍</div>
-        <p class="sk-name">Scripting &amp; Automation</p>
-        <p class="sk-desc">Python and Bash for log parsing, IOC extraction, and alert monitoring. Scripts deployed in a live Suricata/Splunk homelab pipeline.</p>
-        <div class="tags"><span class="tag t-v">Python</span><span class="tag t-v">Bash</span><span class="tag t-v">SQL</span></div>
+        <p class="sk-name">Web Attack Analysis & Vulnerability Management</p>
+        <p class="sk-desc">Executed SQL injection attacks against DVWA using SQLMap, monitored Apache access and error logs for attack signatures, and ingested findings into Wazuh for rule validation. Familiar with CVE identification, OWASP Top 10, and remediation tracking workflows.</p>
+        <div class="tags"><span class="tag t-r">SQL Injection</span><span class="tag t-r">SQLMap</span><span class="tag t-r">DVWA</span><span class="tag t-r">Apache Log Analysis</span><span class="tag t-r">CVE</span></div>
       </div>
+
       <div class="sk-card fi d2">
-        <div class="sk-ico ico-b">🔐</div>
-        <p class="sk-name">IAM &amp; Security Engineering</p>
-        <p class="sk-desc">RBAC, AES-256, bcrypt, 2FA, session management, and audit logging — designed end-to-end in Qrypta. Familiar with NIST CSF and ISO 27001.</p>
-        <div class="tags"><span class="tag t-b">RBAC</span><span class="tag t-b">IAM</span><span class="tag t-b">NIST CSF</span><span class="tag t-b">AES-256</span></div>
+        <p class="sk-name">Scripting, IAM & Security Engineering</p>
+        <p class="sk-desc">Wrote Bash automation scripts for log parsing and alert monitoring in the Suricata/Splunk pipeline. Built Qrypta — a full-stack IAM password manager with AES-256 encryption, bcrypt hashing, RBAC, 2FA (SMTP OTP), session management, and audit logging using Python and Flask.</p>
+        <div class="tags"><span class="tag t-v">Python</span><span class="tag t-v">Bash</span><span class="tag t-v">RBAC</span><span class="tag t-v">AES-256</span><span class="tag t-v">2FA</span><span class="tag t-v">Audit Logging</span></div>
       </div>
+
     </div>
   </div>
 </section>
@@ -901,7 +909,7 @@ footer{
     <div class="sh fi">
       <p class="eyebrow">Portfolio</p>
       <h2 class="section-title">Featured Projects</h2>
-      <p class="section-sub">End-to-end homelab builds — deployed, documented, and on GitHub.</p>
+      <p class="section-sub">Production homelabs — architected, deployed, and documented end-to-end.</p>
     </div>
     <div class="proj-list">
 
@@ -911,11 +919,11 @@ footer{
           <div class="proj-header">
             <span class="ptag ptag-b">IDS/IPS · SIEM</span>
           </div>
-          <p class="proj-name">Network Threat Detection Lab — Suricata + Splunk</p>
-          <p class="proj-desc">Full SOC homelab on Kali Linux. Active Nmap recon, SYN flood capture in Wireshark, fed into Suricata with 15+ custom YAML rules. Eve.json ingested into Splunk with SPL correlation alerts, dashboards, and Bash automation. All TTPs mapped to MITRE ATT&amp;CK.</p>
-          <div class="proj-result">Deployed · Custom rules actively firing · T1595, T1046</div>
+          <p class="proj-name">Network Intrusion Detection Lab — Suricata + Splunk</p>
+          <p class="proj-desc">Simulated Nmap reconnaissance and SYN flood attacks from Kali Linux, captured traffic via Wireshark, and authored 15+ custom Suricata YAML rules targeting T1595 and T1046. Structured eve.json logs into Splunk via Bash pipeline; built SPL correlation searches, threshold alerts, and operational dashboards. Full investigation documented with packet-level evidence.</p>
+          <div class="proj-result">15+ detection rules · 200+ events triaged · T1595, T1046</div>
           <div class="tags" style="margin-top:.65rem">
-            <span class="tag t-b">Suricata</span><span class="tag t-b">Splunk</span><span class="tag t-t">Wireshark</span><span class="tag t-v">Bash</span><span class="tag t-r">T1595 · T1046</span>
+            <span class="tag t-b">Suricata</span><span class="tag t-b">Splunk SPL</span><span class="tag t-t">Wireshark</span><span class="tag t-v">Bash</span><span class="tag t-r">MITRE ATT&amp;CK</span>
           </div>
         </div>
         <div class="proj-arrow">↗</div>
@@ -928,10 +936,10 @@ footer{
             <span class="ptag ptag-t">Web Attacks · SIEM</span>
           </div>
           <p class="proj-name">Web Attack Detection Lab — Wazuh + DVWA</p>
-          <p class="proj-desc">SQL Injection via sqlmap against DVWA with real-time Apache2 log monitoring. Extended to Command Injection, reflected XSS, and IDOR — each case documented with MITRE ATT&amp;CK mapping and Wazuh alert generation.</p>
-          <div class="proj-result">4 attack types · Wazuh alerts generated · MITRE-mapped</div>
+          <p class="proj-desc">Executed SQL Injection via SQLMap against a DVWA target, monitoring Apache2 access and error logs for attack signatures in real time. Ingested logs into Wazuh for rule validation and alert generation. Extended scope to Command Injection, Reflected XSS, and IDOR — each with reconstructed attack timeline, forensic log evidence, and ATT&amp;CK technique mapping.</p>
+          <div class="proj-result">4 attack vectors · Wazuh alerts validated · T1190, T1059</div>
           <div class="tags" style="margin-top:.65rem">
-            <span class="tag t-b">Wazuh</span><span class="tag t-r">DVWA</span><span class="tag t-r">sqlmap</span><span class="tag t-a">Apache2</span><span class="tag t-r">T1190 · T1059</span>
+            <span class="tag t-b">Wazuh</span><span class="tag t-r">SQLMap</span><span class="tag t-r">DVWA</span><span class="tag t-a">Apache2 Logs</span><span class="tag t-r">T1190 · T1059</span>
           </div>
         </div>
         <div class="proj-arrow">↗</div>
@@ -943,9 +951,9 @@ footer{
           <div class="proj-header">
             <span class="ptag ptag-v">IAM · Security Engineering</span>
           </div>
-          <p class="proj-name">Qrypta — Enterprise-Grade IAM Password Vault</p>
-          <p class="proj-desc">Full-stack password manager (Python/Flask) with RBAC, least-privilege, 2FA, AES-256, bcrypt, session token expiry, and immutable audit trails. Models enterprise IAM risk controls. Submitted as MCA major project.</p>
-          <div class="proj-result">MCA major project · AES-256 · Immutable audit trail</div>
+          <p class="proj-name">Qrypta — IAM Password Vault</p>
+          <p class="proj-desc">Full-stack credential management platform built in Python/Flask with RBAC and least-privilege access enforcement, AES-256 vault encryption, bcrypt password hashing, SMTP-based 2FA, and session expiration controls. Implements immutable audit trails for forensic review and anomaly detection. Structured to reflect enterprise IAM and access governance requirements.</p>
+          <div class="proj-result">AES-256 · RBAC enforced · Immutable audit trail · MCA capstone</div>
           <div class="tags" style="margin-top:.65rem">
             <span class="tag t-v">Python</span><span class="tag t-v">Flask</span><span class="tag t-v">AES-256</span><span class="tag t-v">RBAC</span><span class="tag t-t">MongoDB</span>
           </div>
@@ -986,19 +994,19 @@ footer{
         <p class="lab-desc">Ingested Suricata eve.json into Splunk. Built SPL correlation alerts and dashboards to surface actionable IOCs from raw log volume.</p>
         <div class="lab-foot"><span>Splunk · eve.json</span><span class="mitre">Log Correlation</span></div>
       </a>
-      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/SQL-Injection" target="_blank" rel="noopener">
+      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab" target="_blank" rel="noopener">
         <div class="lab-top"><span class="lbadge lb-a">Web App</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">SQL Injection — DVWA + sqlmap</p>
         <p class="lab-desc">Union-based and blind SQLi with real-time Apache2 log monitoring and Wazuh alert generation. Full case report with IOC listing.</p>
         <div class="lab-foot"><span>DVWA · Wazuh</span><span class="mitre">T1190</span></div>
       </a>
-      <a class="lab-card fi d1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/Command-Injection" target="_blank" rel="noopener">
+      <a class="lab-card fi d1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Command-Injection/Case-01-Whoami-Command-Detected" target="_blank" rel="noopener">
         <div class="lab-top"><span class="lbadge lb-r">Attack Sim</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">Command Injection — OS Enumeration Chain</p>
         <p class="lab-desc">Documented the full whoami → uname → system enumeration chain via DVWA with structured case report and IOC listing.</p>
         <div class="lab-foot"><span>DVWA · Apache Logs</span><span class="mitre">T1059 · T1087</span></div>
       </a>
-      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/Cross-Site-Scripting" target="_blank" rel="noopener">
+      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting/Case-1_Javascript_code_Detected_in_URL" target="_blank" rel="noopener">
         <div class="lab-top"><span class="lbadge lb-v">Analysis</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">XSS — Reflected Payload in URL Parameters</p>
         <p class="lab-desc">Identified reflected XSS payloads in HTTP logs, mapped to ATT&amp;CK, and produced alert tuning notes to improve detection logic.</p>
@@ -1016,7 +1024,7 @@ footer{
         <p class="lab-desc">Bash scripts to automate Suricata log monitoring, parse eve.json alert fields, and surface critical IOCs — reducing manual triage time.</p>
         <div class="lab-foot"><span>Bash · eve.json</span><span class="mitre">Automation</span></div>
       </a>
-      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/LFI" target="_blank" rel="noopener">
+      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/LFI-RFI/Case-01-LFI-Detection" target="_blank" rel="noopener">
         <div class="lab-top"><span class="lbadge lb-v">Investigation</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">SOC170 — LFI Attack Investigation</p>
         <p class="lab-desc">LFI attempt targeting <code style="font-family:'JetBrains Mono';font-size:.75em;background:var(--surface2);padding:1px 4px;border-radius:3px">/etc/passwd</code> via manipulated URL parameter. Confirmed True Positive; request was unsuccessful, no data exposure.</p>
@@ -1093,30 +1101,61 @@ footer{
       </div>
 
       <div class="fi d1">
-        <p class="eyebrow" style="margin-bottom:1.1rem">Tools &amp; Platforms</p>
-        <div class="tool-group">
-          <p class="tool-label">SIEM &amp; Detection</p>
-          <div class="tools-wrap"><span class="tool">Splunk</span><span class="tool">Wazuh</span><span class="tool">Suricata IDS/IPS</span><span class="tool">VirusTotal</span></div>
-        </div>
-        <div class="tool-group">
-          <p class="tool-label">Network &amp; Traffic Analysis</p>
-          <div class="tools-wrap"><span class="tool">Wireshark</span><span class="tool">TCPdump</span><span class="tool">Nmap</span><span class="tool">Burp Suite</span></div>
-        </div>
-        <div class="tool-group">
-          <p class="tool-label">Offensive / Lab</p>
-          <div class="tools-wrap"><span class="tool">sqlmap</span><span class="tool">DVWA</span><span class="tool">Kali Linux</span><span class="tool">VirtualBox</span></div>
-        </div>
-        <div class="tool-group">
-          <p class="tool-label">Scripting &amp; Dev</p>
-          <div class="tools-wrap"><span class="tool">Python</span><span class="tool">Bash</span><span class="tool">SQL</span><span class="tool">Flask</span><span class="tool">MongoDB</span><span class="tool">Git</span></div>
-        </div>
-        <div class="tool-group">
-          <p class="tool-label">Frameworks</p>
-          <div class="tools-wrap"><span class="tool">MITRE ATT&amp;CK</span><span class="tool">NIST CSF</span><span class="tool">ISO 27001</span><span class="tool">Kill Chain</span><span class="tool">Jira</span><span class="tool">ServiceNow</span></div>
-        </div>
-      </div>
+  <p class="eyebrow" style="margin-bottom:1.1rem">Tools &amp; Platforms</p>
+
+  <div class="tool-group">
+    <p class="tool-label">SIEM &amp; Detection</p>
+    <div class="tools-wrap">
+      <span class="tool">Splunk <span class="tool-ctx">— SPL queries, dashboards, correlation alerts (Suricata lab)</span></span>
+      <span class="tool">Wazuh <span class="tool-ctx">— agent deployment, rule tuning, alert validation (DVWA lab)</span></span>
+      <span class="tool">Suricata <span class="tool-ctx">— 15+ custom IDS/IPS YAML rules, eve.json pipeline</span></span>
+      <span class="tool">VirusTotal <span class="tool-ctx">— IOC lookup, malware triage (LetsDefend SOC168)</span></span>
     </div>
   </div>
+
+  <div class="tool-group">
+    <p class="tool-label">Network &amp; Traffic Analysis</p>
+    <div class="tools-wrap">
+      <span class="tool">Wireshark <span class="tool-ctx">— Nmap recon &amp; SYN flood packet capture (Suricata lab)</span></span>
+      <span class="tool">TCPdump <span class="tool-ctx">— live traffic capture, log extraction</span></span>
+      <span class="tool">Nmap <span class="tool-ctx">— recon simulation, T1595 mapping (Suricata lab)</span></span>
+    </div>
+  </div>
+
+  <div class="tool-group">
+    <p class="tool-label">Offensive / Lab</p>
+    <div class="tools-wrap">
+      <span class="tool">SQLMap <span class="tool-ctx">— SQL injection execution against DVWA target</span></span>
+      <span class="tool">DVWA <span class="tool-ctx">— SQLi, XSS, IDOR, Command Injection scenarios</span></span>
+      <span class="tool">Kali Linux <span class="tool-ctx">— attack simulation host across all homelabs</span></span>
+      <span class="tool">VirtualBox <span class="tool-ctx">— isolated lab environment provisioning</span></span>
+    </div>
+  </div>
+
+  <div class="tool-group">
+    <p class="tool-label">Scripting &amp; Dev</p>
+    <div class="tools-wrap">
+      <span class="tool">Python <span class="tool-ctx">— Qrypta backend, log parsing scripts</span></span>
+      <span class="tool">Bash <span class="tool-ctx">— log pipeline automation (Suricata/Splunk lab)</span></span>
+      <span class="tool">Flask <span class="tool-ctx">— Qrypta web framework, REST API</span></span>
+      <span class="tool">MongoDB <span class="tool-ctx">— Qrypta encrypted credential store</span></span>
+      <span class="tool">SQL <span class="tool-ctx">— query writing, injection analysis</span></span>
+      <span class="tool">Git <span class="tool-ctx">— version control, GitHub portfolio publishing</span></span>
+    </div>
+  </div>
+
+  <div class="tool-group">
+    <p class="tool-label">Frameworks &amp; Platforms</p>
+    <div class="tools-wrap">
+      <span class="tool">MITRE ATT&amp;CK <span class="tool-ctx">— TTP mapping across all lab investigations</span></span>
+      <span class="tool">Cyber Kill Chain <span class="tool-ctx">— attack narrative structuring, SOC168 writeup</span></span>
+      <span class="tool">NIST CSF <span class="tool-ctx">— security control reference, Qrypta design</span></span>
+      <span class="tool">ISO 27001 <span class="tool-ctx">— policy and control framework awareness</span></span>
+      <span class="tool">ServiceNow <span class="tool-ctx">— ticket lifecycle management (Niftel, 24×7 ops)</span></span>
+      <span class="tool">Jira <span class="tool-ctx">— issue tracking, project task management</span></span>
+    </div>
+  </div>
+</div>
 </section>
 
 <hr class="divider"/>
@@ -1187,7 +1226,8 @@ footer{
           <button class="r-btn" id="zoomIn" title="Zoom in">+</button>
           <button class="r-btn r-btn-reset" id="zoomReset" title="Reset zoom">⊙</button>
         </div>
-        <a class="r-btn r-btn-dl" id="resumeDownload" href="#" download="Didde_Isaac_Resume.pdf" title="Download PDF">↓ Download</a>
+        <!-- change download="Didde_Isaac_Resume.pdf" to: -->
+        <a class="r-btn r-btn-dl" id="resumeDownload" href="#" download="IsaacDidde_Resume.pdf" title="Download PDF">↓ Download</a>
         <button class="r-btn r-btn-close" id="resumeClose" title="Close">✕</button>
       </div>
     </div>
@@ -1210,7 +1250,7 @@ footer{
 </footer>
 
 <script>
-const RESUME_URL = 'https://raw.githubusercontent.com/Isaacdidde/SOC_Portfolio/main/Didde_Isaac_Resume.pdf';
+const RESUME_URL = 'Assets/IsaacDidde_Resume.pdf';
 
 /* ── Theme toggle ───────────────────────────────────── */
 const html = document.documentElement;
