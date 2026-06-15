@@ -723,6 +723,11 @@ footer{
   object-position: center top;
   display: block;
 }
+.tools-stacked {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem 2.5rem;
+}
 </style>
 </head>
 <body>
@@ -1072,90 +1077,104 @@ footer{
       <p class="eyebrow">Credentials</p>
       <h2 class="section-title">Certifications &amp; Tools</h2>
     </div>
-    <div class="creds-grid">
-      <div>
-        <p class="eyebrow fi" style="margin-bottom:1.1rem">Certifications</p>
-        <div class="certs-list fi">
-          <div class="cert-card">
-            <div class="cert-ico ci-green">✅</div>
-            <div>
-              <p class="cert-name">Google Cybersecurity Professional Certificate</p>
-              <p class="cert-year">Earned · 2026</p>
-            </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="fi" style="margin-bottom:2.5rem">
+      <p class="eyebrow" style="margin-bottom:1.1rem">Certifications</p>
+      <div class="certs-list">
+        <div class="cert-card">
+          <div class="cert-ico ci-green">✅</div>
+          <div>
+            <p class="cert-name">Google Cybersecurity Professional Certificate</p>
+            <p class="cert-year">Earned · 2026</p>
           </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-blue">🎓</div>
-            <div>
-              <p class="cert-name">MCA — CSVTU, Durg</p>
-              <p class="cert-year">2024 – 2026</p>
-            </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-amber">⏳</div>
+          <div>
+            <p class="cert-name">CompTIA Security+ SY0-701</p>
+            <p class="cert-year">In Progress · Expected 2026</p>
           </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-green">✅</div>
-            <div>
-              <p class="cert-name">IT Help Desk Practical Certificate</p>
-              <p class="cert-year">Earned · 2025</p>
-            </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-green">✅</div>
+          <div>
+            <p class="cert-name">IT Help Desk Practical Certificate</p>
+            <p class="cert-year">Earned · 2025</p>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-blue">🎓</div>
+          <div>
+            <p class="cert-name">MCA — CSVTU, Durg</p>
+            <p class="cert-year">2024 – 2026</p>
           </div>
         </div>
       </div>
-
-      <div class="fi d1">
-  <p class="eyebrow" style="margin-bottom:1.1rem">Tools &amp; Platforms</p>
-
-  <div class="tool-group">
-    <p class="tool-label">SIEM &amp; Detection</p>
-    <div class="tools-wrap">
-      <span class="tool">Splunk <span class="tool-ctx">— SPL queries, dashboards, correlation alerts (Suricata lab)</span></span>
-      <span class="tool">Wazuh <span class="tool-ctx">— agent deployment, rule tuning, alert validation (DVWA lab)</span></span>
-      <span class="tool">Suricata <span class="tool-ctx">— 15+ custom IDS/IPS YAML rules, eve.json pipeline</span></span>
-      <span class="tool">VirusTotal <span class="tool-ctx">— IOC lookup, malware triage (LetsDefend SOC168)</span></span>
     </div>
-  </div>
 
-  <div class="tool-group">
-    <p class="tool-label">Network &amp; Traffic Analysis</p>
-    <div class="tools-wrap">
-      <span class="tool">Wireshark <span class="tool-ctx">— Nmap recon &amp; SYN flood packet capture (Suricata lab)</span></span>
-      <span class="tool">TCPdump <span class="tool-ctx">— live traffic capture, log extraction</span></span>
-      <span class="tool">Nmap <span class="tool-ctx">— recon simulation, T1595 mapping (Suricata lab)</span></span>
-    </div>
-  </div>
+    <!-- TOOLS & PLATFORMS -->
+    <div class="fi d1">
+      <p class="eyebrow" style="margin-bottom:1.1rem">Tools &amp; Platforms</p>
+      <div class="tools-stacked">
 
-  <div class="tool-group">
-    <p class="tool-label">Offensive / Lab</p>
-    <div class="tools-wrap">
-      <span class="tool">SQLMap <span class="tool-ctx">— SQL injection execution against DVWA target</span></span>
-      <span class="tool">DVWA <span class="tool-ctx">— SQLi, XSS, IDOR, Command Injection scenarios</span></span>
-      <span class="tool">Kali Linux <span class="tool-ctx">— attack simulation host across all homelabs</span></span>
-      <span class="tool">VirtualBox <span class="tool-ctx">— isolated lab environment provisioning</span></span>
-    </div>
-  </div>
+        <div class="tool-group">
+          <p class="tool-label">SIEM &amp; Detection</p>
+          <div class="tools-wrap">
+            <span class="tool">Splunk <span class="tool-ctx">— SPL, dashboards, correlation alerts (Suricata lab)</span></span>
+            <span class="tool">Wazuh <span class="tool-ctx">— agent deployment, rule tuning, alert validation (DVWA lab)</span></span>
+            <span class="tool">Suricata <span class="tool-ctx">— 15+ custom IDS/IPS YAML rules, eve.json pipeline</span></span>
+            <span class="tool">VirusTotal <span class="tool-ctx">— IOC lookup, malware triage (LetsDefend SOC168)</span></span>
+          </div>
+        </div>
 
-  <div class="tool-group">
-    <p class="tool-label">Scripting &amp; Dev</p>
-    <div class="tools-wrap">
-      <span class="tool">Python <span class="tool-ctx">— Qrypta backend, log parsing scripts</span></span>
-      <span class="tool">Bash <span class="tool-ctx">— log pipeline automation (Suricata/Splunk lab)</span></span>
-      <span class="tool">Flask <span class="tool-ctx">— Qrypta web framework, REST API</span></span>
-      <span class="tool">MongoDB <span class="tool-ctx">— Qrypta encrypted credential store</span></span>
-      <span class="tool">SQL <span class="tool-ctx">— query writing, injection analysis</span></span>
-      <span class="tool">Git <span class="tool-ctx">— version control, GitHub portfolio publishing</span></span>
-    </div>
-  </div>
+        <div class="tool-group">
+          <p class="tool-label">Network &amp; Traffic Analysis</p>
+          <div class="tools-wrap">
+            <span class="tool">Wireshark <span class="tool-ctx">— Nmap recon &amp; SYN flood packet capture (Suricata lab)</span></span>
+            <span class="tool">TCPdump <span class="tool-ctx">— live traffic capture, log extraction</span></span>
+            <span class="tool">Nmap <span class="tool-ctx">— recon simulation, T1595 mapping (Suricata lab)</span></span>
+          </div>
+        </div>
 
-  <div class="tool-group">
-    <p class="tool-label">Frameworks &amp; Platforms</p>
-    <div class="tools-wrap">
-      <span class="tool">MITRE ATT&amp;CK <span class="tool-ctx">— TTP mapping across all lab investigations</span></span>
-      <span class="tool">Cyber Kill Chain <span class="tool-ctx">— attack narrative structuring, SOC168 writeup</span></span>
-      <span class="tool">NIST CSF <span class="tool-ctx">— security control reference, Qrypta design</span></span>
-      <span class="tool">ISO 27001 <span class="tool-ctx">— policy and control framework awareness</span></span>
-      <span class="tool">ServiceNow <span class="tool-ctx">— ticket lifecycle management (Niftel, 24×7 ops)</span></span>
-      <span class="tool">Jira <span class="tool-ctx">— issue tracking, project task management</span></span>
+        <div class="tool-group">
+          <p class="tool-label">Offensive / Lab</p>
+          <div class="tools-wrap">
+            <span class="tool">SQLMap <span class="tool-ctx">— SQL injection execution against DVWA target</span></span>
+            <span class="tool">DVWA <span class="tool-ctx">— SQLi, XSS, IDOR, Command Injection scenarios</span></span>
+            <span class="tool">Kali Linux <span class="tool-ctx">— attack simulation host across all homelabs</span></span>
+            <span class="tool">VirtualBox <span class="tool-ctx">— isolated lab environment provisioning</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Scripting &amp; Dev</p>
+          <div class="tools-wrap">
+            <span class="tool">Python <span class="tool-ctx">— Qrypta backend, log parsing scripts</span></span>
+            <span class="tool">Bash <span class="tool-ctx">— log pipeline automation (Suricata/Splunk lab)</span></span>
+            <span class="tool">Flask <span class="tool-ctx">— Qrypta web framework, REST API</span></span>
+            <span class="tool">MongoDB <span class="tool-ctx">— Qrypta encrypted credential store</span></span>
+            <span class="tool">SQL <span class="tool-ctx">— query writing, injection analysis</span></span>
+            <span class="tool">Git <span class="tool-ctx">— version control, GitHub portfolio publishing</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Frameworks &amp; Platforms</p>
+          <div class="tools-wrap">
+            <span class="tool">MITRE ATT&amp;CK <span class="tool-ctx">— TTP mapping across all lab investigations</span></span>
+            <span class="tool">Cyber Kill Chain <span class="tool-ctx">— attack narrative structuring, SOC168 writeup</span></span>
+            <span class="tool">NIST CSF <span class="tool-ctx">— security control reference, Qrypta design</span></span>
+            <span class="tool">ISO 27001 <span class="tool-ctx">— policy and control framework awareness</span></span>
+            <span class="tool">ServiceNow <span class="tool-ctx">— ticket lifecycle management (Niftel, 24×7 ops)</span></span>
+            <span class="tool">Jira <span class="tool-ctx">— issue tracking, project task management</span></span>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </div>
-</div>
 </section>
 
 <hr class="divider"/>
