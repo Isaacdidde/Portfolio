@@ -665,6 +665,7 @@ footer{
   border-radius:6px;
   box-shadow:var(--shadow-md);
   display:block;
+  overflow: hidden;
 }
 .r-loading{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -705,6 +706,22 @@ footer{
   color: var(--ink-dim);
   font-weight: 400;
   margin-left: .2rem;
+}
+.hero-photo {
+  width: 280px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+}
+
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 </style>
 </head>
@@ -790,27 +807,10 @@ footer{
       </div>
 
       <!-- Right: Profile Card -->
-      <div class="profile-card fi d2">
-        <div class="pc-avatar-wrap">
-          <div class="pc-avatar-inner">
-            <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-            <span class="pc-avatar-placeholder" style="display:none">🛡️</span>
-          </div>
-        </div>
-        <p class="pc-role-badge">SOC Analyst · Blue Team</p>
-        <p class="pc-location">📍 India · Open to Pan-India &amp; Global Remote</p>
-        <div class="pc-rule"></div>
-        <div class="pc-stat-row">
-          <div class="pc-stat"><div class="v">MCA</div><div class="k">Degree</div></div>
-          <div class="pc-stat"><div class="v">2026</div><div class="k">Grad Year</div></div>
-          <div class="pc-stat"><div class="v">GCC</div><div class="k">Target</div></div>
-        </div>
-        <div class="pc-rule"></div>
-        <div style="text-align:center"><span class="avail-badge-sm">Open to Offers</span></div>
-      </div>
-
-    </div>
-  </div>
+      <div class="hero-photo fi d2">
+  <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac"
+       onerror="this.style.display='none'"/>
+</div>
 </section>
 
 <hr class="divider"/>
@@ -1297,7 +1297,7 @@ function openOverlay() {
     loading.innerHTML = '<div class="r-spinner"></div><span>Loading resume…</span>';
     body.prepend(loading);
 
-    frame.src = RESUME_URL + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH';
+    frame.src = RESUME_URL + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
     frame.onload = () => {
       document.getElementById('rLoading')?.remove();
       frame.style.opacity = '1';
