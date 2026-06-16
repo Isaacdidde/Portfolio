@@ -1,1392 +1,1311 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Didde Isaac · SOC Analyst</title>
+<title>SOC Analyst · Blue Team · Threat Detection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-/* ══ DESIGN TOKENS ═══════════════════════════════════════════════ */
-:root {
-  /* Cyber-meets-professional palette */
-  --bg:         #07090f;
-  --bg-alt:     #0b0e18;
-  --surface:    #0e1220;
-  --surface2:   #131828;
-  --surface3:   #181f30;
-  --glass:      rgba(13,18,35,.72);
-
-  --border:     rgba(79,139,255,.10);
-  --border-h:   rgba(79,139,255,.28);
-  --border-g:   rgba(0,210,150,.14);
-
-  /* Dual accent system — blue (cyber) + teal (professional) */
-  --blue:       #4f8bff;
-  --blue-d:     #2563eb;
-  --blue-g:     linear-gradient(135deg,#4f8bff,#7b5af5);
-  --teal:       #00d296;
-  --teal-d:     #00a876;
-  --teal-g:     linear-gradient(135deg,#00d296,#00b4d8);
-  --violet:     #7b5af5;
-  --violet-s:   #9d7cff;
-  --red:        #ff4f6e;
-  --amber:      #f5a623;
-
-  /* Blend gradient — THE signature */
-  --dual:       linear-gradient(135deg,#4f8bff 0%,#7b5af5 45%,#00d296 100%);
-  --dual-h:     linear-gradient(135deg,#7b5af5 0%,#00d296 100%);
-
-  --text:       #e8edf8;
-  --text-sec:   #7a93b8;
-  --text-dim:   #3d526b;
-
-  --mono: 'DM Mono', monospace;
-  --sans: 'Space Grotesk', sans-serif;
-  --display: 'Bebas Neue', sans-serif;
-  --serif: 'Fraunces', serif;
-
-  --r-sm: 8px;
-  --r-md: 14px;
-  --r-lg: 20px;
+/* ═══ TOKENS ══════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg:        #f8f9fc;
+  --bg-alt:    #ffffff;
+  --surface:   #ffffff;
+  --surface2:  #f1f3f8;
+  --border:    #e4e8f0;
+  --border-h:  #c5cfe0;
+  --ink:       #0f1623;
+  --ink-sec:   #4b5568;
+  --ink-dim:   #9aa5b8;
+  --blue:      #2563eb;
+  --blue-lt:   #3b82f6;
+  --blue-bg:   #eff6ff;
+  --blue-bdr:  #bfdbfe;
+  --teal:      #0d9488;
+  --teal-lt:   #14b8a6;
+  --teal-bg:   #f0fdfa;
+  --teal-bdr:  #99f6e4;
+  --green:     #16a34a;
+  --green-bg:  #f0fdf4;
+  --green-bdr: #bbf7d0;
+  --red-bg:    #fff1f2;
+  --red-bdr:   #fecdd3;
+  --red-ink:   #be123c;
+  --amber-bg:  #fffbeb;
+  --amber-bdr: #fde68a;
+  --amber-ink: #92400e;
+  --violet-bg: #f5f3ff;
+  --violet-bdr:#ddd6fe;
+  --violet-ink:#6d28d9;
+  --nav-bg:    rgba(248,249,252,.96);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 18px rgba(0,0,0,.07);
+  --shadow-lg: 0 12px 36px rgba(0,0,0,.09);
+}
+[data-theme="dark"] {
+  --bg:        #0d1117;
+  --bg-alt:    #161b22;
+  --surface:   #161b22;
+  --surface2:  #21262d;
+  --border:    #30363d;
+  --border-h:  #484f58;
+  --ink:       #e6edf3;
+  --ink-sec:   #8b949e;
+  --ink-dim:   #484f58;
+  --blue:      #58a6ff;
+  --blue-lt:   #79c0ff;
+  --blue-bg:   #0d1b2e;
+  --blue-bdr:  #1f3a5f;
+  --teal:      #2dd4bf;
+  --teal-lt:   #5eead4;
+  --teal-bg:   #0a1f1e;
+  --teal-bdr:  #1a3835;
+  --green:     #4ade80;
+  --green-bg:  #0a1f0f;
+  --green-bdr: #1a3d22;
+  --red-bg:    #1e0a0d;
+  --red-bdr:   #4a1420;
+  --red-ink:   #ff7b93;
+  --amber-bg:  #1c160a;
+  --amber-bdr: #3d2e0a;
+  --amber-ink: #f0c060;
+  --violet-bg: #130e24;
+  --violet-bdr:#2a1f50;
+  --violet-ink:#b39dff;
+  --nav-bg:    rgba(13,17,23,.97);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 18px rgba(0,0,0,.4);
+  --shadow-lg: 0 12px 36px rgba(0,0,0,.5);
 }
 
-/* ══ RESET ═══════════════════════════════════════════════════════ */
+/* ═══ RESET ═══════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--blue) var(--bg)}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  font-size:16px;
-  line-height:1.65;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-
-/* ══ SCROLLBAR ═══════════════════════════════════════════════════ */
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--blue);border-radius:4px}
+a{color:inherit;text-decoration:none}
 
-/* ══ BACKGROUND ATMOSPHERE ═══════════════════════════════════════ */
-.bg-canvas{
-  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-}
-.bg-orb{
-  position:absolute;border-radius:50%;filter:blur(90px);
-  animation:orb-drift 18s ease-in-out infinite;
-}
-.bg-orb-1{
-  width:600px;height:600px;
-  background:radial-gradient(circle,rgba(79,139,255,.08) 0%,transparent 70%);
-  top:-15%;right:-10%;
-  animation-delay:0s;
-}
-.bg-orb-2{
-  width:500px;height:500px;
-  background:radial-gradient(circle,rgba(0,210,150,.06) 0%,transparent 70%);
-  bottom:10%;left:-15%;
-  animation-delay:-8s;
-}
-.bg-orb-3{
-  width:300px;height:300px;
-  background:radial-gradient(circle,rgba(123,90,245,.06) 0%,transparent 70%);
-  top:45%;right:30%;
-  animation-delay:-13s;
-}
-@keyframes orb-drift{
-  0%,100%{transform:translate(0,0)}
-  33%{transform:translate(30px,-20px)}
-  66%{transform:translate(-20px,25px)}
-}
-.bg-grid{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(79,139,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(79,139,255,.025) 1px,transparent 1px);
-  background-size:56px 56px;
-  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
-}
-
-/* ══ NAV ═════════════════════════════════════════════════════════ */
+/* ═══ NAV ═════════════════════════════════════════════ */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:300;
-  height:64px;
-  display:flex;align-items:center;justify-content:space-between;
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:64px;display:flex;align-items:center;justify-content:space-between;
   padding:0 3rem;
-  background:rgba(7,9,15,.85);
-  backdrop-filter:blur(24px) saturate(1.4);
+  background:var(--nav-bg);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
   border-bottom:1px solid var(--border);
+  transition:background .25s,border-color .25s,box-shadow .25s;
+}
+nav.scrolled{
+  box-shadow:0 2px 20px rgba(0,0,0,.08);
+  border-bottom-color:transparent;
 }
 .nav-brand{
-  display:flex;align-items:center;gap:.5rem;
-  font-family:var(--mono);font-size:.72rem;
-  color:var(--text-sec);letter-spacing:.05em;
+  display:flex;align-items:center;gap:.55rem;
+  font-family:'Sora',sans-serif;font-size:.9rem;font-weight:700;
+  color:var(--ink);transition:color .2s;
+  cursor:default;flex-shrink:0;
 }
 .nav-brand .dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--teal);
-  box-shadow:0 0 8px var(--teal);
-  animation:pulse-dot 2.5s ease-in-out infinite;
-  flex-shrink:0;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--teal);flex-shrink:0;
+  animation:pulse 2.5s ease-in-out infinite;
 }
-@keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 8px var(--teal)}50%{opacity:.5;box-shadow:0 0 3px var(--teal)}}
-.nav-brand .nb-name{color:var(--text);font-weight:600;font-family:var(--sans);font-size:.82rem}
-.nav-brand .sep{color:var(--border-h);margin:0 .2rem}
-
-.nav-links{display:flex;gap:.1rem;list-style:none}
+.nav-brand-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;font-weight:400;
+  color:var(--ink-dim);letter-spacing:.1em;
+  margin-left:.1rem;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--teal) 40%,transparent)}
+  50%{box-shadow:0 0 0 5px transparent}
+}
+.nav-links{display:flex;gap:.05rem;list-style:none}
 .nav-links a{
-  font-size:.78rem;font-weight:500;letter-spacing:.02em;
-  color:var(--text-sec);text-decoration:none;
-  padding:.35rem .7rem;border-radius:var(--r-sm);
-  transition:color .2s,background .2s;
-}
-.nav-links a:hover{color:var(--text);background:rgba(79,139,255,.08)}
-
-.nav-cta{
-  display:inline-flex;align-items:center;gap:.4rem;
-  font-size:.76rem;font-weight:600;letter-spacing:.04em;
-  color:#fff;text-decoration:none;
-  padding:.38rem 1.1rem;border-radius:var(--r-sm);
-  background:var(--blue-d);
-  border:1px solid rgba(79,139,255,.4);
-  transition:all .2s;position:relative;overflow:hidden;
-}
-.nav-cta::before{
-  content:'';position:absolute;inset:0;
-  background:var(--dual);opacity:0;transition:opacity .2s;
-}
-.nav-cta:hover::before{opacity:1}
-.nav-cta span{position:relative;z-index:1}
-
-/* ══ LAYOUT ══════════════════════════════════════════════════════ */
-.wrap{
-  position:relative;z-index:1;
-  max-width:1060px;margin:0 auto;
-  padding:0 2.5rem;
-}
-
-/* ══ SECTION HEADER ══════════════════════════════════════════════ */
-.sh{margin-bottom:3.5rem}
-.sh-eyebrow{
-  font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;
-  color:var(--teal);text-transform:uppercase;
-  display:inline-flex;align-items:center;gap:.55rem;
-  margin-bottom:.75rem;
-}
-.sh-eyebrow::before{
-  content:'';width:22px;height:1px;
-  background:linear-gradient(90deg,var(--teal),transparent);
-}
-.sh-title{
-  font-family:var(--display);
-  font-size:clamp(2.8rem,6vw,4.5rem);
-  font-weight:400;letter-spacing:.03em;
-  line-height:1.0;
-  background:var(--dual);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.sh-title.light{
-  background:none;
-  -webkit-background-clip:unset;background-clip:unset;
-  color:var(--text);
-}
-.sh-sub{
-  margin-top:.8rem;font-size:.95rem;
-  color:var(--text-sec);line-height:1.75;max-width:540px;
-  font-weight:300;
-}
-
-/* ══ HERO ════════════════════════════════════════════════════════ */
-#hero{
-  position:relative;z-index:1;
-  min-height:100vh;
-  display:flex;align-items:center;
-  padding:100px 0 6rem;
-}
-.hero-layout{
-  display:grid;grid-template-columns:1fr 360px;
-  gap:5rem;align-items:center;width:100%;
-}
-
-.hero-badge{
-  display:inline-flex;align-items:center;gap:.55rem;
-  font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;
-  color:var(--teal);text-transform:uppercase;
-  background:rgba(0,210,150,.07);
-  border:1px solid rgba(0,210,150,.2);
-  padding:5px 14px;border-radius:40px;
-  margin-bottom:1.8rem;
-}
-.hero-badge::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--teal);box-shadow:0 0 8px var(--teal);
-  animation:pulse-dot 2.5s ease-in-out infinite;
-}
-
-.hero-name{
-  font-family:var(--display);
-  font-size:clamp(4.5rem,10vw,8rem);
-  letter-spacing:.04em;
-  line-height:.92;
-  margin-bottom:1.4rem;
-}
-.hero-name .first{
-  display:block;
-  color:var(--text);
-}
-.hero-name .last{
-  display:block;
-  background:var(--dual);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-
-.hero-typed-wrap{
-  display:flex;align-items:center;gap:.5rem;
-  font-family:var(--mono);font-size:.88rem;
-  color:var(--text-sec);
-  margin-bottom:1.8rem;min-height:2em;
-}
-.hero-typed-wrap .prompt{color:var(--teal);font-size:.8rem}
-#typed{color:var(--text)}
-.cursor{
-  display:inline-block;width:2px;height:1.1em;
-  background:var(--blue);vertical-align:text-bottom;
-  margin-left:1px;
-  animation:blink 1s step-end infinite;
-}
-@keyframes blink{50%{opacity:0}}
-
-.hero-bio{
-  font-size:.97rem;line-height:1.85;
-  color:var(--text-sec);margin-bottom:2.2rem;max-width:510px;
-  font-weight:300;
-}
-.hero-bio strong{color:var(--text);font-weight:600}
-.hero-bio .hi{
-  background:var(--dual);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  font-weight:600;
-}
-
-.hero-ctas{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:3rem}
-.btn{
-  display:inline-flex;align-items:center;gap:.5rem;
-  padding:.65rem 1.4rem;border-radius:var(--r-sm);
-  font-family:var(--sans);font-size:.82rem;font-weight:600;
-  letter-spacing:.02em;
-  text-decoration:none;cursor:pointer;
-  transition:all .22s;border:1.5px solid transparent;
-  position:relative;overflow:hidden;
-}
-.btn-primary{
-  background:var(--blue);color:#fff;border-color:var(--blue);
-}
-.btn-primary:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,139,255,.25)}
-.btn-teal{
-  background:rgba(0,210,150,.12);color:var(--teal);
-  border-color:rgba(0,210,150,.3);
-}
-.btn-teal:hover{background:rgba(0,210,150,.2);transform:translateY(-2px)}
-.btn-ghost{
-  background:transparent;color:var(--text-sec);
-  border-color:var(--border-h);
-}
-.btn-ghost:hover{color:var(--text);border-color:var(--blue);background:rgba(79,139,255,.06)}
-
-.hero-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-  border-radius:var(--r-md);overflow:hidden;
-}
-.stat-item{
-  background:var(--surface);
-  padding:1.1rem 1.2rem;
-  display:flex;flex-direction:column;gap:.3rem;
-}
-.stat-num{
-  font-family:var(--display);font-size:2.2rem;
-  letter-spacing:.04em;line-height:1;
-  background:var(--dual);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.stat-label{
-  font-size:.72rem;color:var(--text-sec);
-  line-height:1.35;font-weight:400;
-  font-family:var(--mono);letter-spacing:.03em;
-}
-
-/* ── ID CARD ── */
-.id-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  padding:2rem 1.8rem;
-  position:relative;overflow:hidden;
-}
-.id-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--dual);
-}
-.id-card::after{
-  content:'';position:absolute;
-  top:20%;right:-30%;
-  width:280px;height:280px;
-  background:radial-gradient(circle,rgba(79,139,255,.05) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
-}
-.id-avatar-wrap{margin-bottom:1.4rem}
-.id-avatar{
-  width:68px;height:68px;border-radius:var(--r-sm);
-  background:linear-gradient(135deg,rgba(79,139,255,.15),rgba(0,210,150,.12));
-  border:1.5px solid var(--border-h);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--display);font-size:1.6rem;letter-spacing:.04em;
-  color:var(--blue);
+  font-size:.73rem;font-weight:500;color:var(--ink-sec);
+  padding:.32rem .72rem;border-radius:6px;
+  transition:color .15s,background .15s;
   position:relative;
 }
-.id-avatar::after{
-  content:'';position:absolute;
-  inset:-1px;border-radius:inherit;
-  background:var(--dual);opacity:.15;
+.nav-links a:hover{color:var(--blue);background:var(--blue-bg)}
+.nav-links a.active{color:var(--blue)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);
+  width:16px;height:2px;border-radius:2px;background:var(--blue);
 }
-.id-name{
-  font-family:var(--sans);font-size:1.05rem;
-  font-weight:700;color:var(--text);margin-bottom:.2rem;
+.nav-right{display:flex;align-items:center;gap:.6rem}
+.nav-status{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--green);letter-spacing:.08em;
+  background:var(--green-bg);border:1px solid var(--green-bdr);
+  padding:.28rem .65rem;border-radius:20px;
+  white-space:nowrap;
 }
-.id-role{font-size:.78rem;color:var(--teal);font-weight:500;margin-bottom:1.2rem;font-family:var(--mono)}
-.id-divider{
-  height:1px;
-  background:linear-gradient(90deg,var(--border),transparent);
-  margin-bottom:1.2rem;
+.nav-status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);flex-shrink:0;
+  animation:pulse-green 2s ease-in-out infinite;
 }
-.id-row{
-  display:flex;align-items:flex-start;gap:.65rem;
-  margin-bottom:.8rem;
+@keyframes pulse-green{
+  0%,100%{opacity:1}50%{opacity:.4}
 }
-.id-row:last-child{margin-bottom:0}
-.id-key{
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.07em;
-  color:var(--text-dim);text-transform:uppercase;
-  min-width:68px;padding-top:2px;flex-shrink:0;
+.theme-toggle{
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid var(--border);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.82rem;color:var(--ink-sec);
+  transition:all .2s;
 }
-.id-val{color:var(--text-sec);font-size:.82rem;line-height:1.45}
-.status-badge{
+.theme-toggle:hover{border-color:var(--border-h);color:var(--ink);background:var(--surface2)}
+.nav-hire{
+  font-size:.72rem;font-weight:600;color:#fff;
+  padding:.35rem 1rem;border-radius:6px;
+  background:var(--blue);
+  transition:opacity .15s,transform .15s;
+  white-space:nowrap;
+}
+.nav-hire:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ═══ LAYOUT ══════════════════════════════════════════ */
+.wrap{max-width:1040px;margin:0 auto;padding:0 2.5rem}
+.section{padding:5rem 0}
+.divider{border:none;height:1px;background:var(--border)}
+
+/* ═══ SECTION HEADING ═════════════════════════════════ */
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--teal);
+  display:inline-flex;align-items:center;gap:.45rem;margin-bottom:.5rem;
+}
+.eyebrow::before{content:'';width:14px;height:1.5px;background:var(--teal)}
+.section-title{
+  font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);
+  font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.2;
+}
+.section-sub{
+  margin-top:.5rem;font-size:.9rem;color:var(--ink-sec);
+  line-height:1.8;max-width:500px;font-weight:300;
+}
+.sh{margin-bottom:2.5rem}
+
+/* ═══ HERO ════════════════════════════════════════════ */
+#hero{padding:108px 0 4.5rem;position:relative;overflow:hidden}
+.hero-glow{
+  position:absolute;top:-100px;right:-120px;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+[data-theme="dark"] .hero-glow{background:radial-gradient(circle,rgba(88,166,255,.06) 0%,transparent 65%)}
+
+.hero-layout{
+  display:grid;grid-template-columns:1fr 280px;
+  gap:4rem;align-items:center;position:relative;z-index:1;
+}
+
+/* Availability */
+.avail-chip{
   display:inline-flex;align-items:center;gap:.4rem;
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;
-  padding:4px 10px;border-radius:40px;
-  background:rgba(0,210,150,.09);color:var(--teal);
-  border:1px solid rgba(0,210,150,.22);
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.1em;
+  text-transform:uppercase;
+  background:var(--green-bg);color:var(--green);
+  border:1px solid var(--green-bdr);
+  padding:4px 12px;border-radius:40px;margin-bottom:1.2rem;
 }
-.status-badge::before{
+.avail-chip::before{
   content:'';width:5px;height:5px;border-radius:50%;
-  background:var(--teal);
-  animation:pulse-dot 2.5s ease-in-out infinite;
+  background:var(--green);animation:pulse 2.5s ease-in-out infinite;
 }
 
-/* ══ DIVIDER ═════════════════════════════════════════════════════ */
-.section-divider{
-  border:none;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),transparent);
-  margin:0;
+/* Rotating title */
+.hero-role-wrap{
+  display:flex;align-items:center;gap:.65rem;margin-bottom:1rem;flex-wrap:wrap;
+}
+.role-static{
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  background:var(--blue-bg);color:var(--blue);
+  border:1px solid var(--blue-bdr);
+  padding:4px 13px;border-radius:5px;font-weight:500;letter-spacing:.02em;
+}
+.role-rotating{
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  background:var(--surface2);color:var(--ink-sec);
+  border:1px solid var(--border);
+  padding:4px 13px;border-radius:5px;font-weight:500;
+  min-width:140px;overflow:hidden;white-space:nowrap;
+  position:relative;
+}
+.role-text{
+  display:inline-block;
+  animation:none;
+}
+.role-text.fade-out{animation:roleOut .25s ease forwards}
+.role-text.fade-in{animation:roleIn .3s ease forwards}
+@keyframes roleOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes roleIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.hero-headline{
+  font-family:'Sora',sans-serif;
+  font-size:clamp(2.4rem,5.5vw,3.8rem);
+  font-weight:800;letter-spacing:-.03em;line-height:1.05;
+  color:var(--ink);margin-bottom:.9rem;
+}
+.hero-headline .accent{
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-bio{
+  font-size:.92rem;color:var(--ink-sec);line-height:1.9;
+  margin-bottom:1.6rem;max-width:470px;font-weight:300;
+}
+.hero-bio strong{color:var(--ink);font-weight:600}
+
+/* Impact */
+.impact-row{display:flex;gap:1.4rem;margin-bottom:1.8rem;flex-wrap:wrap}
+.impact-num{display:flex;flex-direction:column;gap:.08rem}
+.impact-num .num{
+  font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);
+  letter-spacing:-.02em;line-height:1;
+}
+.impact-num .lbl{
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-dim);
+}
+.impact-sep{width:1px;background:var(--border);align-self:stretch}
+
+.hero-actions{display:flex;gap:.45rem;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:.38rem;
+  padding:.52rem 1.1rem;border-radius:7px;
+  font-size:.77rem;font-weight:600;
+  cursor:pointer;transition:all .18s;
+  border:1.5px solid transparent;font-family:'Inter',sans-serif;
+}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 6px 18px rgba(37,99,235,.22)}
+.btn-teal{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-teal:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 6px 18px rgba(13,148,136,.22)}
+.btn-ghost{background:transparent;color:var(--ink-sec);border-color:var(--border)}
+.btn-ghost:hover{color:var(--ink);border-color:var(--border-h);background:var(--surface2)}
+
+/* Profile card */
+.profile-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:1.6rem 1.4rem;
+  box-shadow:var(--shadow-md);
+  position:sticky;top:78px;text-align:center;
+  transition:background .25s,border-color .25s;
+}
+.pc-avatar-wrap{
+  width:88px;height:88px;margin:0 auto 1rem;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  padding:3px;
+  box-shadow:0 4px 16px rgba(37,99,235,.18);
+}
+.pc-avatar-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;overflow:hidden;
+}
+.pc-avatar-inner img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+  display:block;
+}
+.pc-avatar-placeholder{font-size:2rem}
+.pc-role-badge{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.07em;
+  color:var(--teal);margin-bottom:.2rem;
+}
+.pc-location{font-size:.78rem;color:var(--ink-dim);margin-bottom:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.03em}
+.pc-rule{height:1px;background:var(--border);margin:1rem 0}
+.pc-stat-row{display:flex;justify-content:space-around;text-align:center;margin-bottom:1rem}
+.pc-stat .v{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;color:var(--ink)}
+.pc-stat .k{font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim)}
+.avail-badge-sm{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.05em;
+  background:var(--green-bg);color:var(--green);
+  border:1px solid var(--green-bdr);padding:3px 10px;border-radius:40px;
+}
+.avail-badge-sm::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:var(--green);
+  animation:pulse 2.5s ease-in-out infinite;
 }
 
-/* ══ SECTIONS ════════════════════════════════════════════════════ */
-.section{padding:6rem 0}
-
-/* ══ ABOUT / EXP ══════════════════════════════════════════════════ */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
-
+/* ═══ EXPERIENCE ══════════════════════════════════════ */
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .exp-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:1.8rem 2rem;
-  position:relative;overflow:hidden;
-  transition:border-color .25s,transform .25s;
+  border-radius:12px;padding:1.6rem 1.7rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s,transform .2s,background .25s;
 }
-.exp-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:3px;
-  background:var(--dual);
-}
-.exp-card:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.exp-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px)}
 .exp-date{
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;
-  color:var(--text-dim);margin-bottom:.6rem;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;font-size:.57rem;
+  letter-spacing:.1em;color:var(--ink-dim);text-transform:uppercase;margin-bottom:.4rem;
 }
-.exp-title{
-  font-size:1rem;font-weight:700;color:var(--text);
-  margin-bottom:.2rem;line-height:1.3;
-}
-.exp-org{
-  font-size:.8rem;color:var(--teal);margin-bottom:.9rem;
-  font-weight:500;font-family:var(--mono);
-}
-.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-.exp-bullets li{
-  font-size:.86rem;color:var(--text-sec);
-  line-height:1.7;padding-left:1.2rem;position:relative;
-  font-weight:300;
-}
-.exp-bullets li::before{
-  content:'▸';position:absolute;left:0;
-  color:var(--teal);font-size:.7rem;top:.2em;
-}
+.exp-title{font-family:'Sora',sans-serif;font-size:.93rem;font-weight:700;color:var(--ink);margin-bottom:.12rem;line-height:1.3}
+.exp-org{font-size:.72rem;color:var(--teal);font-weight:500;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace}
+.exp-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.exp-list li{font-size:.82rem;color:var(--ink-sec);line-height:1.7;padding-left:1rem;position:relative;font-weight:300}
+.exp-list li::before{content:'▸';position:absolute;left:0;color:var(--blue-lt);font-size:.58rem;top:.3em}
 
-/* ══ SKILLS ══════════════════════════════════════════════════════ */
-.skills-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
-  gap:1rem;
-}
+/* ═══ SKILLS ══════════════════════════════════════════ */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:.9rem}
 .sk-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:1.6rem 1.7rem;
-  position:relative;overflow:hidden;
-  transition:border-color .25s,transform .25s;
+  border-radius:12px;padding:1.4rem 1.5rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s,transform .2s,border-color .2s,background .25s;
 }
-.sk-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  opacity:0;transition:opacity .3s;
-}
-.sk-card.c-blue::after{background:var(--blue-g)}
-.sk-card.c-teal::after{background:var(--teal-g)}
-.sk-card.c-violet::after{background:linear-gradient(90deg,var(--violet),var(--violet-s))}
-.sk-card.c-red::after{background:linear-gradient(90deg,var(--red),#ff8fa0)}
-.sk-card.c-amber::after{background:linear-gradient(90deg,var(--amber),#fcd34d)}
-.sk-card:hover{border-color:var(--border-h);transform:translateY(-4px)}
-.sk-card:hover::after{opacity:1}
-
-.sk-ico-wrap{
-  width:44px;height:44px;border-radius:var(--r-sm);
+.sk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);border-color:var(--border-h)}
+.sk-ico{
+  width:38px;height:38px;border-radius:9px;
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:.9rem;font-size:1.3rem;
+  font-size:.95rem;margin-bottom:.75rem;
 }
-.sk-ico-wrap.ico-blue{background:rgba(79,139,255,.1);border:1px solid rgba(79,139,255,.18)}
-.sk-ico-wrap.ico-teal{background:rgba(0,210,150,.1);border:1px solid rgba(0,210,150,.18)}
-.sk-ico-wrap.ico-violet{background:rgba(123,90,245,.1);border:1px solid rgba(123,90,245,.18)}
-.sk-ico-wrap.ico-red{background:rgba(255,79,110,.08);border:1px solid rgba(255,79,110,.18)}
-.sk-ico-wrap.ico-amber{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18)}
+.ico-b{background:var(--blue-bg);border:1px solid var(--blue-bdr)}
+.ico-t{background:var(--teal-bg);border:1px solid var(--teal-bdr)}
+.ico-r{background:var(--red-bg);border:1px solid var(--red-bdr)}
+.ico-a{background:var(--amber-bg);border:1px solid var(--amber-bdr)}
+.ico-v{background:var(--violet-bg);border:1px solid var(--violet-bdr)}
+.sk-name{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.28rem;line-height:1.3}
+.sk-desc{font-size:.8rem;color:var(--ink-sec);line-height:1.78;margin-bottom:.8rem;font-weight:300}
+.tags{display:flex;flex-wrap:wrap;gap:.28rem}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.03em;padding:2px 7px;border-radius:4px;font-weight:500}
+.t-b{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+.t-t{background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr)}
+.t-r{background:var(--red-bg);color:var(--red-ink);border:1px solid var(--red-bdr)}
+.t-a{background:var(--amber-bg);color:var(--amber-ink);border:1px solid var(--amber-bdr)}
+.t-v{background:var(--violet-bg);color:var(--violet-ink);border:1px solid var(--violet-bdr)}
+.t-s{background:var(--surface2);color:var(--ink-sec);border:1px solid var(--border)}
+.t-g{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
 
-.sk-name{
-  font-size:.97rem;font-weight:700;color:var(--text);
-  margin-bottom:.4rem;line-height:1.3;
-}
-.sk-desc{
-  font-size:.84rem;color:var(--text-sec);
-  line-height:1.75;margin-bottom:1rem;
-  font-weight:300;
-}
-.tags{display:flex;flex-wrap:wrap;gap:.35rem}
-.tag{
-  font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;
-  padding:3px 9px;border-radius:4px;font-weight:500;
-}
-.t-blue  {background:rgba(79,139,255,.09);color:#7eb8ff;border:1px solid rgba(79,139,255,.18)}
-.t-teal  {background:rgba(0,210,150,.08);color:#4de8c4;border:1px solid rgba(0,210,150,.18)}
-.t-violet{background:rgba(123,90,245,.09);color:#b8a0ff;border:1px solid rgba(123,90,245,.18)}
-.t-red   {background:rgba(255,79,110,.08);color:#ff9aa8;border:1px solid rgba(255,79,110,.18)}
-.t-amber {background:rgba(245,166,35,.08);color:#fcd34d;border:1px solid rgba(245,166,35,.18)}
-
-/* ══ PROJECTS ════════════════════════════════════════════════════ */
-.proj-list{display:flex;flex-direction:column;gap:1.25rem}
+/* ═══ PROJECTS — clean horizontal card ═══════════════ */
+.proj-list{display:flex;flex-direction:column;gap:.85rem}
 .proj-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:2rem 2.2rem;
-  display:grid;grid-template-columns:1fr auto;
-  gap:1.5rem;align-items:start;
-  text-decoration:none;color:inherit;
-  transition:border-color .25s,transform .22s,background .22s,box-shadow .25s;
-  position:relative;overflow:hidden;
+  border-radius:12px;padding:1.6rem 1.8rem;
+  display:flex;gap:1.4rem;align-items:flex-start;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s,transform .2s,border-color .2s,background .25s;
 }
-.proj-card::before{
-  content:'';position:absolute;
-  left:0;top:0;bottom:0;width:3px;
-  background:var(--dual);
-  transform:scaleY(0);transform-origin:top;
-  transition:transform .3s ease;
-}
-.proj-card:hover{
-  border-color:var(--border-h);
-  background:var(--surface2);
-  box-shadow:0 8px 32px rgba(79,139,255,.08);
-  transform:translateX(6px);
-}
-.proj-card:hover::before{transform:scaleY(1)}
-.proj-meta-top{
-  display:flex;align-items:center;gap:.7rem;
-  margin-bottom:.65rem;flex-wrap:wrap;
-}
+.proj-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--border-h)}
 .proj-num{
-  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;
-  color:var(--text-dim);text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase;
+  flex-shrink:0;padding-top:2px;min-width:28px;
 }
-.proj-type-badge{
-  font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;
-  padding:3px 9px;border-radius:4px;font-weight:500;
+.proj-body{flex:1;min-width:0}
+.proj-header{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.ptag{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.05em;padding:2px 8px;border-radius:4px;font-weight:500}
+.ptag-b{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+.ptag-t{background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr)}
+.ptag-v{background:var(--violet-bg);color:var(--violet-ink);border:1px solid var(--violet-bdr)}
+.proj-name{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;line-height:1.3}
+.proj-desc{font-size:.83rem;color:var(--ink-sec);line-height:1.85;font-weight:300;margin-bottom:.75rem}
+.proj-result{
+  display:inline-flex;align-items:center;gap:.35rem;
+  background:var(--green-bg);border:1px solid var(--green-bdr);
+  border-radius:5px;padding:3px 10px;
+  font-size:.73rem;color:var(--green);font-weight:500;
 }
-.ptb-ids{background:rgba(79,139,255,.08);color:#7eb8ff;border:1px solid rgba(79,139,255,.18)}
-.ptb-web{background:rgba(0,210,150,.08);color:#4de8c4;border:1px solid rgba(0,210,150,.18)}
-.ptb-iam{background:rgba(123,90,245,.08);color:#b8a0ff;border:1px solid rgba(123,90,245,.18)}
-
-.proj-name{
-  font-family:var(--serif);
-  font-size:1.22rem;font-weight:600;
-  line-height:1.3;color:var(--text);
-  margin-bottom:.65rem;
-}
-.proj-desc{
-  font-size:.88rem;color:var(--text-sec);
-  line-height:1.82;margin-bottom:1.1rem;
-  font-weight:300;
-}
-.proj-tags{display:flex;flex-wrap:wrap;gap:.35rem}
-
-.proj-arrow-col{
-  display:flex;flex-direction:column;
-  align-items:flex-end;gap:.5rem;padding-top:.2rem;
-}
+.proj-result::before{content:'✓';font-size:.65rem}
 .proj-arrow{
-  width:38px;height:38px;border-radius:var(--r-sm);
+  flex-shrink:0;
+  width:32px;height:32px;border-radius:8px;
   border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
-  font-size:1rem;color:var(--text-dim);
-  transition:all .2s;flex-shrink:0;
+  font-size:.8rem;color:var(--ink-dim);
+  transition:all .18s;
 }
-.proj-card:hover .proj-arrow{
-  border-color:var(--blue);color:var(--blue);
-  background:rgba(79,139,255,.08);
-}
-.proj-link-note{
-  font-family:var(--mono);font-size:.58rem;
-  color:var(--text-dim);letter-spacing:.06em;
-}
+.proj-card:hover .proj-arrow{border-color:var(--blue-bdr);color:var(--blue);background:var(--blue-bg)}
 
-/* ══ LABS ════════════════════════════════════════════════════════ */
-.labs-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:1rem;
-}
+/* ═══ LABS — clean 3-col grid ════════════════════════ */
+.labs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.85rem}
 .lab-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:1.5rem 1.65rem;
-  display:flex;flex-direction:column;gap:.55rem;
-  text-decoration:none;color:inherit;
-  transition:border-color .25s,transform .22s,background .22s,box-shadow .25s;
-  position:relative;overflow:hidden;
+  border-radius:12px;padding:1.2rem 1.3rem;
+  display:flex;flex-direction:column;gap:.4rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s,transform .2s,border-color .2s,background .25s;
+  cursor:default;
 }
-.lab-card::after{
-  content:'';position:absolute;
-  top:0;right:0;
-  width:80px;height:80px;
-  background:radial-gradient(circle,rgba(79,139,255,.04) 0%,transparent 70%);
-  border-radius:50%;
-  transition:opacity .3s;
-  opacity:0;
+.lab-card[href]{cursor:pointer}
+.lab-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);border-color:var(--border-h)}
+.lab-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem}
+.lbadge{
+  font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.07em;
+  padding:2px 8px;border-radius:4px;font-weight:500;
 }
-.lab-card:hover{
-  border-color:var(--border-h);
-  transform:translateY(-5px);
-  background:var(--surface2);
-  box-shadow:0 12px 32px rgba(0,0,0,.2);
+.lb-b{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+.lb-r{background:var(--red-bg);color:var(--red-ink);border:1px solid var(--red-bdr)}
+.lb-a{background:var(--amber-bg);color:var(--amber-ink);border:1px solid var(--amber-bdr)}
+.lb-v{background:var(--violet-bg);color:var(--violet-ink);border:1px solid var(--violet-bdr)}
+.lb-t{background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr)}
+.lab-ext{
+  font-size:.68rem;color:var(--ink-dim);transition:color .15s;
 }
-.lab-card:hover::after{opacity:1}
-.lab-header{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.1rem}
-.lab-badge{
-  font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;
-  padding:3px 10px;border-radius:4px;
-  display:inline-flex;align-items:center;gap:.3rem;font-weight:500;
-}
-.lb-detect {background:rgba(79,139,255,.09);color:#7eb8ff;border:1px solid rgba(79,139,255,.18)}
-.lb-attack {background:rgba(255,79,110,.08);color:#ff9aa8;border:1px solid rgba(255,79,110,.18)}
-.lb-webapp {background:rgba(245,166,35,.08);color:#fcd34d;border:1px solid rgba(245,166,35,.18)}
-.lb-analysis{background:rgba(123,90,245,.09);color:#b8a0ff;border:1px solid rgba(123,90,245,.18)}
-.lb-auto  {background:rgba(0,210,150,.09);color:#4de8c4;border:1px solid rgba(0,210,150,.18)}
-
-.lab-ext-icon{
-  display:flex;align-items:center;justify-content:center;
-  width:28px;height:28px;border-radius:6px;
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--text-dim);font-size:.8rem;
-  transition:all .2s;flex-shrink:0;
-}
-.lab-card:hover .lab-ext-icon{
-  border-color:var(--border-h);color:var(--blue);
-  background:rgba(79,139,255,.08);
-}
-
-.lab-title{
-  font-size:.96rem;font-weight:700;
-  line-height:1.4;color:var(--text);
-}
-.lab-desc{
-  font-size:.83rem;color:var(--text-sec);
-  line-height:1.75;flex:1;font-weight:300;
-}
-.lab-footer{
+.lab-card:hover .lab-ext{color:var(--blue)}
+.lab-title{font-size:.88rem;font-weight:700;color:var(--ink);line-height:1.35}
+.lab-desc{font-size:.78rem;color:var(--ink-sec);line-height:1.75;flex:1;font-weight:300}
+.lab-foot{
   display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--border);padding-top:.65rem;margin-top:.2rem;
-  font-family:var(--mono);font-size:.6rem;color:var(--text-dim);
-  letter-spacing:.04em;
+  border-top:1px solid var(--border);padding-top:.45rem;margin-top:.1rem;
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--ink-dim);letter-spacing:.03em;
 }
-.mitre{color:var(--violet-s);font-weight:500}
+.mitre{color:var(--violet-ink);font-weight:500}
 
-/* ══ CREDENTIALS ══════════════════════════════════════════════════ */
-.certs-tools-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:3.5rem;align-items:start;
+/* ═══ WRITEUPS ════════════════════════════════════════ */
+.wu-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:1.8rem 1.9rem;
+  display:flex;gap:1.4rem;align-items:flex-start;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s,transform .2s,border-color .2s,background .25s;
 }
-.certs-list{display:flex;flex-direction:column;gap:.75rem}
+.wu-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--border-h)}
+.wu-body{flex:1;min-width:0}
+.wu-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.45rem}
+.wu-source{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim)}
+.wu-badge{font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.05em;padding:2px 8px;border-radius:4px;font-weight:500}
+.wu-title{font-family:'Sora',sans-serif;font-size:1.02rem;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:.45rem}
+.wu-summary{font-size:.83rem;color:var(--ink-sec);line-height:1.85;font-weight:300}
+.wu-tags{display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.75rem}
+.commissioned-note{
+  display:inline-flex;align-items:center;gap:.35rem;
+  background:var(--amber-bg);border:1px solid var(--amber-bdr);
+  border-radius:5px;padding:4px 10px;margin-top:.7rem;
+  font-size:.73rem;color:var(--amber-ink);font-weight:500;font-family:'JetBrains Mono',monospace;
+}
+.wu-arrow{
+  flex-shrink:0;width:32px;height:32px;border-radius:8px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--ink-dim);
+  transition:all .18s;
+}
+.wu-card:hover .wu-arrow{border-color:var(--blue-bdr);color:var(--blue);background:var(--blue-bg)}
+
+/* ═══ CREDENTIALS ════════════════════════════════════ */
+.creds-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.certs-list{display:flex;flex-direction:column;gap:.55rem}
 .cert-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:1.05rem 1.3rem;
-  display:flex;align-items:center;gap:.9rem;
-  transition:border-color .2s,transform .2s;
+  border-radius:10px;padding:.9rem 1.1rem;
+  display:flex;align-items:center;gap:.8rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .15s,transform .15s,background .25s;
 }
-.cert-card:hover{border-color:var(--border-h);transform:translateX(4px)}
+.cert-card:hover{box-shadow:var(--shadow-md);transform:translateX(4px)}
 .cert-ico{
-  width:42px;height:42px;border-radius:var(--r-sm);
+  width:38px;height:38px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
+  font-size:.9rem;flex-shrink:0;
 }
-.ci-earn{background:rgba(0,210,150,.09);border:1px solid rgba(0,210,150,.2)}
-.ci-prog{background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.2)}
-.ci-plan{background:rgba(74,95,122,.12);border:1px solid rgba(74,95,122,.25)}
-.cert-name{font-size:.87rem;font-weight:600;color:var(--text);margin-bottom:.2rem;line-height:1.3}
-.cert-st{font-family:var(--mono);font-size:.6rem;letter-spacing:.07em}
-.cs-earn{color:var(--teal)}.cs-prog{color:var(--amber)}.cs-plan{color:var(--text-dim)}
+.ci-green{background:var(--green-bg);border:1px solid var(--green-bdr)}
+.ci-blue{background:var(--blue-bg);border:1px solid var(--blue-bdr)}
+.cert-name{font-size:.83rem;font-weight:600;color:var(--ink);margin-bottom:.12rem;line-height:1.3}
+.cert-year{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.04em;color:var(--teal)}
 
-.tools-section-label{
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;
-  color:var(--text-dim);text-transform:uppercase;
-  margin-bottom:.6rem;margin-top:1.4rem;
+.tool-group{margin-bottom:1rem}
+.tool-label{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-dim);margin-bottom:.4rem;
 }
-.tools-section-label:first-child{margin-top:0}
-.tools-wrap{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.1rem}
+.tools-wrap{display:flex;flex-wrap:wrap;gap:.3rem}
 .tool{
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;
-  padding:5px 12px;border-radius:6px;
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.03em;
+  padding:4px 10px;border-radius:5px;
   background:var(--surface2);border:1px solid var(--border);
-  color:var(--text-sec);transition:all .18s;cursor:default;font-weight:400;
+  color:var(--ink-sec);transition:all .15s,background .25s;cursor:default;
 }
-.tool:hover{border-color:var(--border-h);color:var(--blue);background:rgba(79,139,255,.06)}
+.tool:hover{border-color:var(--blue-bdr);color:var(--blue);background:var(--blue-bg)}
 
-/* ══ CONTACT ═════════════════════════════════════════════════════ */
-#contact{padding:6rem 0 4rem}
-.contact-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:4rem;align-items:center;
+/* ═══ CONTACT ════════════════════════════════════════ */
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.contact-heading{
+  font-family:'Sora',sans-serif;
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  font-weight:700;letter-spacing:-.02em;line-height:1.1;
+  color:var(--ink);margin-bottom:.8rem;
 }
-.contact-left h2{
-  font-family:var(--display);
-  font-size:clamp(2.8rem,6vw,4.5rem);
-  letter-spacing:.04em;line-height:1.0;
-  color:var(--text);margin-bottom:1.1rem;
+.contact-heading span{
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.contact-left h2 span{
-  background:var(--dual);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.contact-left p{
-  font-size:.95rem;color:var(--text-sec);
-  line-height:1.82;margin-bottom:2.2rem;
-  font-weight:300;
-}
-.contact-links{display:flex;flex-direction:column;gap:.7rem}
-.contact-link{
-  display:flex;align-items:center;gap:.9rem;
-  text-decoration:none;padding:1rem 1.3rem;
+.contact-body{font-size:.9rem;color:var(--ink-sec);line-height:1.88;margin-bottom:1.6rem;font-weight:300}
+.cl-list{display:flex;flex-direction:column;gap:.5rem}
+.cl{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.85rem 1.1rem;
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);
-  transition:border-color .2s,background .2s,transform .2s;
-  color:inherit;
+  border-radius:10px;box-shadow:var(--shadow-sm);
+  transition:box-shadow .18s,transform .18s,border-color .18s,background .25s;
 }
-.contact-link:hover{border-color:var(--border-h);background:var(--surface2);transform:translateX(4px)}
-.cl-icon{
-  width:40px;height:40px;border-radius:var(--r-sm);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;
-}
-.cl-icon.email{background:rgba(79,139,255,.1);border:1px solid rgba(79,139,255,.18)}
-.cl-icon.li{background:rgba(0,119,181,.12);border:1px solid rgba(0,119,181,.2)}
-.cl-icon.gh{background:rgba(200,200,220,.05);border:1px solid rgba(200,200,220,.12)}
-.cl-text-top{font-size:.88rem;font-weight:600;color:var(--text)}
-.cl-text-bot{font-size:.74rem;color:var(--text-dim);font-family:var(--mono)}
-.cl-arrow{margin-left:auto;color:var(--text-dim);font-size:.9rem;transition:color .2s,transform .2s}
-.contact-link:hover .cl-arrow{color:var(--blue);transform:translateX(3px)}
+.cl:hover{box-shadow:var(--shadow-md);transform:translateX(4px);border-color:var(--border-h)}
+.cl-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.cl-ico.em,.cl-ico.li{background:var(--blue-bg);border:1px solid var(--blue-bdr)}
+.cl-ico.gh{background:var(--surface2);border:1px solid var(--border)}
+.cl-label{font-size:.82rem;font-weight:600;color:var(--ink)}
+.cl-sub{font-size:.68rem;color:var(--ink-dim);font-family:'JetBrains Mono',monospace}
+.cl-arr{margin-left:auto;color:var(--ink-dim);font-size:.8rem;transition:color .15s,transform .15s}
+.cl:hover .cl-arr{color:var(--blue);transform:translateX(3px)}
 
-.contact-right{
+.contact-panel{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-lg);padding:2.2rem;position:relative;overflow:hidden;
+  border-radius:14px;padding:1.8rem;
+  box-shadow:var(--shadow-md);
+  border-top:3px solid var(--blue);
 }
-.contact-right::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--dual);
-}
-.cr-label{
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;
-  color:var(--text-dim);text-transform:uppercase;margin-bottom:1.6rem;
-}
-.cr-item{
-  display:flex;align-items:flex-start;gap:.8rem;
-  margin-bottom:1.2rem;
-}
-.cr-item:last-of-type{margin-bottom:1.5rem}
-.cr-dot{
-  width:8px;height:8px;border-radius:50%;
-  flex-shrink:0;margin-top:.45rem;
-}
-.cr-dot.blue{background:var(--blue);box-shadow:0 0 6px rgba(79,139,255,.4)}
-.cr-dot.teal{background:var(--teal);box-shadow:0 0 6px rgba(0,210,150,.4)}
-.cr-dot.violet{background:var(--violet);box-shadow:0 0 6px rgba(123,90,245,.4)}
-.cr-dot.amber{background:var(--amber);box-shadow:0 0 6px rgba(245,166,35,.4)}
-.cr-item-text{font-size:.875rem;color:var(--text-sec);line-height:1.55;font-weight:300}
-.cr-item-text strong{color:var(--text);font-weight:600}
+.cp-label{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:1.3rem}
+.cp-item{display:flex;align-items:flex-start;gap:.65rem;margin-bottom:.95rem}
+.cp-item:last-of-type{margin-bottom:1.4rem}
+.cp-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:.56rem}
+.cp-dot.b{background:var(--blue)}
+.cp-dot.t{background:var(--teal)}
+.cp-dot.v{background:var(--violet-ink)}
+.cp-dot.a{background:var(--amber-ink)}
+.cp-text{font-size:.82rem;color:var(--ink-sec);line-height:1.65;font-weight:300}
+.cp-text strong{color:var(--ink);font-weight:600}
 .open-badge{
-  display:inline-flex;align-items:center;gap:.4rem;
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;
-  padding:5px 12px;border-radius:40px;
-  background:rgba(0,210,150,.09);color:var(--teal);
-  border:1px solid rgba(0,210,150,.22);
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:'JetBrains Mono',monospace;font-size:.57rem;letter-spacing:.06em;
+  background:var(--green-bg);color:var(--green);
+  border:1px solid var(--green-bdr);padding:4px 11px;border-radius:40px;
 }
 .open-badge::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--teal);animation:pulse-dot 2.5s ease-in-out infinite;
+  content:'';width:5px;height:5px;border-radius:50%;background:var(--green);
+  animation:pulse 2.5s ease-in-out infinite;
 }
 
-/* ══ FOOTER ══════════════════════════════════════════════════════ */
+/* ═══ FOOTER ══════════════════════════════════════════ */
 footer{
-  position:relative;z-index:1;
   border-top:1px solid var(--border);
-  padding:2rem 2.5rem;
+  padding:1.4rem 2.5rem;
   display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:1rem;
+  flex-wrap:wrap;gap:.6rem;
+  background:var(--surface);
+  transition:background .25s,border-color .25s;
 }
-.footer-left{
-  font-family:var(--mono);font-size:.68rem;
-  color:var(--text-dim);letter-spacing:.06em;
-}
-.footer-right{display:flex;gap:1.5rem}
-.footer-right a{
-  font-family:var(--mono);font-size:.66rem;
-  color:var(--text-dim);text-decoration:none;
-  transition:color .2s;
-}
-.footer-right a:hover{color:var(--blue)}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ink-dim);letter-spacing:.04em}
+.footer-links{display:flex;gap:1.3rem}
+.footer-links a{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ink-dim);transition:color .15s}
+.footer-links a:hover{color:var(--blue)}
 
-/* ══ FADE-IN ══════════════════════════════════════════════════════ */
-.fi{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+/* ═══ RESUME OVERLAY ══════════════════════════════════ */
+.r-overlay{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+}
+.r-overlay[hidden]{display:none}
+.r-backdrop{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  animation:bdIn .22s ease;
+}
+@keyframes bdIn{from{opacity:0}to{opacity:1}}
+.r-modal{
+  position:relative;z-index:1;
+  width:min(860px,100%);
+  height:min(92vh,1100px);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 24px 60px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  animation:modalIn .26s cubic-bezier(.22,1,.36,1);
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.96) translateY(12px)}
+  to{opacity:1;transform:none}
+}
+.r-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1rem;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  gap:.75rem;flex-shrink:0;
+}
+.r-toolbar-left{display:flex;align-items:center;gap:.6rem}
+.r-title{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);
+}
+.r-name-label{
+  font-family:'Sora',sans-serif;font-size:.82rem;font-weight:700;color:var(--ink);
+}
+.r-toolbar-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.r-zoom-group{
+  display:flex;align-items:center;gap:.25rem;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:7px;padding:2px 6px;
+}
+.r-zoom-val{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  color:var(--ink-sec);min-width:36px;text-align:center;
+}
+.r-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:.3rem;
+  height:30px;padding:0 .7rem;
+  border-radius:6px;border:1px solid var(--border);
+  background:transparent;color:var(--ink-sec);
+  font-size:.75rem;font-weight:600;cursor:pointer;
+  transition:all .15s;font-family:'Inter',sans-serif;
+  white-space:nowrap;
+}
+.r-btn:hover{border-color:var(--border-h);color:var(--ink);background:var(--surface2)}
+.r-zoom-group .r-btn{border:none;padding:0 .45rem;height:24px;border-radius:4px}
+.r-zoom-group .r-btn:hover{background:var(--border)}
+.r-btn-reset{font-size:.8rem}
+.r-btn-dl{
+  background:var(--blue);color:#fff;border-color:var(--blue);
+  font-size:.72rem;
+}
+.r-btn-dl:hover{opacity:.88;color:#fff;background:var(--blue)}
+.r-btn-close{
+  width:30px;padding:0;font-size:.78rem;
+}
+.r-btn-close:hover{border-color:var(--red-bdr);color:var(--red-ink);background:var(--red-bg)}
+.r-body{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  background:var(--bg);
+  display:flex;justify-content:center;
+  align-items:flex-start;
+  padding:1.5rem 1rem;
+}
+.r-pdf-wrap{
+  transform-origin:top center;
+  transition:transform .2s ease;
+  width:100%;max-width:760px;
+}
+.r-frame{
+  width:100%;
+  height:1200px;
+  border:none;
+  border-radius:6px;
+  box-shadow:var(--shadow-md);
+  display:block;
+  scroll-behavior:no;
+}
+
+.r-loading{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.8rem;padding:3rem;color:var(--ink-dim);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;
+}
+.r-spinner{
+  width:28px;height:28px;border-radius:50%;
+  border:2.5px solid var(--border);
+  border-top-color:var(--blue);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ FADE-IN ═════════════════════════════════════════ */
+.fi{opacity:0;transform:translateY(16px);transition:opacity .48s ease,transform .48s ease}
 .fi.vis{opacity:1;transform:none}
-.fi-delay-1{transition-delay:.1s}
-.fi-delay-2{transition-delay:.2s}
-.fi-delay-3{transition-delay:.3s}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
 
-/* ══ RESPONSIVE ══════════════════════════════════════════════════ */
+/* ═══ RESPONSIVE ══════════════════════════════════════ */
 @media(max-width:860px){
-  nav{padding:0 1.5rem}
-  .wrap{padding:0 1.5rem}
-  .hero-layout{grid-template-columns:1fr;gap:3rem}
-  .id-card{display:none}
-  .two-col{grid-template-columns:1fr}
-  .certs-tools-grid{grid-template-columns:1fr}
-  .contact-grid{grid-template-columns:1fr}
-  .proj-card{grid-template-columns:1fr}
-  .proj-arrow-col{display:none}
+  nav{padding:0 1.2rem}
+  .wrap{padding:0 1.2rem}
+  .hero-layout{grid-template-columns:1fr}
+  .profile-card{display:none}
+  .exp-grid,.creds-grid,.contact-layout{grid-template-columns:1fr}
+  .proj-card{flex-direction:column}
+  .proj-arrow,.wu-arrow{display:none}
   footer{flex-direction:column;align-items:flex-start}
 }
-@media(max-width:540px){
-  .hero-stats{grid-template-columns:1fr 1fr}
+@media(max-width:520px){
   .nav-links{display:none}
-  .hero-name{font-size:clamp(3.5rem,14vw,5rem)}
+  .hero-headline{font-size:clamp(2.2rem,10vw,3rem)}
+  .impact-row{gap:.9rem}
+}
+.tool-ctx {
+  font-size: .68rem;
+  color: var(--ink-dim);
+  font-weight: 400;
+  margin-left: .2rem;
+}
+.hero-photo {
+  width: 280px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+}
+
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.tools-stacked {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem 2.5rem;
 }
 </style>
 </head>
 <body>
 
-<div class="bg-canvas">
-  <div class="bg-orb bg-orb-1"></div>
-  <div class="bg-orb bg-orb-2"></div>
-  <div class="bg-orb bg-orb-3"></div>
-</div>
-<div class="bg-grid"></div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DXWG78EWFQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DXWG78EWFQ', {
+    page_title: 'SOC Portfolio — Didde Isaac',
+    send_page_view: true
+  });
+</script>
 
-<!-- ══ NAV ══════════════════════════════════════════════════════ -->
-<nav>
-  <div class="nav-brand">
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="nav-brand" href="#hero">
     <div class="dot"></div>
-    <span class="nb-name">Didde Isaac</span>
-    <span class="sep">/</span>
-    <span>SOC Analyst</span>
-  </div>
+    Didde Isaac
+    <!-- <span class="nav-brand-sub">/ SOC</span> -->
+  </a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
+    <li><a href="#about">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#labs">Labs</a></li>
+    <li><a href="#writeups">Writeups</a></li>
     <li><a href="#certs">Credentials</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-  <a class="nav-cta" href="mailto:diddeisaac@gmail.com">
-    <span>Hire Me</span>
-  </a>
+  <div class="nav-right">
+    <div class="nav-status">
+      <!-- <span class="nav-status-dot"></span>Open to Offers -->
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <!-- <a class="nav-hire" href="mailto:diddeisaac@gmail.com">Hire Me →</a> -->
+  </div>
 </nav>
 
-<!-- ══ HERO ══════════════════════════════════════════════════════ -->
+<!-- HERO -->
 <section id="hero">
+  <div class="hero-glow"></div>
   <div class="wrap">
     <div class="hero-layout">
 
       <!-- Left -->
       <div>
-        <div class="hero-badge">Cybersecurity · SOC Operations · Blue Team</div>
-        <h1 class="hero-name">
-          <span class="first">Didde</span>
-          <span class="last">Isaac</span>
+        <div class="avail-chip fi">Available · Pan-India &amp; Remote</div>
+        <div class="hero-role-wrap fi d1">
+          <span class="role-static">SOC Analyst</span>
+          <span class="role-rotating"><span class="role-text" id="roleText">Blue Team</span></span>
+        </div>
+        <h1 class="hero-headline fi d1">
+          Security <span class="accent">Analyst</span><br/>Ready to Defend.
         </h1>
-        <div class="hero-typed-wrap">
-          <span class="prompt">→</span>
-          <span id="typed"></span><span class="cursor"></span>
-        </div>
-        <p class="hero-bio">
-          <span class="hi">Google Cybersecurity Certified</span> SOC analyst with hands-on homelab experience in <strong>Suricata IDS/IPS</strong>, <strong>Splunk SIEM</strong>, and web attack detection. Former BPO SME with <strong>11 months</strong> of 24×7 shift-based incident triage and Tier 1→2 escalation discipline.
+        <p class="hero-bio fi d2">
+          <strong>Google Cybersecurity Certified</strong> with hands-on <strong>Suricata IDS/IPS</strong>, <strong>Splunk SIEM</strong>, and web attack detection. 11 months of 24×7 incident triage — zero missed critical escalations.
         </p>
-        <div class="hero-ctas">
-          <a class="btn btn-primary" href="https://github.com/Isaacdidde" target="_blank" rel="noopener">View GitHub ↗</a>
-          <a class="btn btn-teal" href="#projects">See Projects</a>
-          <a class="btn btn-ghost" href="mailto:diddeisaac@gmail.com">Contact</a>
-        </div>
-        <!-- <div class="hero-stats">
-          <div class="stat-item fi fi-delay-1">
-            <div class="stat-num">200+</div>
-            <div class="stat-label">Alerts<br>Triaged</div>
-          </div>
-          <div class="stat-item fi fi-delay-2">
-            <div class="stat-num">15+</div>
-            <div class="stat-label">Detection Rules<br>Written</div>
-          </div>
-          <div class="stat-item fi fi-delay-3">
-            <div class="stat-num">3</div>
-            <div class="stat-label">Published<br>Lab Repos</div>
-          </div>
-        </div> -->
-      </div>
-
-      <!-- Right — ID Card -->
-      <div class="id-card fi">
-        <div class="id-avatar-wrap">
-          <div class="id-avatar">DI</div>
-        </div>
-        <p class="id-name">Didde Isaac</p>
-        <p class="id-role">Tier 1 SOC Analyst Candidate</p>
-        <div class="id-divider"></div>
-        <div class="id-row">
-          <span class="id-key">Location</span>
-          <span class="id-val">Bhilai, CG → Hyderabad</span>
-        </div>
-        <div class="id-row">
-          <span class="id-key">Education</span>
-          <span class="id-val">MCA — CSVTU, 2026</span>
-        </div>
-        <div class="id-row">
-          <span class="id-key">Cert</span>
-          <span class="id-val">Google Cybersecurity Professional</span>
-        </div>
-        <div class="id-row">
-          <span class="id-key">Focus</span>
-          <span class="id-val">SIEM · Threat Detection · Blue Team</span>
-        </div>
-        <div class="id-row">
-          <span class="id-key">Status</span>
-          <span class="id-val"><span class="status-badge">Open to Work</span></span>
-        </div>
-      </div>
-
-    </div>
+    <div class="impact-row fi d2">
+  <div class="impact-num">
+    <span class="num">200+</span>
+    <span class="lbl">Events Triaged</span>
   </div>
+  <div class="impact-sep"></div>
+  <div class="impact-num">
+    <span class="num">15+</span>
+    <span class="lbl">Detection Rules</span>
+  </div>
+  <div class="impact-sep"></div>
+  <div class="impact-num">
+    <span class="num">3</span>
+    <span class="lbl">Homelabs Built</span>
+  </div>
+  <div class="impact-sep"></div>
+  <div class="impact-num">
+    <span class="num">100%</span>
+    <span class="lbl">SLA Adherence</span>
+  </div>
+  <div class="impact-sep"></div>
+  <div class="impact-num">
+    <span class="num">24×7</span>
+    <span class="lbl">Ops Experience</span>
+  </div>
+</div>
+        <div class="hero-actions fi d3">
+          <a class="btn btn-primary" href="https://github.com/Isaacdidde" target="_blank" rel="noopener">⌨ View GitHub</a>
+          <button class="btn btn-teal" id="resumeBtn">↓ Resume</button>
+          <a class="btn btn-ghost" href="mailto:diddeisaac@gmail.com">Get in Touch</a>
+        </div>
+      </div>
+
+      <!-- Right: Profile Card -->
+      <div class="hero-photo fi d2">
+  <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac"
+       onerror="this.style.display='none'"/>
+</div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ ABOUT / EXPERIENCE ═════════════════════════════════════════ -->
+<!-- EXPERIENCE & EDUCATION -->
 <section id="about" class="section">
   <div class="wrap">
     <div class="sh fi">
-      <p class="sh-eyebrow">01 — Background</p>
-      <h2 class="sh-title">Experience &amp; Background</h2>
-      <p class="sh-sub">A non-traditional path into cybersecurity — technical depth built through self-directed homelab work, backed by professional discipline from BPO operations.</p>
+      <p class="eyebrow">Background</p>
+      <h2 class="section-title">Experience &amp; Education</h2>
+      <p class="section-sub">Real-world operations discipline applied to security.</p>
     </div>
-    <div class="two-col">
+    <div class="exp-grid">
       <div class="exp-card fi">
         <p class="exp-date">Mar 2023 — Jan 2024</p>
-        <p class="exp-title">Customer Support Executive &amp; SME</p>
+        <p class="exp-title">Customer Support Executive &amp; Subject Matter Expert</p>
         <p class="exp-org">Niftel Communications — Blinkit Process</p>
-        <ul class="exp-bullets">
-          <li>Handled 50–80+ tickets daily in a 24×7 rotational shift environment with 100% SLA adherence — directly building the triage discipline needed for SOC Tier 1 queue management.</li>
-          <li>Performed root-cause analysis on escalated cases; documented findings in runbooks and routed per defined escalation trees.</li>
-          <li>Promoted to SME in 6 months; awarded Top Performer ×2 for zero-miss critical escalations and precise ticket categorisation.</li>
+        <ul class="exp-list">
+          <li>Handled 50–80+ tickets per day in a 24×7 rotational shift environment with 100% SLA adherence — the same queue discipline a Tier 1 SOC requires.</li>
+          <li>Performed root-cause analysis on escalated cases; routed through defined escalation paths.</li>
+          <li>Promoted to SME in 6 months. Recognised as Top Performer twice for zero-miss critical escalations.</li>
         </ul>
       </div>
-      <div class="exp-card fi fi-delay-1">
+      <div class="exp-card fi d1">
         <p class="exp-date">2024 — 2026</p>
         <p class="exp-title">Master of Computer Applications (MCA)</p>
         <p class="exp-org">CSVTU, Durg — Computer Science</p>
-        <ul class="exp-bullets">
-          <li>Completed major project: <strong>Qrypta</strong> — a zero-trust Flask/MongoDB password vault with RBAC, AES-256 encryption, 2FA, and audit logging.</li>
-          <li>Built parallel cybersecurity homelab portfolio throughout the degree — Suricata, Splunk, Wazuh, and web attack detection labs.</li>
-          <li>Actively pursuing CompTIA Security+ alongside degree coursework.</li>
+        <ul class="exp-list">
+          <li>Final-year project: <strong>Qrypta</strong> — zero-trust Flask/MongoDB password vault with RBAC, AES-256, 2FA, and immutable audit logging.</li>
+          <li>Ran a parallel cybersecurity homelab throughout — Suricata, Splunk, Wazuh, and web attack detection labs alongside coursework.</li>
+          <li>Completed the <strong>Google Cybersecurity Professional Certificate</strong> concurrently.</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ SKILLS ════════════════════════════════════════════════════ -->
+<!-- Skills -->
+ <!-- SKILLS -->
 <section id="skills" class="section">
   <div class="wrap">
     <div class="sh fi">
-      <p class="sh-eyebrow">02 — Capabilities</p>
-      <h2 class="sh-title">Core Skill Areas</h2>
+      <p class="eyebrow">Capabilities</p>
+      <h2 class="section-title">Technical Skill Areas</h2>
+      <p class="section-sub">Deployed in production homelabs, tested against real attack scenarios.</p>
     </div>
     <div class="skills-grid">
 
-      <div class="sk-card c-blue fi">
-        <div class="sk-ico-wrap ico-blue">📡</div>
-        <p class="sk-name">SIEM &amp; Detection Engineering</p>
-        <p class="sk-desc">Splunk SPL queries, correlation rules, and dashboards. Wazuh agent deployment and rule tuning. Suricata IDS/IPS YAML rule authoring and eve.json log analysis.</p>
-        <div class="tags"><span class="tag t-blue">Splunk</span><span class="tag t-blue">Wazuh</span><span class="tag t-blue">Suricata</span><span class="tag t-blue">SPL</span></div>
+      <div class="sk-card fi">
+        <p class="sk-name">SIEM & Log Analysis</p>
+        <p class="sk-desc">Ingested eve.json logs from Suricata into Splunk, built SPL correlation searches, and created dashboards to investigate 200+ simulated security events. Deployed Wazuh agents, tuned detection rules, and analysed alerts via the Wazuh dashboard in a live web-attack lab.</p>
+        <div class="tags"><span class="tag t-b">Splunk</span><span class="tag t-b">SPL</span><span class="tag t-b">Wazuh</span><span class="tag t-b">eve.json</span><span class="tag t-b">Log Correlation</span></div>
       </div>
 
-      <div class="sk-card c-red fi fi-delay-1">
-        <div class="sk-ico-wrap ico-red">🌐</div>
-        <p class="sk-name">Web Attack Investigation</p>
-        <p class="sk-desc">Detecting and documenting SQL Injection, XSS, IDOR, and Command Injection through HTTP log analysis, raw request inspection, and DVWA-based purple team exercises.</p>
-        <div class="tags"><span class="tag t-red">SQLi</span><span class="tag t-red">XSS</span><span class="tag t-red">IDOR</span><span class="tag t-red">OWASP</span></div>
+      <div class="sk-card fi d1">
+        <p class="sk-name">Intrusion Detection & Network Forensics</p>
+        <p class="sk-desc">Wrote 15+ custom Suricata IDS/IPS rules in YAML, validated alert generation, and captured network traffic with Wireshark to analyse Nmap reconnaissance and malicious payloads at the packet level. Used TCPdump for live capture and log review.</p>
+        <div class="tags"><span class="tag t-b">Suricata</span><span class="tag t-b">Wireshark</span><span class="tag t-b">TCPdump</span><span class="tag t-b">Nmap</span><span class="tag t-b">IDS/IPS Rules</span></div>
       </div>
 
-      <div class="sk-card c-amber fi fi-delay-2">
-        <div class="sk-ico-wrap ico-amber">🔬</div>
-        <p class="sk-name">Threat Intelligence &amp; IR</p>
-        <p class="sk-desc">Alert triage, IOC extraction, malware triage, phishing analysis, OSINT. Full Incident Response Lifecycle with MITRE ATT&amp;CK and Cyber Kill Chain mapping.</p>
-        <div class="tags"><span class="tag t-amber">ATT&amp;CK</span><span class="tag t-amber">IOC</span><span class="tag t-amber">Kill Chain</span></div>
+      <div class="sk-card fi d2">
+        <p class="sk-name">Alert Triage & Incident Response</p>
+        <p class="sk-desc">Triaged and validated alerts from SIEM dashboards, extracted IOCs, reconstructed attack timelines from Apache and Windows Event Logs, and produced structured incident documentation with escalation notes. Applied the full IR lifecycle — detection through post-incident review.</p>
+        <div class="tags"><span class="tag t-r">Alert Triage</span><span class="tag t-r">IOC Extraction</span><span class="tag t-r">Incident Documentation</span><span class="tag t-r">Windows Event Logs</span><span class="tag t-r">Sysmon</span></div>
       </div>
 
-      <div class="sk-card c-teal fi">
-        <div class="sk-ico-wrap ico-teal">🖧</div>
-        <p class="sk-name">Network &amp; Endpoint Security</p>
-        <p class="sk-desc">Wireshark, TCPdump, Nmap for traffic analysis. TCP/IP, DNS, HTTP/S protocol understanding. Windows Event Logs, Sysmon, Linux CLI (Kali/Ubuntu), firewall rules.</p>
-        <div class="tags"><span class="tag t-teal">Wireshark</span><span class="tag t-teal">Nmap</span><span class="tag t-teal">Sysmon</span><span class="tag t-teal">Linux</span></div>
+      <div class="sk-card fi">
+        <p class="sk-name">Threat Intelligence & MITRE ATT&CK Mapping</p>
+        <p class="sk-desc">Mapped lab findings to MITRE ATT&CK techniques — T1595 (Active Scanning), T1046 (Network Service Discovery), T1190 (Exploit Public-Facing Application) — and applied the Cyber Kill Chain to document full attack narratives with evidence in published GitHub writeups.</p>
+        <div class="tags"><span class="tag t-a">MITRE ATT&CK</span><span class="tag t-a">Cyber Kill Chain</span><span class="tag t-a">TTP Mapping</span><span class="tag t-a">OSINT</span></div>
       </div>
 
-      <div class="sk-card c-violet fi fi-delay-1">
-        <div class="sk-ico-wrap ico-violet">🐍</div>
-        <p class="sk-name">Scripting &amp; Automation</p>
-        <p class="sk-desc">Python and Bash for log parsing, IOC extraction, and alert monitoring automation. Bash automation scripts deployed in production Suricata/Splunk homelab pipeline.</p>
-        <div class="tags"><span class="tag t-violet">Python</span><span class="tag t-violet">Bash</span><span class="tag t-violet">SQL</span></div>
+      <div class="sk-card fi d1">
+        <p class="sk-name">Web Attack Analysis & Vulnerability Management</p>
+        <p class="sk-desc">Executed SQL injection attacks against DVWA using SQLMap, monitored Apache access and error logs for attack signatures, and ingested findings into Wazuh for rule validation. Familiar with CVE identification, OWASP Top 10, and remediation tracking workflows.</p>
+        <div class="tags"><span class="tag t-r">SQL Injection</span><span class="tag t-r">SQLMap</span><span class="tag t-r">DVWA</span><span class="tag t-r">Apache Log Analysis</span><span class="tag t-r">CVE</span></div>
       </div>
 
-      <div class="sk-card c-blue fi fi-delay-2">
-        <div class="sk-ico-wrap ico-blue">🔐</div>
-        <p class="sk-name">IAM &amp; Security Engineering</p>
-        <p class="sk-desc">RBAC, least-privilege, AES-256, bcrypt, 2FA, session management, audit logging — designed and implemented in Qrypta. Frameworks: NIST CSF, ISO 27001.</p>
-        <div class="tags"><span class="tag t-blue">RBAC</span><span class="tag t-blue">IAM</span><span class="tag t-blue">NIST CSF</span></div>
+      <div class="sk-card fi d2">
+        <p class="sk-name">Scripting, IAM & Security Engineering</p>
+        <p class="sk-desc">Wrote Bash automation scripts for log parsing and alert monitoring in the Suricata/Splunk pipeline. Built Qrypta — a full-stack IAM password manager with AES-256 encryption, bcrypt hashing, RBAC, 2FA (SMTP OTP), session management, and audit logging using Python and Flask.</p>
+        <div class="tags"><span class="tag t-v">Python</span><span class="tag t-v">Bash</span><span class="tag t-v">RBAC</span><span class="tag t-v">AES-256</span><span class="tag t-v">2FA</span><span class="tag t-v">Audit Logging</span></div>
       </div>
 
     </div>
   </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ PROJECTS ═══════════════════════════════════════════════════ -->
+<!-- PROJECTS -->
 <section id="projects" class="section">
   <div class="wrap">
     <div class="sh fi">
-      <p class="sh-eyebrow">03 — Portfolio</p>
-      <h2 class="sh-title">Featured Projects</h2>
-      <p class="sh-sub">End-to-end homelab builds — each one documented, published, and mapped to real-world SOC workflows.</p>
+      <p class="eyebrow">Portfolio</p>
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-sub">Production homelabs — architected, deployed, and documented end-to-end.</p>
     </div>
     <div class="proj-list">
 
       <a class="proj-card fi" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab" target="_blank" rel="noopener">
-        <div>
-          <div class="proj-meta-top">
-            <span class="proj-num">PROJECT 01</span>
-            <span class="proj-type-badge ptb-ids">IDS/IPS · SIEM</span>
+        <span class="proj-num">01</span>
+        <div class="proj-body">
+          <div class="proj-header">
+            <span class="ptag ptag-b">IDS/IPS · SIEM</span>
           </div>
-          <p class="proj-name">Network Threat Detection Lab — Suricata IDS/IPS + Splunk</p>
-          <p class="proj-desc">Full SOC homelab on Kali Linux. Ran active Nmap reconnaissance from the attack machine, captured all traffic in Wireshark at the packet level — identifying SYN flood patterns and probe sequences in real time. Fed traffic into Suricata IDS/IPS, authored 15+ custom YAML detection rules. Ingested eve.json into Splunk, built SPL correlation alerts and dashboards, and automated log monitoring with Bash scripts. All TTPs mapped to MITRE ATT&amp;CK (T1595, T1046).</p>
-          <div class="proj-tags">
-            <span class="tag t-blue">Suricata</span>
-            <span class="tag t-blue">Splunk</span>
-            <span class="tag t-teal">Wireshark</span>
-            <span class="tag t-violet">Bash</span>
-            <span class="tag t-red">T1595 · T1046</span>
+          <p class="proj-name">Network Intrusion Detection Lab — Suricata + Splunk</p>
+          <p class="proj-desc">Simulated Nmap reconnaissance and SYN flood attacks from Kali Linux, captured traffic via Wireshark, and authored 15+ custom Suricata YAML rules targeting T1595 and T1046. Structured eve.json logs into Splunk via Bash pipeline; built SPL correlation searches, threshold alerts, and operational dashboards. Full investigation documented with packet-level evidence.</p>
+          <div class="proj-result">15+ detection rules · 200+ events triaged · T1595, T1046</div>
+          <div class="tags" style="margin-top:.65rem">
+            <span class="tag t-b">Suricata</span><span class="tag t-b">Splunk SPL</span><span class="tag t-t">Wireshark</span><span class="tag t-v">Bash</span><span class="tag t-r">MITRE ATT&amp;CK</span>
           </div>
         </div>
-        <div class="proj-arrow-col">
-          <div class="proj-arrow">↗</div>
-          <span class="proj-link-note">github</span>
-        </div>
+        <div class="proj-arrow">↗</div>
       </a>
 
-      <a class="proj-card fi fi-delay-1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks" target="_blank" rel="noopener">
-        <div>
-          <div class="proj-meta-top">
-            <span class="proj-num">PROJECT 02</span>
-            <span class="proj-type-badge ptb-web">WEB ATTACKS · SIEM</span>
+      <a class="proj-card fi d1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks" target="_blank" rel="noopener">
+        <span class="proj-num">02</span>
+        <div class="proj-body">
+          <div class="proj-header">
+            <span class="ptag ptag-t">Web Attacks · SIEM</span>
           </div>
-          <p class="proj-name">Web Attack Detection Lab — Wazuh SIEM + DVWA</p>
-          <p class="proj-desc">Executed SQL injection attacks on DVWA using sqlmap; monitored real-time attack traces by tailing Apache2 access and error logs — identifying injection patterns, error responses, and suspicious query strings. Ingested Apache2 logs into Wazuh for alert generation and dashboard analysis. Extended to cover Command Injection (Whoami), XSS URL-parameter payloads, and IDOR access-control flaws — each fully documented with MITRE ATT&amp;CK mapping.</p>
-          <div class="proj-tags">
-            <span class="tag t-blue">Wazuh</span>
-            <span class="tag t-red">DVWA</span>
-            <span class="tag t-red">sqlmap</span>
-            <span class="tag t-amber">Apache2 Logs</span>
-            <span class="tag t-red">T1190 · T1059</span>
+          <p class="proj-name">Web Attack Detection Lab — Wazuh + DVWA</p>
+          <p class="proj-desc">Executed SQL Injection via SQLMap against a DVWA target, monitoring Apache2 access and error logs for attack signatures in real time. Ingested logs into Wazuh for rule validation and alert generation. Extended scope to Command Injection, Reflected XSS, and IDOR — each with reconstructed attack timeline, forensic log evidence, and ATT&amp;CK technique mapping.</p>
+          <div class="proj-result">4 attack vectors · Wazuh alerts validated · T1190, T1059</div>
+          <div class="tags" style="margin-top:.65rem">
+            <span class="tag t-b">Wazuh</span><span class="tag t-r">SQLMap</span><span class="tag t-r">DVWA</span><span class="tag t-a">Apache2 Logs</span><span class="tag t-r">T1190 · T1059</span>
           </div>
         </div>
-        <div class="proj-arrow-col">
-          <div class="proj-arrow">↗</div>
-          <span class="proj-link-note">github</span>
-        </div>
+        <div class="proj-arrow">↗</div>
       </a>
 
-      <a class="proj-card fi fi-delay-2" href="https://github.com/Isaacdidde/Qrypta" target="_blank" rel="noopener">
-        <div>
-          <div class="proj-meta-top">
-            <span class="proj-num">PROJECT 03</span>
-            <span class="proj-type-badge ptb-iam">IAM · SECURITY ENG.</span>
+      <a class="proj-card fi d2" href="https://github.com/Isaacdidde/Qrypta" target="_blank" rel="noopener">
+        <span class="proj-num">03</span>
+        <div class="proj-body">
+          <div class="proj-header">
+            <span class="ptag ptag-v">IAM · Security Engineering</span>
           </div>
-          <p class="proj-name">Qrypta — Enterprise IAM Password Manager</p>
-          <p class="proj-desc">Full-stack password manager built with Python and Flask enforcing RBAC, least-privilege access, 2FA, and AES-256 encryption. All user passwords, OTPs, and PII hashed with bcrypt. Implements password-strength policy enforcement, session token expiry, and full audit trails — simulating enterprise-grade IAM risk controls and anomaly detection capability. MCA major project submitted to CSVTU.</p>
-          <div class="proj-tags">
-            <span class="tag t-violet">Python</span>
-            <span class="tag t-violet">Flask</span>
-            <span class="tag t-violet">AES-256</span>
-            <span class="tag t-violet">RBAC</span>
-            <span class="tag t-teal">MongoDB</span>
+          <p class="proj-name">Qrypta — IAM Password Vault</p>
+          <p class="proj-desc">Full-stack credential management platform built in Python/Flask with RBAC and least-privilege access enforcement, AES-256 vault encryption, bcrypt password hashing, SMTP-based 2FA, and session expiration controls. Implements immutable audit trails for forensic review and anomaly detection. Structured to reflect enterprise IAM and access governance requirements.</p>
+          <div class="proj-result">AES-256 · RBAC enforced · Immutable audit trail · MCA capstone</div>
+          <div class="tags" style="margin-top:.65rem">
+            <span class="tag t-v">Python</span><span class="tag t-v">Flask</span><span class="tag t-v">AES-256</span><span class="tag t-v">RBAC</span><span class="tag t-t">MongoDB</span>
           </div>
         </div>
-        <div class="proj-arrow-col">
-          <div class="proj-arrow">↗</div>
-          <span class="proj-link-note">github</span>
-        </div>
+        <div class="proj-arrow">↗</div>
       </a>
 
     </div>
   </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ LABS ═══════════════════════════════════════════════════════ -->
+<!-- LAB WORK -->
 <section id="labs" class="section">
   <div class="wrap">
     <div class="sh fi">
-      <p class="sh-eyebrow">04 — Hands-On Cases</p>
-      <h2 class="sh-title">Lab Work</h2>
-      <p class="sh-sub">Individual exercises documented from the Suricata-Splunk lab and Web Attacks repo — each linked directly to source.</p>
+      <p class="eyebrow">Hands-On Cases</p>
+      <h2 class="section-title">Lab Investigations</h2>
+      <p class="section-sub">Individual cases from the homelab — each linked to its source and MITRE reference.</p>
     </div>
     <div class="labs-grid">
-
       <a class="lab-card fi" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-attack">Attack Sim</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
+        <div class="lab-top"><span class="lbadge lb-r">Attack Sim</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">Nmap Recon &amp; SYN Flood Simulation</p>
-        <p class="lab-desc">Ran active Nmap scans from Kali against the defending VM. Captured SYN flood patterns and probe sequences in Wireshark at packet level for signature identification.</p>
-        <div class="lab-footer">
-          <span>Kali · Wireshark</span>
-          <span class="mitre">T1595 · T1046</span>
-        </div>
+        <p class="lab-desc">Active Nmap scans from Kali against the defending VM. Captured SYN flood patterns and probe sequences in Wireshark for signature identification.</p>
+        <div class="lab-foot"><span>Kali · Wireshark</span><span class="mitre">T1595 · T1046</span></div>
       </a>
-
-      <a class="lab-card fi fi-delay-1" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-detect">Detection</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
+      <a class="lab-card fi d1" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-b">Detection</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">Suricata Custom Rule Engineering</p>
-        <p class="lab-desc">Authored 15+ custom YAML Suricata rules targeting scan patterns, SYN floods, and abnormal packet rates. Tuned thresholds to cut false-positive noise while maintaining high-confidence alert coverage.</p>
-        <div class="lab-footer">
-          <span>Suricata IDS/IPS</span>
-          <span class="mitre">Custom Rules</span>
-        </div>
+        <p class="lab-desc">15+ custom YAML rules targeting scan patterns, SYN floods, and abnormal packet rates. Tuned thresholds to reduce false-positive volume.</p>
+        <div class="lab-foot"><span>Suricata IDS/IPS</span><span class="mitre">Custom Rules</span></div>
       </a>
-
-      <a class="lab-card fi fi-delay-2" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/splunk" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-detect">Detection</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
+      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/splunk" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-b">SIEM</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">Splunk SPL Dashboards &amp; Correlation Alerts</p>
-        <p class="lab-desc">Ingested Suricata eve.json into Splunk. Built SPL-based correlation alerts and dashboards surfacing actionable IOCs — reducing alert noise from raw log volume.</p>
-        <div class="lab-footer">
-          <span>Splunk · eve.json</span>
-          <span class="mitre">Log Correlation</span>
-        </div>
+        <p class="lab-desc">Ingested Suricata eve.json into Splunk. Built SPL correlation alerts and dashboards to surface actionable IOCs from raw log volume.</p>
+        <div class="lab-foot"><span>Splunk · eve.json</span><span class="mitre">Log Correlation</span></div>
       </a>
-
-      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/SQL-Injection" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-webapp">Web App</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
-        <p class="lab-title">SQL Injection — DVWA + sqlmap Lab</p>
-        <p class="lab-desc">Set up DVWA locally, ran union-based and blind SQLi attacks with sqlmap, tailed Apache2 access and error logs in real time, and ingested results into Wazuh for alert generation and dashboard review.</p>
-        <div class="lab-footer">
-          <span>DVWA · Wazuh</span>
-          <span class="mitre">T1190</span>
-        </div>
+      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-a">Web App</span><span class="lab-ext">↗</span></div>
+        <p class="lab-title">SQL Injection — DVWA + sqlmap</p>
+        <p class="lab-desc">Union-based and blind SQLi with real-time Apache2 log monitoring and Wazuh alert generation. Full case report with IOC listing.</p>
+        <div class="lab-foot"><span>DVWA · Wazuh</span><span class="mitre">T1190</span></div>
       </a>
-
-      <a class="lab-card fi fi-delay-1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/Command-Injection" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-attack">Attack Sim</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
-        <p class="lab-title">Command Injection — Whoami Enumeration</p>
-        <p class="lab-desc">Simulated OS command injection via a vulnerable DVWA input field. Detected and documented the whoami and system enumeration chain; produced a structured case report with IOCs and remediation notes.</p>
-        <div class="lab-footer">
-          <span>DVWA · Apache Logs</span>
-          <span class="mitre">T1059 · T1087</span>
-        </div>
+      <a class="lab-card fi d1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Command-Injection/Case-01-Whoami-Command-Detected" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-r">Attack Sim</span><span class="lab-ext">↗</span></div>
+        <p class="lab-title">Command Injection — OS Enumeration Chain</p>
+        <p class="lab-desc">Documented the full whoami → uname → system enumeration chain via DVWA with structured case report and IOC listing.</p>
+        <div class="lab-foot"><span>DVWA · Apache Logs</span><span class="mitre">T1059 · T1087</span></div>
       </a>
-
-      <a class="lab-card fi fi-delay-2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/Cross-Site-Scripting" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-analysis">Analysis</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
-        <p class="lab-title">XSS — JavaScript Payload in URL Parameters</p>
-        <p class="lab-desc">Identified reflected XSS payloads embedded in URL parameters from captured HTTP logs. Documented IOCs, mapped to MITRE ATT&amp;CK, and produced alert tuning notes for detection logic.</p>
-        <div class="lab-footer">
-          <span>HTTP Log Review</span>
-          <span class="mitre">T1059.007</span>
-        </div>
+      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting/Case-1_Javascript_code_Detected_in_URL" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-v">Analysis</span><span class="lab-ext">↗</span></div>
+        <p class="lab-title">XSS — Reflected Payload in URL Parameters</p>
+        <p class="lab-desc">Identified reflected XSS payloads in HTTP logs, mapped to ATT&amp;CK, and produced alert tuning notes to improve detection logic.</p>
+        <div class="lab-foot"><span>HTTP Log Analysis</span><span class="mitre">T1059.007</span></div>
       </a>
-
-      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/IDOR" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-analysis">Analysis</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
-        <p class="lab-title">IDOR — Unauthorized Object Access Review</p>
-        <p class="lab-desc">Identified IDOR vulnerabilities through direct object reference manipulation in DVWA. Documented affected endpoints, unauthorized access patterns, and proposed access-control detection controls.</p>
-        <div class="lab-footer">
-          <span>DVWA · Manual Testing</span>
-          <span class="mitre">OWASP A01</span>
-        </div>
+      <a class="lab-card fi" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-v">Investigation</span><span class="lab-ext">↗</span></div>
+        <p class="lab-title">SOC169 — IDOR Attack Investigation</p>
+        <p class="lab-desc">User-ID enumeration against a public web app. HTTP traffic pattern analysis. Concluded likely successful IDOR exploitation; no host-level compromise confirmed.</p>
+        <div class="lab-foot"><span>IDOR · Web Attacks</span><span class="mitre">OWASP A01</span></div>
       </a>
-
-      <a class="lab-card fi fi-delay-1" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web%20Attacks/SQL-Injection" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-detect">Detection</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
-        <p class="lab-title">Wazuh Rule Tuning for Web Attacks</p>
-        <p class="lab-desc">Authored custom Wazuh detection rules for SQLi and XSS Apache2 log patterns. Tuned alert thresholds to maintain high-confidence coverage while minimising false-positive noise.</p>
-        <div class="lab-footer">
-          <span>Wazuh HIDS</span>
-          <span class="mitre">Custom Rules</span>
-        </div>
-      </a>
-
-      <a class="lab-card fi fi-delay-2" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener">
-        <div class="lab-header">
-          <span class="lab-badge lb-auto">Automation</span>
-          <div class="lab-ext-icon">↗</div>
-        </div>
+      <a class="lab-card fi d1" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-t">Automation</span><span class="lab-ext">↗</span></div>
         <p class="lab-title">Bash Log Monitoring &amp; Alert Parsing</p>
-        <p class="lab-desc">Wrote Bash scripts to automate Suricata log monitoring, parse eve.json alert fields, and surface critical IOCs — reducing manual triage time in the homelab pipeline.</p>
-        <div class="lab-footer">
-          <span>Bash · eve.json</span>
-          <span class="mitre">Automation</span>
-        </div>
+        <p class="lab-desc">Bash scripts to automate Suricata log monitoring, parse eve.json alert fields, and surface critical IOCs — reducing manual triage time.</p>
+        <div class="lab-foot"><span>Bash · eve.json</span><span class="mitre">Automation</span></div>
       </a>
-
+      <a class="lab-card fi d2" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/LFI-RFI/Case-01-LFI-Detection" target="_blank" rel="noopener">
+        <div class="lab-top"><span class="lbadge lb-v">Investigation</span><span class="lab-ext">↗</span></div>
+        <p class="lab-title">SOC170 — LFI Attack Investigation</p>
+        <p class="lab-desc">LFI attempt targeting <code style="font-family:'JetBrains Mono';font-size:.75em;background:var(--surface2);padding:1px 4px;border-radius:3px">/etc/passwd</code> via manipulated URL parameter. Confirmed True Positive; request was unsuccessful, no data exposure.</p>
+        <div class="lab-foot"><span>Target: /etc/passwd</span><span class="mitre">T1190</span></div>
+      </a>
     </div>
   </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ CREDENTIALS ════════════════════════════════════════════════ -->
+<!-- WRITEUPS -->
+<section id="writeups" class="section">
+  <div class="wrap">
+    <div class="sh fi">
+      <p class="eyebrow">Published Work</p>
+      <h2 class="section-title">Investigation Writeups</h2>
+      <p class="section-sub">Case walkthroughs published on Medium — commissioned by LetsDefend.</p>
+    </div>
+    <a class="wu-card fi" href="https://medium.com/@diddeisaac/soc168-walkthrough-how-i-investigated-a-real-command-injection-attack-whoami-in-http-request-body-11b1f060efad" target="_blank" rel="noopener">
+      <div class="wu-body">
+        <div class="wu-meta">
+          <span class="wu-source">LetsDefend · EventID 118</span>
+          <span class="wu-badge t-r">Command Injection</span>
+          <span class="wu-badge t-s">True Positive</span>
+        </div>
+        <p class="wu-title">SOC168 — Whoami Command Detected in HTTP Request Body</p>
+        <p class="wu-summary">One of the most frequently misclassified alerts on LetsDefend. The attacker injected OS commands via POST parameter and escalated from <code style="font-family:'JetBrains Mono';font-size:.8em;background:var(--surface2);padding:1px 5px;border-radius:3px">whoami</code> to <code style="font-family:'JetBrains Mono';font-size:.8em;background:var(--surface2);padding:1px 5px;border-radius:3px">cat /etc/shadow</code> within minutes. HTTP 200 responses with file-sized payloads and EDR terminal history confirmed active RCE and credential exposure on WebServer1004. Full log analysis, threat intel lookups, EDR correlation, and the decision logic that makes this a True Positive.</p>
+        <div class="wu-tags">
+          <span class="tag t-r">T1059</span><span class="tag t-r">T1082</span><span class="tag t-r">T1552</span><span class="tag t-b">Splunk</span><span class="tag t-s">Medium ↗</span>
+        </div>
+        <div class="commissioned-note">★ Commissioned by LetsDefend for community publication</div>
+      </div>
+      <div class="wu-arrow">↗</div>
+    </a>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- CREDENTIALS -->
 <section id="certs" class="section">
   <div class="wrap">
     <div class="sh fi">
-      <p class="sh-eyebrow">05 — Credentials</p>
-      <h2 class="sh-title">Certifications &amp; Tools</h2>
+      <p class="eyebrow">Credentials</p>
+      <h2 class="section-title">Certifications &amp; Tools</h2>
     </div>
-    <div class="certs-tools-grid">
 
-      <div>
-        <div class="sh-eyebrow fi" style="margin-bottom:1.2rem">Certifications</div>
-        <div class="certs-list fi">
-          <div class="cert-card">
-            <div class="cert-ico ci-earn">✅</div>
-            <div>
-              <p class="cert-name">Google Cybersecurity Professional Certificate</p>
-              <p class="cert-st cs-earn">● EARNED · 2026</p>
-            </div>
+    <!-- CERTIFICATIONS -->
+    <div class="fi" style="margin-bottom:2.5rem">
+      <p class="eyebrow" style="margin-bottom:1.1rem">Certifications</p>
+      <div class="certs-list">
+        <div class="cert-card">
+          <div class="cert-ico ci-green">✅</div>
+          <div>
+            <p class="cert-name">Google Cybersecurity Professional Certificate</p>
+            <p class="cert-year">Earned · 2026</p>
           </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-earn">✅</div>
-            <div>
-              <p class="cert-name">IT Help Desk Practical Certificate</p>
-              <p class="cert-st cs-earn">● EARNED · 2025</p>
-            </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-amber">⏳</div>
+          <div>
+            <p class="cert-name">CompTIA Security+ SY0-701</p>
+            <p class="cert-year">In Progress · Expected 2026</p>
           </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-earn">🎓</div>
-            <div>
-              <p class="cert-name">MCA — CSVTU, Durg</p>
-              <p class="cert-st cs-earn">● 2024 – 2026</p>
-            </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-green">✅</div>
+          <div>
+            <p class="cert-name">IT Help Desk Practical Certificate</p>
+            <p class="cert-year">Earned · 2025</p>
           </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-prog">🎯</div>
-            <div>
-              <p class="cert-name">CompTIA Security+</p>
-              <p class="cert-st cs-prog">◐ IN PROGRESS</p>
-            </div>
-          </div>
-          <div class="cert-card">
-            <div class="cert-ico ci-plan">📌</div>
-            <div>
-              <p class="cert-name">HTB CDSA</p>
-              <p class="cert-st cs-plan">○ PLANNED</p>
-            </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-ico ci-blue">🎓</div>
+          <div>
+            <p class="cert-name">MCA — CSVTU, Durg</p>
+            <p class="cert-year">2024 – 2026</p>
           </div>
         </div>
       </div>
-
-      <div>
-        <div class="sh-eyebrow fi" style="margin-bottom:.5rem">Tools &amp; Platforms</div>
-
-        <p class="tools-section-label fi">SIEM &amp; Detection</p>
-        <div class="tools-wrap fi">
-          <span class="tool">Splunk</span>
-          <span class="tool">Wazuh</span>
-          <span class="tool">Suricata IDS/IPS</span>
-          <span class="tool">VirusTotal</span>
-        </div>
-
-        <p class="tools-section-label fi">Network &amp; Traffic</p>
-        <div class="tools-wrap fi">
-          <span class="tool">Wireshark</span>
-          <span class="tool">TCPdump</span>
-          <span class="tool">Nmap</span>
-          <span class="tool">Burp Suite</span>
-        </div>
-
-        <p class="tools-section-label fi">Offensive / Lab</p>
-        <div class="tools-wrap fi">
-          <span class="tool">sqlmap</span>
-          <span class="tool">DVWA</span>
-          <span class="tool">Kali Linux</span>
-          <span class="tool">VirtualBox</span>
-        </div>
-
-        <p class="tools-section-label fi">Scripting &amp; Dev</p>
-        <div class="tools-wrap fi">
-          <span class="tool">Python</span>
-          <span class="tool">Bash</span>
-          <span class="tool">SQL</span>
-          <span class="tool">Flask</span>
-          <span class="tool">MongoDB</span>
-          <span class="tool">Git</span>
-        </div>
-
-        <p class="tools-section-label fi">Frameworks &amp; Ops</p>
-        <div class="tools-wrap fi">
-          <span class="tool">MITRE ATT&amp;CK</span>
-          <span class="tool">NIST CSF</span>
-          <span class="tool">ISO 27001</span>
-          <span class="tool">Cyber Kill Chain</span>
-          <span class="tool">Jira</span>
-          <span class="tool">ServiceNow</span>
-        </div>
-      </div>
-
     </div>
+
+    <!-- TOOLS & PLATFORMS -->
+    <div class="fi d1">
+      <p class="eyebrow" style="margin-bottom:1.1rem">Tools &amp; Platforms</p>
+      <div class="tools-stacked">
+
+        <div class="tool-group">
+          <p class="tool-label">SIEM &amp; Detection</p>
+          <div class="tools-wrap">
+            <span class="tool">Splunk <span class="tool-ctx">— SPL, dashboards, correlation alerts (Suricata lab)</span></span>
+            <span class="tool">Wazuh <span class="tool-ctx">— agent deployment, rule tuning, alert validation (DVWA lab)</span></span>
+            <span class="tool">Suricata <span class="tool-ctx">— 15+ custom IDS/IPS YAML rules, eve.json pipeline</span></span>
+            <span class="tool">VirusTotal <span class="tool-ctx">— IOC lookup, malware triage (LetsDefend SOC168)</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Network &amp; Traffic Analysis</p>
+          <div class="tools-wrap">
+            <span class="tool">Wireshark <span class="tool-ctx">— Nmap recon &amp; SYN flood packet capture (Suricata lab)</span></span>
+            <span class="tool">TCPdump <span class="tool-ctx">— live traffic capture, log extraction</span></span>
+            <span class="tool">Nmap <span class="tool-ctx">— recon simulation, T1595 mapping (Suricata lab)</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Offensive / Lab</p>
+          <div class="tools-wrap">
+            <span class="tool">SQLMap <span class="tool-ctx">— SQL injection execution against DVWA target</span></span>
+            <span class="tool">DVWA <span class="tool-ctx">— SQLi, XSS, IDOR, Command Injection scenarios</span></span>
+            <span class="tool">Kali Linux <span class="tool-ctx">— attack simulation host across all homelabs</span></span>
+            <span class="tool">VirtualBox <span class="tool-ctx">— isolated lab environment provisioning</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Scripting &amp; Dev</p>
+          <div class="tools-wrap">
+            <span class="tool">Python <span class="tool-ctx">— Qrypta backend, log parsing scripts</span></span>
+            <span class="tool">Bash <span class="tool-ctx">— log pipeline automation (Suricata/Splunk lab)</span></span>
+            <span class="tool">Flask <span class="tool-ctx">— Qrypta web framework, REST API</span></span>
+            <span class="tool">MongoDB <span class="tool-ctx">— Qrypta encrypted credential store</span></span>
+            <span class="tool">SQL <span class="tool-ctx">— query writing, injection analysis</span></span>
+            <span class="tool">Git <span class="tool-ctx">— version control, GitHub portfolio publishing</span></span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <p class="tool-label">Frameworks &amp; Platforms</p>
+          <div class="tools-wrap">
+            <span class="tool">MITRE ATT&amp;CK <span class="tool-ctx">— TTP mapping across all lab investigations</span></span>
+            <span class="tool">Cyber Kill Chain <span class="tool-ctx">— attack narrative structuring, SOC168 writeup</span></span>
+            <span class="tool">NIST CSF <span class="tool-ctx">— security control reference, Qrypta design</span></span>
+            <span class="tool">ISO 27001 <span class="tool-ctx">— policy and control framework awareness</span></span>
+            <span class="tool">ServiceNow <span class="tool-ctx">— ticket lifecycle management (Niftel, 24×7 ops)</span></span>
+            <span class="tool">Jira <span class="tool-ctx">— issue tracking, project task management</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="divider"/>
 
-<!-- ══ CONTACT ════════════════════════════════════════════════════ -->
-<section id="contact">
+<!-- CONTACT -->
+<section id="contact" class="section">
   <div class="wrap">
-    <div class="contact-grid">
-
-      <div class="contact-left fi">
-        <h2>Let's <span>Work Together</span></h2>
-        <p>I'm actively looking for entry-level SOC Analyst roles — especially with GCCs and MNCs in Hyderabad. Open to hybrid and remote opportunities. If you're hiring or want to talk blue team, reach out directly.</p>
-        <div class="contact-links">
-          <a class="contact-link" href="mailto:diddeisaac@gmail.com">
-            <div class="cl-icon email">📧</div>
-            <div>
-              <p class="cl-text-top">Email</p>
-              <p class="cl-text-bot">diddeisaac@gmail.com</p>
-            </div>
-            <span class="cl-arrow">→</span>
+    <div class="contact-layout">
+      <div class="fi">
+        <h2 class="contact-heading">Let's <span>Work Together</span></h2>
+        <p class="contact-body">Open to SOC Analyst roles across India — Hyderabad, Bengaluru, Mumbai, Delhi, Pune, Chennai, and beyond. Also available for fully remote positions with global teams. Need someone who ships documented, production-grade work from day one — reach out.</p>
+        <div class="cl-list">
+          <a class="cl" href="mailto:diddeisaac@gmail.com">
+            <div class="cl-ico em">📧</div>
+            <div><p class="cl-label">Email</p><p class="cl-sub">diddeisaac@gmail.com</p></div>
+            <span class="cl-arr">→</span>
           </a>
-          <a class="contact-link" href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">
-            <div class="cl-icon li">💼</div>
-            <div>
-              <p class="cl-text-top">LinkedIn</p>
-              <p class="cl-text-bot">linkedin.com/in/didde-isaac</p>
-            </div>
-            <span class="cl-arrow">→</span>
+          <a class="cl" href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">
+            <div class="cl-ico li">💼</div>
+            <div><p class="cl-label">LinkedIn</p><p class="cl-sub">linkedin.com/in/didde-isaac</p></div>
+            <span class="cl-arr">→</span>
           </a>
-          <a class="contact-link" href="https://github.com/Isaacdidde" target="_blank" rel="noopener">
-            <div class="cl-icon gh">⌨</div>
-            <div>
-              <p class="cl-text-top">GitHub</p>
-              <p class="cl-text-bot">github.com/Isaacdidde</p>
-            </div>
-            <span class="cl-arrow">→</span>
+          <a class="cl" href="https://github.com/Isaacdidde" target="_blank" rel="noopener">
+            <div class="cl-ico gh">⌨</div>
+            <div><p class="cl-label">GitHub</p><p class="cl-sub">github.com/Isaacdidde</p></div>
+            <span class="cl-arr">→</span>
           </a>
         </div>
       </div>
 
-      <div class="contact-right fi fi-delay-1">
-        <p class="cr-label">// What I Bring</p>
-        <div class="cr-item">
-          <div class="cr-dot blue"></div>
-          <p class="cr-item-text"><strong>Homelab-proven detection skills</strong> — Suricata, Splunk, Wazuh with documented rule-writing and triage output.</p>
+      <div class="contact-panel fi d1">
+        <p class="cp-label">// Why hire me</p>
+        <div class="cp-item">
+          <div class="cp-dot b"></div>
+          <p class="cp-text"><strong>Production homelab with published output.</strong> Suricata, Splunk, and Wazuh rules written, tested, and documented on GitHub.</p>
         </div>
-        <div class="cr-item">
-          <div class="cr-dot teal"></div>
-          <p class="cr-item-text"><strong>Professional SLA discipline</strong> — 11 months of 24×7 incident triage with structured escalation and documentation habits.</p>
+        <div class="cp-item">
+          <div class="cp-dot t"></div>
+          <p class="cp-text"><strong>SLA discipline from day one.</strong> 11 months of 24×7 incident triage with structured escalation and zero-miss critical cases.</p>
         </div>
-        <div class="cr-item">
-          <div class="cr-dot violet"></div>
-          <p class="cr-item-text"><strong>Full-stack security thinking</strong> — from packet capture to IAM design, covering both attack and defence perspectives.</p>
+        <div class="cp-item">
+          <div class="cp-dot v"></div>
+          <p class="cp-text"><strong>Full-stack security perspective.</strong> Packet capture to IAM design, attack simulation to blue team detection.</p>
         </div>
-        <div class="cr-item">
-          <div class="cr-dot amber"></div>
-          <p class="cr-item-text"><strong>Continuous learning posture</strong> — CompTIA Security+ in progress, HTB CDSA on the roadmap, LetsDefend SOC path active.</p>
+        <div class="cp-item">
+          <div class="cp-dot a"></div>
+          <p class="cp-text"><strong>Community-recognised analysis.</strong> SOC168 writeup commissioned and published by LetsDefend.</p>
         </div>
-        <span class="open-badge">Open to SOC Analyst roles</span>
+        <span class="open-badge">Open to SOC Analyst roles · Pan-India &amp; Remote</span>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══ FOOTER ════════════════════════════════════════════════════ -->
+<!-- RESUME OVERLAY -->
+<div id="resumeOverlay" class="r-overlay" aria-modal="true" role="dialog" aria-label="Resume viewer" hidden>
+  <div class="r-backdrop" id="resumeBackdrop"></div>
+  <div class="r-modal">
+    <div class="r-toolbar">
+      <div class="r-toolbar-left">
+        <span class="r-title">Resume</span>
+        <span class="r-name-label">Didde Isaac</span>
+      </div>
+      <div class="r-toolbar-right">
+        <div class="r-zoom-group">
+          <button class="r-btn" id="zoomOut" title="Zoom out">−</button>
+          <span class="r-zoom-val" id="zoomVal">100%</span>
+          <button class="r-btn" id="zoomIn" title="Zoom in">+</button>
+          <button class="r-btn r-btn-reset" id="zoomReset" title="Reset zoom">⊙</button>
+        </div>
+        <!-- change download="Didde_Isaac_Resume.pdf" to: -->
+        <a class="r-btn r-btn-dl" id="resumeDownload" href="#" download="IsaacDidde_Resume.pdf" title="Download PDF">↓ Download</a>
+        <button class="r-btn r-btn-close" id="resumeClose" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="r-body" id="resumeBody">
+      <div class="r-pdf-wrap" id="pdfWrap">
+        <iframe id="resumeFrame" class="r-frame" title="Resume PDF"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <span class="footer-left">© 2026 Didde Isaac · isaacdidde.github.io/Portfolio</span>
-  <div class="footer-right">
+  <span class="footer-copy">© 2026 · isaacdidde.github.io/SOC_Portfolio</span>
+  <div class="footer-links">
     <a href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">LinkedIn</a>
     <a href="mailto:diddeisaac@gmail.com">Email</a>
@@ -1394,39 +1313,183 @@ footer{
 </footer>
 
 <script>
-// ── Typewriter ──
-const phrases=[
-  'role=soc_analyst_tier1',
-  'skills=suricata,splunk,wazuh',
-  'certs=google_cybersecurity',
-  'status=open_to_work',
-];
-let pi=0,ci=0,dl=false;
-const el=document.getElementById('typed');
-function type(){
-  const p=phrases[pi];
-  if(!dl){
-    el.textContent=p.slice(0,ci+1);ci++;
-    if(ci===p.length){dl=true;setTimeout(type,2200);return}
-  }else{
-    el.textContent=p.slice(0,ci-1);ci--;
-    if(ci===0){dl=false;pi=(pi+1)%phrases.length}
-  }
-  setTimeout(type,dl?36:68);
-}
-type();
+const RESUME_URL = 'Assets/IsaacDidde_Resume.pdf';
 
-// ── Intersection fade-in ──
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting)return;
-    e.target.classList.add('vis');
-    // stagger children
-    const children=[...e.target.querySelectorAll('.fi:not(.vis)')];
-    children.forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*80));
+/* ── Theme toggle ───────────────────────────────────── */
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', saved);
+themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
+themeBtn.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// Nav scroll shadow + active link highlight
+(function(){
+  const nav = document.getElementById('mainNav');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+    let current = '';
+    document.querySelectorAll('section[id]').forEach(s => {
+      if(window.scrollY >= s.offsetTop - 90) current = s.id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
   });
-},{threshold:0.07});
-document.querySelectorAll('.fi').forEach(n=>io.observe(n));
+})();
+
+/* ── Resume overlay ─────────────────────────────────── */
+const overlay   = document.getElementById('resumeOverlay');
+const frame     = document.getElementById('resumeFrame');
+const pdfWrap   = document.getElementById('pdfWrap');
+const zoomVal   = document.getElementById('zoomVal');
+const dlBtn     = document.getElementById('resumeDownload');
+const body      = document.getElementById('resumeBody');
+
+let zoom = 1;
+let loaded = false;
+
+function setZoom(z) {
+  zoom = Math.min(2.5, Math.max(0.5, z));
+  pdfWrap.style.transform = `scale(${zoom})`;
+  pdfWrap.style.marginBottom = zoom > 1
+    ? `${(zoom - 1) * frame.offsetHeight}px` : '0';
+  zoomVal.textContent = Math.round(zoom * 100) + '%';
+}
+
+function openOverlay() {
+  overlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+  dlBtn.href = RESUME_URL;
+
+  if (!loaded) {
+    frame.style.opacity = '0';
+    const loading = document.createElement('div');
+    loading.className = 'r-loading';
+    loading.id = 'rLoading';
+    loading.innerHTML = '<div class="r-spinner"></div><span>Loading resume…</span>';
+    body.prepend(loading);
+
+    frame.src = RESUME_URL + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH&zoom=page-width';
+    frame.onload = () => {
+      document.getElementById('rLoading')?.remove();
+      frame.style.opacity = '1';
+      loaded = true;
+    };
+  }
+  setZoom(1);
+}
+
+function closeOverlay() {
+  overlay.hidden = true;
+  document.body.style.overflow = '';
+}
+
+document.getElementById('resumeBtn').addEventListener('click', openOverlay);
+document.getElementById('resumeClose').addEventListener('click', closeOverlay);
+document.getElementById('resumeBackdrop').addEventListener('click', closeOverlay);
+
+document.getElementById('zoomIn').addEventListener('click', () => setZoom(zoom + 0.15));
+document.getElementById('zoomOut').addEventListener('click', () => setZoom(zoom - 0.15));
+document.getElementById('zoomReset').addEventListener('click', () => setZoom(1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !overlay.hidden) closeOverlay();
+  if (e.key === '+' && !overlay.hidden) { e.preventDefault(); setZoom(zoom + 0.15); }
+  if (e.key === '-' && !overlay.hidden) { e.preventDefault(); setZoom(zoom - 0.15); }
+});
+
+/* ── Rotating role text ─────────────────────────────── */
+const roles = ['Blue Team', 'Threat Detection', 'Incident Response', 'SIEM & Splunk', 'Security Operations'];
+let idx = 0;
+const roleEl = document.getElementById('roleText');
+setInterval(() => {
+  roleEl.classList.remove('fade-in');
+  roleEl.classList.add('fade-out');
+  setTimeout(() => {
+    idx = (idx + 1) % roles.length;
+    roleEl.textContent = roles[idx];
+    roleEl.classList.remove('fade-out');
+    roleEl.classList.add('fade-in');
+  }, 260);
+}, 2800);
+
+/* ── GA4 custom events ──────────────────────────────── */
+function gtrack(event, params) {
+  if (typeof gtag === 'function') gtag('event', event, params);
+}
+
+document.getElementById('resumeBtn').addEventListener('click', () => {
+  gtrack('resume_opened', { method: 'overlay' });
+});
+
+document.getElementById('resumeDownload').addEventListener('click', () => {
+  gtrack('resume_downloaded', { file: 'Didde_Isaac_Resume.pdf' });
+});
+
+document.querySelectorAll('.cl').forEach(el => {
+  el.addEventListener('click', () => {
+    const label = el.querySelector('.cl-label')?.textContent || 'unknown';
+    gtrack('contact_click', { channel: label });
+  });
+});
+
+document.querySelector('.nav-hire')?.addEventListener('click', () => {
+  gtrack('contact_click', { channel: 'Hire Me — Nav' });
+});
+
+document.querySelector('.btn-primary')?.addEventListener('click', () => {
+  gtrack('github_click', { source: 'hero' });
+});
+
+const sectionsSeen = new Set();
+const sectionLabels = {
+  hero: 'Hero', about: 'Experience & Education',
+  skills: 'Skills', projects: 'Projects',
+  labs: 'Lab Work', writeups: 'Writeups',
+  certs: 'Credentials', contact: 'Contact'
+};
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    const id = e.target.id;
+    if (e.isIntersecting && id && !sectionsSeen.has(id)) {
+      sectionsSeen.add(id);
+      gtrack('section_viewed', { section: sectionLabels[id] || id });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+const depthHit = new Set();
+window.addEventListener('scroll', () => {
+  const pct = Math.round(
+    (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+  );
+  [25, 50, 75, 100].forEach(milestone => {
+    if (pct >= milestone && !depthHit.has(milestone)) {
+      depthHit.add(milestone);
+      gtrack('scroll_depth', { depth_percent: milestone });
+    }
+  });
+}, { passive: true });
+
+/* ── Scroll fade-in ─────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('vis');
+    [...e.target.querySelectorAll('.fi:not(.vis)')].forEach((c, i) =>
+      setTimeout(() => c.classList.add('vis'), i * 60)
+    );
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.fi').forEach(n => io.observe(n));
 </script>
 </body>
 </html>
