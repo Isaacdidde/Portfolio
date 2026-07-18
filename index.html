@@ -301,7 +301,14 @@ nav.scrolled{
   border:1px solid var(--c-border2);
   padding:4px 13px;border-radius:5px;
   min-width:155px;overflow:hidden;white-space:nowrap;
+  display:inline-flex;align-items:center;
 }
+.role-rotating .role-cursor{
+  display:inline-block;width:7px;height:.85em;
+  background:var(--c-teal2);margin-left:4px;
+  animation:cursorBlink 1s steps(1) infinite;
+}
+@keyframes cursorBlink{50%{opacity:0}}
 .role-text.fade-out{animation:roleOut .22s ease forwards}
 .role-text.fade-in{animation:roleIn .28s ease forwards}
 @keyframes roleOut{to{opacity:0;transform:translateY(-6px)}}
@@ -1091,6 +1098,72 @@ footer{
 [data-theme="light"] nav{background:rgba(244,246,251,.92)}
 [data-theme="light"] footer{background:var(--c-bg1)}
 [data-theme="light"] #particles-canvas{opacity:.15}
+
+/* ═══ ENHANCEMENTS (patched) ═══════════════════════════ */
+.has-tip{position:relative;cursor:help}
+.has-tip::after{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:var(--c-surf);color:var(--c-ink);
+  border:1px solid var(--c-border2);border-radius:6px;
+  padding:6px 10px;font-family:'Inter',sans-serif;font-size:.68rem;font-weight:400;
+  letter-spacing:0;text-transform:none;line-height:1.4;
+  white-space:normal;width:max-content;max-width:260px;
+  box-shadow:var(--shadow-md);
+  opacity:0;pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease;
+  z-index:400;
+}
+.has-tip:hover::after,.has-tip:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.learn-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--c-amber);margin-right:6px;vertical-align:middle;
+  box-shadow:0 0 8px var(--c-amber);
+  animation:blink 2s ease-in-out infinite;
+}
+.cert-status-in{color:var(--c-amber) !important;font-weight:500}
+.interview-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--c-green);background:var(--c-green-dim);
+  border:1px solid rgba(34,197,94,.35);
+  padding:6px 14px;border-radius:40px;margin-bottom:1rem;font-weight:600;
+  box-shadow:0 0 24px rgba(34,197,94,.15);
+}
+.interview-badge .pdot{
+  width:8px;height:8px;border-radius:50%;background:var(--c-green);
+  box-shadow:0 0 0 0 rgba(34,197,94,.7);
+  animation:pulseDot 1.6s ease-out infinite;
+}
+@keyframes pulseDot{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}
+  70%{box-shadow:0 0 0 10px rgba(34,197,94,0)}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}
+}
+/* Mobile responsive tweaks */
+@media(max-width:640px){
+  .impact-row{gap:.9rem 1.1rem}
+  .impact-sep{display:none}
+  .impact-num .num{font-size:1.2rem}
+  .skills-grid{grid-template-columns:1fr}
+  .labs-grid{grid-template-columns:1fr !important}
+  .proj-grid{grid-template-columns:1fr !important}
+  .hero-actions .btn{flex:1 1 45%;justify-content:center}
+  footer{padding:1.2rem 1.2rem;flex-direction:column;text-align:center}
+}
+/* Smooth section-header reveal */
+.sh.sr{transform:translateY(28px)}
+/* GitHub link hover consistency */
+a[href*="github.com"]{transition:color .18s ease}
+a[href*="github.com"]:hover{color:var(--c-blue2)}
+.proj-link,.lab-card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,color .18s ease}
+.proj-link:hover{color:var(--c-teal2)}
+/* Resume fallback message */
+.r-fallback{
+  padding:2rem;text-align:center;color:var(--c-ink2);font-size:.85rem;line-height:1.7;
+}
+.r-fallback a{color:var(--c-blue2);text-decoration:underline}
+
 </style>
 </head>
 <body>
@@ -1161,7 +1234,7 @@ footer{
 
         <div class="hero-role-wrap sr d1">
           <span class="role-static">SOC Analyst</span>
-          <span class="role-rotating"><span class="role-text" id="roleText">Blue Team</span></span>
+          <span class="role-rotating"><span class="role-text" id="roleText">Blue Team</span><span class="role-cursor" aria-hidden="true"></span></span>
         </div>
 
         <h1 class="hero-headline sr d1">
@@ -1174,17 +1247,17 @@ footer{
 
         <div class="impact-row sr d2">
           <div class="impact-num">
-            <span class="num" data-target="200">0</span>
+            <span class="num" data-target="200" data-suffix="+">0</span>
             <span class="lbl">Events Triaged</span>
           </div>
           <div class="impact-sep"></div>
           <div class="impact-num">
-            <span class="num" data-target="15">0</span>
+            <span class="num" data-target="15" data-suffix="+">0</span>
             <span class="lbl">Detection Rules</span>
           </div>
           <div class="impact-sep"></div>
           <div class="impact-num">
-            <span class="num" data-target="3">0</span>
+            <span class="num" data-target="3" data-suffix="">0</span>
             <span class="lbl">Homelabs Built</span>
           </div>
           <div class="impact-sep"></div>
@@ -1329,6 +1402,69 @@ footer{
       <p class="section-sub">Production homelabs — architected, deployed, and documented end-to-end.</p>
     </div>
     <div class="proj-grid">
+
+      <!-- Project: IR Copilot (flagship) -->
+      <div class="proj-card p-teal sr">
+        <div class="card-cover">
+          <img src="Assets/ir-copilot.jpg" alt="IR Copilot — Local RAG Incident Response Assistant" loading="lazy" decoding="async"
+               onerror="this.parentNode.innerHTML='<div class=\'card-cover-fallback\'><span class=\'icon\'>🤖</span><span class=\'label\'>IR Copilot · Local RAG</span></div>'"/>
+        </div>
+        <div class="proj-header">
+          <span class="ptag ptag-t">RAG · Incident Response</span>
+          <span class="diff-badge diff-adv">Flagship</span>
+          <span class="proj-date">2026</span>
+        </div>
+        <p class="proj-title">IR Copilot — Local RAG Incident Response Assistant</p>
+        <p class="proj-desc">Fully offline, air-gapped IR assistant that ingests playbooks, MITRE technique notes, and case history into a local ChromaDB vector store. Semantic retrieval powers grounded, citation-first answers for on-call analysts — no cloud, no data leakage.</p>
+        <div class="tags" style="margin-bottom:.7rem">
+          <span class="tag t-t">ChromaDB</span><span class="tag t-v">Ollama</span><span class="tag t-b">sentence-transformers</span><span class="tag t-a">FastAPI</span><span class="tag t-r">Streamlit</span><span class="tag t-s">Python</span>
+        </div>
+        <span class="result-chip">Local-first · Zero data egress · Retrieval-grounded playbooks</span>
+        <div class="proj-footer">
+          <a class="proj-link" href="https://github.com/Isaacdidde/IR-Copilot" target="_blank" rel="noopener">GitHub ↗</a>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <span class="mitre-badge">RAG</span><span class="mitre-badge">Local LLM</span>
+          </div>
+        </div>
+        <button class="details-toggle" data-target="proj-ircopilot-details">View Details <span class="arr">▾</span></button>
+        <div class="card-details" id="proj-ircopilot-details">
+          <div class="detail-section">
+            <p class="detail-title">// Project Overview</p>
+            <p class="detail-body"><strong>Goal:</strong> Give an on-call SOC analyst a private, offline assistant that answers "what do I do next?" from real playbooks and past cases — not hallucinated advice. <strong>Constraint:</strong> Nothing leaves the host; safe for regulated or air-gapped environments.</p>
+          </div>
+          <div class="detail-section">
+            <p class="detail-title">// Architecture</p>
+            <ul class="detail-list">
+              <li><strong>Ollama</strong> — local LLM runtime for grounded response generation</li>
+              <li><strong>sentence-transformers</strong> — dense embeddings for playbooks, IR notes, and MITRE mappings</li>
+              <li><strong>ChromaDB</strong> — persistent vector store with metadata-filtered semantic search</li>
+              <li><strong>FastAPI</strong> — retrieval + generation API with citation payloads</li>
+              <li><strong>Streamlit</strong> — analyst-facing chat UI with source-highlighted answers</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <p class="detail-title">// Retrieval Pipeline</p>
+            <ul class="detail-list">
+              <li>Chunked corpus ingestion with per-document metadata (source, tactic, technique ID)</li>
+              <li>Top-k semantic search with reranking on MITRE technique proximity</li>
+              <li>Prompt assembly with strict "cite-or-refuse" guardrails to reduce hallucination</li>
+              <li>Every response returns the source snippets so analysts can verify before acting</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <p class="detail-title">// Why It Matters</p>
+            <p class="detail-body">Replaces "grep the wiki + guess" with retrieval-grounded, tactic-aware answers. Runs entirely on the analyst's laptop, so it stays usable during incidents where cloud SaaS is untrusted or unreachable.</p>
+          </div>
+          <div class="detail-section">
+            <p class="detail-title">// Key Outcomes</p>
+            <ul class="detail-list">
+              <li>End-to-end local RAG stack — ingestion, retrieval, generation, UI</li>
+              <li>Demonstrates practical LLM engineering applied to defensive security</li>
+              <li>Extensible corpus — drop new playbooks in a folder, re-index, done</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
       <!-- Project 1 -->
       <div class="proj-card p-blue sr">
@@ -1683,7 +1819,7 @@ footer{
             <div class="cert-ico ci-amber">⏳</div>
             <div>
               <p class="cert-name">CompTIA Security+ SY0-701</p>
-              <p class="cert-year cert-status-in">In Progress · Expected 2026</p>
+              <p class="cert-year cert-status-in"><span class="learn-dot"></span>Currently Learning · Exam scheduled late July 2026</p>
             </div>
           </div>
           <div class="cert-card">
@@ -1774,6 +1910,7 @@ footer{
   <div class="wrap">
     <div class="contact-layout">
       <div class="sr">
+        <span class="interview-badge"><span class="pdot"></span>Actively interviewing · Available immediately</span>
         <h2 class="contact-heading">Let's <span>Work Together</span></h2>
         <p class="contact-body">Open to SOC Analyst roles across India — Hyderabad, Bengaluru, Mumbai, Delhi, Pune, Chennai, and beyond. Also available for fully remote positions with global teams. Need someone who ships documented, production-grade work from day one — reach out.</p>
         <div class="cl-list">
@@ -1855,7 +1992,7 @@ footer{
 
 <!-- FOOTER -->
 <footer>
-  <span class="footer-copy">© 2026 · isaacdidde.github.io/SOC_Portfolio</span>
+  <span class="footer-copy">© 2026 · isaacdidde.github.io/Portfolio</span>
   <div class="footer-links">
     <a href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">LinkedIn</a>
@@ -1985,49 +2122,69 @@ const srObserver = new IntersectionObserver(entries => {
 }, {threshold: 0.06});
 document.querySelectorAll('.sr').forEach(n => srObserver.observe(n));
 
-/* ═══ COUNTER ANIMATION ═══════════════════════════════ */
+/* ═══ COUNTER ANIMATION (fixed) ═══════════════════════ */
 function animateCounter(el, target, suffix){
-  const duration = 1200;
+  const duration = 1400;
   const start = performance.now();
   function step(ts){
     const progress = Math.min((ts - start) / duration, 1);
     const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(ease * target) + (suffix || '');
+    el.textContent = Math.floor(ease * target) + suffix;
     if(progress < 1) requestAnimationFrame(step);
-    else el.textContent = target + (suffix || '');
+    else el.textContent = target + suffix;
   }
   requestAnimationFrame(step);
 }
-
+function runCounter(el){
+  if(el.dataset.animated) return;
+  el.dataset.animated = '1';
+  const target = parseInt(el.dataset.target, 10);
+  if(isNaN(target)) return;
+  const suffix = el.dataset.suffix || '';
+  animateCounter(el, target, suffix);
+}
 const counterObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if(!e.isIntersecting) return;
-    const el = e.target;
-    const target = parseInt(el.dataset.target);
-    if(isNaN(target)) return;
-    const suffix = el.dataset.target.includes('+') ? '+' : '';
-    animateCounter(el, target, suffix);
-    counterObserver.unobserve(el);
+    if(e.isIntersecting){ runCounter(e.target); counterObserver.unobserve(e.target); }
   });
-}, {threshold:.5});
-document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+}, {threshold:.15, rootMargin:'0px 0px -10% 0px'});
+document.querySelectorAll('[data-target]').forEach(el => {
+  counterObserver.observe(el);
+  // Fallback: hero counters are usually in view at load — kick after a tick
+  const r = el.getBoundingClientRect();
+  if(r.top < window.innerHeight && r.bottom > 0){
+    setTimeout(() => runCounter(el), 300);
+  }
+});
 
-/* ═══ EXPANDABLE CARDS ════════════════════════════════ */
+/* ═══ EXPANDABLE CARDS (smooth height) ════════════════ */
 document.querySelectorAll('.details-toggle').forEach(btn => {
   btn.addEventListener('click', e => {
     e.preventDefault();
-    const targetId = btn.dataset.target;
-    const panel = document.getElementById(targetId);
+    const panel = document.getElementById(btn.dataset.target);
     if(!panel) return;
     const isOpen = panel.classList.contains('open');
-    panel.classList.toggle('open', !isOpen);
-    btn.classList.toggle('open', !isOpen);
-    btn.querySelector('.arr').style.transform = !isOpen ? 'rotate(180deg)' : '';
-    // Update text
+    if(isOpen){
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      requestAnimationFrame(() => { panel.style.maxHeight = '0px'; });
+      panel.classList.remove('open');
+      btn.classList.remove('open');
+    } else {
+      panel.classList.add('open');
+      btn.classList.add('open');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      panel.addEventListener('transitionend', function h(ev){
+        if(ev.propertyName === 'max-height' && panel.classList.contains('open')){
+          panel.style.maxHeight = 'none';
+          panel.removeEventListener('transitionend', h);
+        }
+      });
+    }
     const span = btn.childNodes[0];
     if(span && span.nodeType === 3){
       span.textContent = !isOpen ? 'Hide Details ' : 'View Details ';
     }
+    gtrack('card_toggle', {target: btn.dataset.target, open: !isOpen});
   });
 });
 
@@ -2074,10 +2231,31 @@ function openResume(){
     loading.innerHTML = '<div class="r-spinner"></div><span>Loading resume…</span>';
     resBody.prepend(loading);
     frame.src = RESUME_URL + '#toolbar=0&navpanes=0';
+    let fbTimer = setTimeout(() => {
+      // If PDF hasn't loaded in 3.5s, show fallback with direct download link.
+      if(!loaded){
+        document.getElementById('rLoading')?.remove();
+        frame.style.display = 'none';
+        const fb = document.createElement('div');
+        fb.className = 'r-fallback';
+        fb.innerHTML = 'Preview unavailable. <a href="' + RESUME_URL + '" download>Click here to download the resume PDF</a>.';
+        pdfWrap.appendChild(fb);
+      }
+    }, 3500);
     frame.onload = () => {
+      clearTimeout(fbTimer);
       document.getElementById('rLoading')?.remove();
       frame.style.opacity = '1';
       loaded = true;
+    };
+    frame.onerror = () => {
+      clearTimeout(fbTimer);
+      document.getElementById('rLoading')?.remove();
+      frame.style.display = 'none';
+      const fb = document.createElement('div');
+      fb.className = 'r-fallback';
+      fb.innerHTML = 'Could not load PDF. <a href="' + RESUME_URL + '" download>Download it directly</a>.';
+      pdfWrap.appendChild(fb);
     };
   }
   setZoom(1);
@@ -2141,6 +2319,28 @@ const sectionObserver = new IntersectionObserver(entries => {
   });
 }, {threshold:.3});
 document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+/* ═══ MITRE TOOLTIPS ══════════════════════════════════ */
+const MITRE_DESC = {
+  'T1595': 'Active Scanning — Attackers probe target infrastructure to gather info.',
+  'T1046': 'Network Service Discovery — Enumerating running services on hosts.',
+  'T1190': 'Exploit Public-Facing App — Exploiting a web-facing vulnerability.',
+  'T1059': 'Command & Scripting Interpreter — Abusing shells or interpreters.',
+  'T1059.007': 'JavaScript — Malicious JS execution in browser or server context.',
+  'T1087': 'Account Discovery — Enumerating user or service accounts.',
+  'T1082': 'System Information Discovery — Fingerprinting the OS environment.',
+  'T1552': 'Unsecured Credentials — Harvesting keys, tokens, or config secrets.'
+};
+document.querySelectorAll('.mitre-badge, .lab-mitre, .tag').forEach(el => {
+  const raw = el.textContent.trim();
+  const m = raw.match(/T\d{4}(?:\.\d{3})?/);
+  if(!m) return;
+  const desc = MITRE_DESC[m[0]];
+  if(!desc) return;
+  el.setAttribute('data-tip', m[0] + ' · ' + desc);
+  el.classList.add('has-tip');
+});
+
 
 const depthHit = new Set();
 window.addEventListener('scroll', () => {
