@@ -1992,6 +1992,68 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
   </div>
 </section>
 
+<section id="articles" class="section">
+  <div class="wrap">
+    <div class="sh sr">
+      <p class="eyebrow">Published Work</p>
+      <h2 class="section-title">Articles &amp; Build Logs</h2>
+      <p class="section-sub">Personal project writeups published on Medium.</p>
+    </div>
+
+    <div class="inv-card sr">
+      <div class="inv-card-header">
+        <div class="card-cover">
+          <img src="Assets/ir-copilot-article-cover.png" alt="I built a security tool that's allowed to say I don't know"
+               onerror="this.parentNode.innerHTML='<div class=\'card-cover-fallback\'><span class=\'icon\'>🗂️</span><span class=\'label\'>IR-Copilot — Build Log</span></div>'"/>
+        </div>
+        <div class="inv-meta">
+          <span class="inv-source">Medium · Personal Project</span>
+          <span class="inv-badge t-t">RAG</span>
+          <span class="inv-badge t-s">Build Log</span>
+        </div>
+        <p class="inv-title">I built a security tool that's allowed to say "I don't know"</p>
+        <p class="inv-summary">A writeup on vibecoding IR-Copilot — a retrieval-grounded incident response assistant that maps incidents to MITRE ATT&amp;CK, Sigma, and NIST SP 800-61 evidence, and is deliberately built to refuse a confident answer when the evidence doesn't hold up. Covers the retrieval pipeline, the deterministic guard-rails that strip unverified claims before they reach the analyst, and a false-positive trap that exposed a real flaw in the first version.</p>
+        <div class="inv-tools">
+          <span class="tag t-r">T1558.003</span><span class="tag t-r">T1059.001</span><span class="tag t-b">ChromaDB</span><span class="tag t-s">Groq</span>
+        </div>
+      </div>
+
+      <div class="inv-card-footer">
+        <a class="btn btn-ghost" style="font-size:.7rem;padding:.38rem .9rem" href="https://medium.com/@diddeisaac/i-built-a-security-tool-thats-allowed-to-say-i-don-t-know-ec15771af65d" target="_blank" rel="noopener">Read on Medium ↗</a>
+        <button class="details-toggle" style="margin-top:0" data-target="article1-details">Full Breakdown <span class="arr">▾</span></button>
+      </div>
+
+      <div class="card-details inv-expand" id="article1-details">
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 01 · The Problem</p>
+          <p class="inv-phase-body">Security knowledge for triage is scattered — MITRE ATT&amp;CK, Sigma rules, NIST guidance, and internal playbooks all live in different places. Language models will happily fill that gap with plausible-sounding but invented technique IDs, rule names, and response steps if you let them.</p>
+        </div>
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 02 · Retrieval Pipeline</p>
+          <p class="inv-phase-body">Hybrid dense + keyword search over ~4,600 chunks spanning MITRE, Sigma, NIST SP 800-61, and playbooks, reranked for relevance before anything reaches the language model.</p>
+        </div>
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 03 · Confidence Gate</p>
+          <p class="inv-phase-body">A deterministic score computed purely from retrieval signal — independent of the LLM — decides whether generation happens at all. Below threshold, the system returns "insufficient evidence" with no model call made.</p>
+        </div>
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 04 · Guard-Rails</p>
+          <p class="inv-phase-body">Every MITRE mapping and cited source is checked against what was actually retrieved after generation — right ID, right name, or it's stripped. If verification leaves nothing substantive standing, the response honestly downgrades rather than presenting a hollow report.</p>
+        </div>
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 05 · The False-Positive Trap</p>
+          <p class="inv-phase-body">A PowerShell remoting scenario designed to look like lateral movement — but run during a scheduled maintenance window by a service account. The first version missed the context and called it malicious at 85% confidence. Fixed by explicitly weighing the incident's own contextual signals, not just technical pattern matches.</p>
+        </div>
+        <div class="inv-phase">
+          <p class="inv-phase-label">// 06 · Takeaway</p>
+          <p class="inv-phase-body">The real engineering work wasn't retrieval or the UI — it was the repeated loop of finding where the system overclaimed and tuning it back. A tool that admits uncertainty out loud is more useful than one that guesses confidently.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <hr class="divider"/>
 
 <!-- ═══ CREDENTIALS ═══════════════════════════════════ -->
