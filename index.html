@@ -1473,20 +1473,20 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
         <div class="flip-inner">
           <div class="flip-face flip-front proj-card p-teal">
             <div class="card-cover">
-              <img src="Assets/ir-copilot.jpg" alt="IR Copilot — Local RAG Incident Response Assistant" loading="lazy" decoding="async"
-                   onerror="this.parentNode.innerHTML='<div class=\'card-cover-fallback\'><span class=\'icon\'>🤖</span><span class=\'label\'>IR Copilot · Local RAG</span></div>'"/>
+              <img src="Assets/ir-copilot.jpg" alt="IR Copilot — Evidence-Grounded RAG Incident Response Assistant" loading="lazy" decoding="async"
+                   onerror="this.parentNode.innerHTML='<div class=\'card-cover-fallback\'><span class=\'icon\'>🤖</span><span class=\'label\'>IR Copilot · RAG</span></div>'"/>
             </div>
             <div class="proj-header">
               <span class="ptag ptag-t">RAG · Incident Response</span>
               <span class="diff-badge diff-adv">Flagship</span>
               <span class="proj-date">2026</span>
             </div>
-            <p class="proj-title">IR Copilot — Local RAG Incident Response Assistant</p>
-            <p class="proj-desc">Offline IR assistant that retrieves grounded answers from playbooks and case history — no cloud, no data leakage.</p>
+            <p class="proj-title">IR Copilot — Evidence-Grounded RAG Incident Response Assistant</p>
+            <p class="proj-desc">SOC assistant that maps live incidents to MITRE ATT&CK, Sigma, and NIST SP 800-61 evidence — every claim is verified against retrieval before it reaches the analyst, or the system honestly says "insufficient evidence."</p>
             <div class="tags" style="margin-bottom:.7rem">
-              <span class="tag t-t">ChromaDB</span><span class="tag t-v">Ollama</span><span class="tag t-a">FastAPI</span><span class="tag t-s">Python</span>
+              <span class="tag t-t">ChromaDB</span><span class="tag t-v">Groq</span><span class="tag t-a">FastAPI</span><span class="tag t-s">Python</span>
             </div>
-            <span class="result-chip">Local-first · Retrieval-grounded</span>
+            <span class="result-chip">Evidence-grounded · Guard-railed</span>
             <div class="flip-hint"><span class="fi"></span>Flip for architecture &amp; outcomes</div>
           </div>
           <div class="flip-face flip-back proj-card p-teal">
@@ -1498,31 +1498,33 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
               <p class="proj-title" style="margin-bottom:.9rem">IR Copilot — Full Breakdown</p>
               <div class="detail-section">
                 <p class="detail-title">// Project Overview</p>
-                <p class="detail-body"><strong>Goal:</strong> Give an on-call SOC analyst a private, offline assistant that answers "what do I do next?" from real playbooks and past cases — not hallucinated advice. <strong>Constraint:</strong> Nothing leaves the host; safe for regulated or air-gapped environments.</p>
+                <p class="detail-body"><strong>Goal:</strong> Give a SOC analyst a fast, evidence-grounded answer to "what is this, and what do I do next?" — mapped to real MITRE ATT&CK techniques, Sigma detections, NIST SP 800-61 guidance, and internal playbooks, never invented. <strong>Constraint:</strong> Every technique ID, cited source, and response step is verified against what was actually retrieved before being shown; if the evidence doesn't hold up, the system downgrades to "insufficient evidence" rather than presenting a confident-looking guess.</p>
               </div>
               <div class="detail-section">
                 <p class="detail-title">// Architecture</p>
                 <ul class="detail-list">
-                  <li><strong>Ollama</strong> — local LLM runtime for grounded response generation</li>
-                  <li><strong>sentence-transformers</strong> — dense embeddings for playbooks, IR notes, and MITRE mappings</li>
-                  <li><strong>ChromaDB</strong> — persistent vector store with metadata-filtered semantic search</li>
-                  <li><strong>FastAPI</strong> — retrieval + generation API with citation payloads</li>
-                  <li><strong>Streamlit</strong> — analyst-facing chat UI with source-highlighted answers</li>
+                  <li><strong>Groq (OSS 20B)</strong> — low-latency hosted LLM inference for grounded response generation, with a pluggable local Ollama backend for fully offline/air-gapped use</li>
+                  <li><strong>Hybrid retrieval</strong> — dense embeddings (BGE) + BM25 keyword search, fused and reranked (BGE reranker) over ~4,600 chunks spanning MITRE ATT&CK, Sigma, NIST, and playbooks</li>
+                  <li><strong>ChromaDB</strong> — persistent vector store with source-typed metadata filtering</li>
+                  <li><strong>Deterministic confidence scoring</strong> — retrieval-derived confidence gates whether the LLM is even called, independent of model output</li>
+                  <li><strong>FastAPI</strong> — retrieval + generation pipeline with post-generation guard-rails: MITRE ID/name verification, evidence-source matching, and a hollow-response downgrade check</li>
+                  <li><strong>Streamlit</strong> — case-file styled analyst UI: situation report, MITRE mapping, cited evidence, and a phased response sequence (Identification → Containment → Eradication → Recovery)</li>
                 </ul>
               </div>
               <div class="detail-section">
                 <p class="detail-title">// Key Outcomes</p>
                 <ul class="detail-list">
-                  <li>End-to-end local RAG stack — ingestion, retrieval, generation, UI</li>
-                  <li>Cite-or-refuse guardrails reduce hallucination; every answer shows sources</li>
-                  <li>Extensible corpus — drop new playbooks in a folder, re-index, done</li>
+                  <li>End-to-end grounded RAG pipeline — ingestion, hybrid retrieval, generation, deterministic verification, UI</li>
+                  <li>Post-generation guard-rails strip unverified MITRE mappings and citations rather than trusting the LLM's output at face value</li>
+                  <li>Confidence scoring is computed from retrieval signal, not asserted by the model — auditable and not hallucinated</li>
+                  <li>Extensible corpus — drop new playbooks or Sigma rules in a folder, re-index, done</li>
                 </ul>
               </div>
             </div>
             <div class="proj-footer" style="margin-top:.8rem">
               <a class="proj-link" href="https://github.com/Isaacdidde/IR-Copilot" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub ↗</a>
               <div style="display:flex;align-items:center;gap:.5rem">
-                <span class="mitre-badge">RAG</span><span class="mitre-badge">Local LLM</span>
+                <span class="mitre-badge">RAG</span><span class="mitre-badge">Groq</span>
               </div>
             </div>
             <div class="flip-hint"><span class="fi" style="transform:rotate(180deg)"></span>Flip back</div>
@@ -1530,7 +1532,6 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
         </div>
       </div>
       </div>
-
       <!-- Project 1 -->
       <div class="flip-scene sr">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Network Security Lab project card, press to flip for details">
