@@ -618,6 +618,9 @@ nav.scrolled{
   transform:rotateY(0deg) translateZ(0.01px);
   display:flex;flex-direction:column;
 }
+.flip-face.lab-card{
+  overflow:hidden; /* clip anything that still exceeds the box */
+}
 /* Neutralize the base card's hover-lift transform — it fights the flip
    transform stack and causes jitter. Hover feedback now lives on .flip-scene. */
 .flip-face.proj-card:hover,
@@ -729,7 +732,7 @@ nav.scrolled{
    LABS — 3-col grid
 ═══════════════════════════════════════════ */
 .labs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:.9rem}
-.labs-grid .flip-scene{min-height:230px}
+.labs-grid .flip-scene{min-height:260px}
 .lab-card{
   background:var(--c-surf);border:1px solid var(--c-border);
   border-radius:var(--radius);padding:1.3rem 1.4rem;
@@ -755,6 +758,14 @@ nav.scrolled{
   font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--c-ink3);
 }
 .lab-mitre{color:#c4b5fd;font-weight:500}
+
+/* add this new rule */
+.lab-card .lab-desc{
+  overflow-y:auto;
+  padding-right:2px;
+}
+.lab-card .lab-desc::-webkit-scrollbar{width:3px}
+.lab-card .lab-desc::-webkit-scrollbar-thumb{background:var(--c-border2);border-radius:3px}
 
 /* ═══════════════════════════════════════════
    INVESTIGATIONS SECTION
