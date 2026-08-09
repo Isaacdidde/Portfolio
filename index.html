@@ -1259,6 +1259,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
     <li><a href="#projects">Projects</a></li>
     <li><a href="#labs">Labs</a></li>
     <li><a href="#investigations">Investigations</a></li>
+    <li><a href="#articles">Articles</a></li>
     <li><a href="#certs">Credentials</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1280,8 +1281,10 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
   <a href="#projects">Projects</a>
   <a href="#labs">Labs</a>
   <a href="#investigations">Investigations</a>
+  <a href="#articles">Articles</a>
   <a href="#certs">Credentials</a>
   <a href="#contact">Contact</a>
+
 </div>
 
 <!-- ═══ HERO ═══════════════════════════════════════════ -->
@@ -1751,6 +1754,44 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
     <div class="labs-grid">
 
       <div class="flip-scene sr">
+  <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Windows Event Log Cleared, press to flip for details">
+    <div class="flip-inner">
+      <div class="flip-face flip-front lab-card">
+        <div class="lab-top"><span class="lbadge lb-b">Endpoint</span></div>
+        <p class="lab-title">Windows Event Log Cleared — SOC130</p>
+        <p class="lab-desc">EDR alert triage on an Event Log Cleared detection from an Exchange Server, verified as a false positive.</p>
+        <div class="flip-hint" style="margin-top:auto"><span class="fi"></span>Flip for details</div>
+      </div>
+      <div class="flip-face flip-back lab-card">
+        <p class="lab-title">Windows Event Log Cleared — SOC130</p>
+        <p class="lab-desc">Investigated a Medium-severity EDR alert flagging Windows Event Log clearing on an Exchange Server. Verified the source IP against the host, analyzed the powershell.exe artifact, checked its hash on VirusTotal and ANY.RUN, and correlated findings with endpoint context to reach a documented false-positive verdict.</p>
+        <div class="lab-foot"><span>LetsDefend · VirusTotal · ANY.RUN</span><span class="lab-mitre">T1070.001</span></div>
+        <a class="proj-link" style="margin-top:.6rem" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Event-Log-Cleared" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flip-scene sr d1">
+  <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Suspicious PowerShell Script Executed, press to flip for details">
+    <div class="flip-inner">
+      <div class="flip-face flip-front lab-card">
+        <div class="lab-top"><span class="lbadge lb-r">Incident Response</span></div>
+        <p class="lab-title">Suspicious PowerShell Script — SOC153</p>
+        <p class="lab-desc">Full IR investigation from a PowerShell alert to a confirmed RDP brute-force → Cobalt Strike → data exfiltration chain.</p>
+        <div class="flip-hint" style="margin-top:auto"><span class="fi"></span>Flip for details</div>
+      </div>
+      <div class="flip-face flip-back lab-card">
+        <p class="lab-title">Suspicious PowerShell Script — SOC153</p>
+        <p class="lab-desc">Decoded a Base64/compressed PowerShell payload (endpoint.ps1) and traced it to Cobalt Strike. Investigated backward through 4625/4624 and Terminal Services events to uncover RDP brute-force initial access, then forward through recon (ipconfig, netstat, Advanced Port Scanner), Netcat C2 on port 4444, and confirmed exfiltration of user-db-backup.sql. Full attack timeline, MITRE ATT&CK and Cyber Kill Chain mapping, containment and eradication plan included.</p>
+        <div class="lab-foot"><span>LetsDefend · Sysmon · Windows Event Logs</span><span class="lab-mitre">T1110 / T1059.001 / T1071</span></div>
+        <a class="proj-link" style="margin-top:.6rem" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="flip-scene sr d2">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Nmap Recon and SYN Flood Simulation, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1769,7 +1810,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d1">
+      <div class="flip-scene sr">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Suricata Custom Rule Engineering, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1788,7 +1829,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d2">
+      <div class="flip-scene sr d1">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Splunk SPL Dashboards and Correlation Alerts, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1807,7 +1848,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr">
+      <div class="flip-scene sr d2">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="SQL Injection DVWA and sqlmap, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1826,7 +1867,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d1">
+      <div class="flip-scene sr">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Command Injection OS Enumeration Chain, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1845,7 +1886,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d2">
+      <div class="flip-scene sr d1">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="XSS Reflected Payload in URL Parameters, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1864,7 +1905,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr">
+      <div class="flip-scene sr d2">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="SOC169 IDOR Attack Investigation, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1995,7 +2036,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
 <section id="articles" class="section">
   <div class="wrap">
     <div class="sh sr">
-      <p class="eyebrow">Published Work</p>
+      <p class="eyebrow">Build Logs</p>
       <h2 class="section-title">Articles &amp; Build Logs</h2>
       <p class="section-sub">Personal project writeups published on Medium.</p>
     </div>
