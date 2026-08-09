@@ -1924,7 +1924,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d1">
+      <div class="flip-scene sr">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="Bash Log Monitoring and Alert Parsing, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -1943,7 +1943,7 @@ a[href*="github.com"]:hover{color:var(--c-blue2)}
       </div>
       </div>
 
-      <div class="flip-scene sr d2">
+      <div class="flip-scene sr d1">
       <div class="flip-card" data-flip-card tabindex="0" role="button" aria-pressed="false" aria-label="SOC170 LFI Attack Investigation, press to flip for details">
         <div class="flip-inner">
           <div class="flip-face flip-front lab-card">
@@ -2652,7 +2652,11 @@ const MITRE_DESC = {
   'T1059.007': 'JavaScript — Malicious JS execution in browser or server context.',
   'T1087': 'Account Discovery — Enumerating user or service accounts.',
   'T1082': 'System Information Discovery — Fingerprinting the OS environment.',
-  'T1552': 'Unsecured Credentials — Harvesting keys, tokens, or config secrets.'
+  'T1552': 'Unsecured Credentials — Harvesting keys, tokens, or config secrets.',
+  'T1070.001': 'Indicator Removal: Clear Windows Event Logs — Anti-forensics via log clearing.',
+  'T1110': 'Brute Force — Repeated authentication attempts to gain access.',
+  'T1059.001': 'PowerShell — Malicious script execution via PowerShell.',
+  'T1071': 'Application Layer Protocol — C2 communication over standard protocols.'
 };
 document.querySelectorAll('.mitre-badge, .lab-mitre, .tag').forEach(el => {
   const raw = el.textContent.trim();
