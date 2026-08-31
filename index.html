@@ -53,6 +53,11 @@ button{cursor:pointer;font-family:'Inter',sans-serif}
 code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--surface2);padding:1px 5px;border-radius:4px;color:var(--ink)}
 h1,h2,h3{font-family:'Sora',sans-serif}
 
+/* focus visibility (accessibility, not decoration) */
+a:focus-visible,button:focus-visible,.flip-card:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;
+}
+
 /* ============================================
    NAV
 ============================================ */
@@ -112,7 +117,7 @@ nav.scrolled{border-bottom-color:var(--border)}
 .wrap{max-width:var(--measure);margin:0 auto;padding:0 1.6rem}
 .section{padding:4.5rem 0}
 .divider{border:none;height:1px;background:var(--border)}
-.section-head{margin-bottom:2.2rem}
+.section-head{margin-bottom:2.2rem;padding-left:.85rem;border-left:2px solid var(--accent)}
 .section-title{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
 .section-sub{margin-top:.5rem;font-size:.9rem;color:var(--ink2);line-height:1.8;max-width:520px}
 
@@ -123,11 +128,17 @@ nav.scrolled{border-bottom-color:var(--border)}
 /* ============================================
    HERO
 ============================================ */
-#hero{padding-top:calc(var(--nav-h) + 3.5rem);padding-bottom:3.5rem}
-.hero-row{display:flex;gap:2.5rem;align-items:center}
+#hero{padding-top:calc(var(--nav-h) + 3.5rem);padding-bottom:3.5rem;position:relative;overflow:hidden}
+#hero::before{
+  content:"";position:absolute;top:-120px;left:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-soft) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+.hero-row{display:flex;gap:2.5rem;align-items:center;position:relative;z-index:1}
 .hero-photo{
   width:112px;height:112px;border-radius:50%;overflow:hidden;flex-shrink:0;
   border:1px solid var(--border2);background:var(--surface);
+  box-shadow:0 0 0 4px var(--accent-soft);
 }
 .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 .hero-text{min-width:0}
@@ -140,9 +151,9 @@ nav.scrolled{border-bottom-color:var(--border)}
   font-size:.8rem;font-weight:500;border:1px solid var(--border2);transition:all .15s;
 }
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn-primary:hover{opacity:.9}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--ink)}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
 @media(max-width:560px){.hero-row{flex-direction:column;align-items:flex-start;text-align:left}.hero-photo{width:88px;height:88px}}
 
 /* ============================================
@@ -156,14 +167,20 @@ nav.scrolled{border-bottom-color:var(--border)}
   position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
   display:flex;flex-direction:column;border-radius:var(--radius);
   border:1px solid var(--border);background:var(--surface);
-  transition:border-color .15s;
+  transition:border-color .15s,box-shadow .15s;
+  overflow:hidden;
 }
-.flip-card:hover .flip-face{border-color:var(--border2)}
-.flip-back{transform:rotateY(180deg);overflow:hidden}
-.flip-back-scroll{flex:1;overflow-y:auto;padding-right:2px}
-.flip-back-scroll::-webkit-scrollbar{width:3px}
-.flip-back-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-.flip-hint{font-size:.68rem;color:var(--ink3);margin-top:auto;padding-top:.8rem}
+.flip-card:hover .flip-face{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
+.flip-back{transform:rotateY(180deg)}
+
+/* scrollable content region shared by front + back faces, so long copy
+   never collides with the hint/link pinned at the bottom */
+.flip-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:2px}
+.flip-scroll::-webkit-scrollbar{width:4px}
+.flip-scroll::-webkit-scrollbar-track{background:transparent}
+.flip-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.flip-hint{flex-shrink:0;font-size:.68rem;color:var(--ink3);padding-top:.75rem}
 .flip-card:hover .flip-hint{color:var(--accent)}
 @media(prefers-reduced-motion:reduce){
   .flip-inner{transition:none}
@@ -177,31 +194,36 @@ nav.scrolled{border-bottom-color:var(--border)}
    PROJECTS
 ============================================ */
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
-.proj-scene{min-height:250px}
+.proj-scene{min-height:290px}
 .proj-face{padding:1.4rem 1.5rem}
-.proj-year{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace}
-.proj-title{font-size:1rem;font-weight:600;margin-top:.35rem;line-height:1.35}
+.proj-year{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.proj-title{font-size:1rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
 .proj-desc{font-size:.85rem;color:var(--ink2);line-height:1.75;margin-top:.6rem}
 .proj-stack{font-size:.72rem;color:var(--ink3);margin-top:.85rem}
-.proj-detail-title{font-size:.95rem;font-weight:600;margin-bottom:.55rem}
+.proj-detail-title{font-size:.95rem;font-weight:600;margin-bottom:.55rem;flex-shrink:0}
 .proj-detail p{font-size:.83rem;color:var(--ink2);line-height:1.8}
 .proj-detail p + p{margin-top:.6rem}
-.proj-link{font-size:.76rem;color:var(--accent);margin-top:.85rem;display:inline-block}
+.proj-link{font-size:.76rem;color:var(--accent);margin-top:.85rem;display:inline-block;flex-shrink:0}
 .proj-link:hover{text-decoration:underline}
 
 /* ============================================
    LABS
 ============================================ */
 .labs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
-.lab-scene{min-height:150px}
+.lab-scene{min-height:190px}
 .lab-face{padding:1.05rem 1.15rem}
-.lab-cat{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace}
-.lab-title{font-size:.86rem;font-weight:600;margin-top:.35rem;line-height:1.35}
+.lab-cat{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.lab-title{font-size:.86rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
 .lab-desc{font-size:.78rem;color:var(--ink2);line-height:1.7;margin-top:.4rem}
+.lab-detail-title{font-size:.86rem;font-weight:600;margin-bottom:.4rem;flex-shrink:0}
 .lab-detail{font-size:.78rem;color:var(--ink2);line-height:1.75}
-.lab-mitre{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:.6rem}
-.lab-link{font-size:.72rem;color:var(--accent);margin-top:.55rem;display:inline-block}
+.lab-mitre{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:.6rem;flex-shrink:0}
+.lab-link{
+  font-size:.72rem;color:var(--accent);margin-top:.6rem;display:inline-flex;align-items:center;gap:.3rem;
+  flex-shrink:0;
+}
 .lab-link:hover{text-decoration:underline}
+.lab-link svg{width:12px;height:12px;flex-shrink:0}
 
 /* ============================================
    SKILLS
@@ -214,14 +236,36 @@ nav.scrolled{border-bottom-color:var(--border)}
 @media(max-width:560px){.skill-row{grid-template-columns:1fr;gap:.3rem}}
 
 /* ============================================
+   EXPERIENCE
+============================================ */
+.exp-list{display:flex;flex-direction:column;gap:1rem}
+.exp-card{
+  border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem 1.5rem;
+  transition:border-color .15s,box-shadow .15s;
+}
+.exp-card:hover{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
+.exp-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem}
+.exp-role{font-size:.98rem;font-weight:600}
+.exp-company{font-size:.83rem;color:var(--accent);margin-top:.25rem}
+.exp-dates{font-size:.72rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.exp-bullets{margin-top:.9rem;display:flex;flex-direction:column;gap:.55rem}
+.exp-bullets li{
+  list-style:none;position:relative;padding-left:1rem;
+  font-size:.85rem;color:var(--ink2);line-height:1.75;
+}
+.exp-bullets li::before{
+  content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--accent);
+}
+
+/* ============================================
    WRITEUPS
 ============================================ */
 .write-list{display:flex;flex-direction:column;gap:1rem}
 .write-card{
   border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.5rem;
-  transition:border-color .15s;
+  transition:border-color .15s,box-shadow .15s;
 }
-.write-card:hover{border-color:var(--border2)}
+.write-card:hover{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
 .write-meta{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace}
 .write-title{font-size:.95rem;font-weight:600;margin-top:.4rem}
 .write-desc{font-size:.84rem;color:var(--ink2);line-height:1.8;margin-top:.55rem}
@@ -248,9 +292,9 @@ nav.scrolled{border-bottom-color:var(--border)}
 .contact-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.3rem}
 .contact-links a{
   font-size:.8rem;padding:.5rem 1rem;border:1px solid var(--border2);border-radius:8px;
-  transition:border-color .15s,color .15s;
+  transition:border-color .15s,color .15s,transform .15s;
 }
-.contact-links a:hover{border-color:var(--accent);color:var(--accent)}
+.contact-links a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
 
 /* ============================================
    RESUME OVERLAY
@@ -319,6 +363,7 @@ footer{
     <li><a href="#projects">Projects</a></li>
     <li><a href="#labs">Labs</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
     <li><a href="#writeups">Writeups</a></li>
     <li><a href="#credentials">Credentials</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -333,6 +378,7 @@ footer{
   <a href="#projects">Projects</a>
   <a href="#labs">Labs</a>
   <a href="#skills">Skills</a>
+  <a href="#experience">Experience</a>
   <a href="#writeups">Writeups</a>
   <a href="#credentials">Credentials</a>
   <a href="#contact">Contact</a>
@@ -348,9 +394,7 @@ footer{
       <div class="hero-text">
         <h1 class="hero-name">Didde Isaac</h1>
         <p class="hero-role">SOC Analyst</p>
-        <p class="hero-bio">SOC Analyst & Defensive Security Practitioner
-
-Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wazuh) and triaging multi-stage attack scenarios mapped to MITRE ATT&CK. Backed by 11 months of 24x7 operational support experience with 100% SLA adherence, bringing proven queue discipline and structured escalation to security operations..</p>
+        <p class="hero-bio">SOC Analyst & Defensive Security Practitioner. Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wazuh) and triaging multi-stage attack scenarios mapped to MITRE ATT&CK. Backed by 11 months of 24x7 operational support experience with 100% SLA adherence, bringing proven queue discipline and structured escalation to security operations.</p>
         <div class="hero-actions">
           <button class="btn btn-primary" id="resumeBtn">Resume</button>
           <a class="btn btn-ghost" href="mailto:diddeisaac@gmail.com">Email</a>
@@ -378,13 +422,15 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front proj-face">
               <span class="proj-year">2026</span>
               <p class="proj-title">IR Copilot — grounded incident response assistant</p>
-              <p class="proj-desc">Gives an analyst a cited next step instead of a guess. Retrieval-verified against MITRE, Sigma, and NIST evidence — it says "insufficient evidence" rather than invent one.</p>
-              <p class="proj-stack">FastAPI · ChromaDB · Groq</p>
+              <div class="flip-scroll">
+                <p class="proj-desc">Gives an analyst a cited next step instead of a guess. Retrieval-verified against MITRE, Sigma, and NIST evidence — it says "insufficient evidence" rather than invent one.</p>
+                <p class="proj-stack">FastAPI · ChromaDB · Groq</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back proj-face">
-              <div class="flip-back-scroll">
-                <p class="proj-detail-title">IR Copilot</p>
+              <p class="proj-detail-title">IR Copilot</p>
+              <div class="flip-scroll">
                 <div class="proj-detail">
                   <p>Hybrid dense + keyword retrieval over ~4,600 chunks of MITRE ATT&CK, Sigma, NIST SP 800-61, and internal playbooks, reranked before the model sees anything.</p>
                   <p>A deterministic confidence score, computed from retrieval signal alone, gates whether generation runs at all — below threshold, no model call is made.</p>
@@ -403,13 +449,15 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front proj-face">
               <span class="proj-year">2025</span>
               <p class="proj-title">Network intrusion detection lab</p>
-              <p class="proj-desc">Detected 200+ simulated scan and flood events with zero false negatives, by writing 15 custom Suricata rules and correlating them in Splunk.</p>
-              <p class="proj-stack">Suricata · Splunk SPL · Wireshark</p>
+              <div class="flip-scroll">
+                <p class="proj-desc">Detected 200+ simulated scan and flood events with zero false negatives, by writing 15 custom Suricata rules and correlating them in Splunk.</p>
+                <p class="proj-stack">Suricata · Splunk SPL · Wireshark</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back proj-face">
-              <div class="flip-back-scroll">
-                <p class="proj-detail-title">Network intrusion detection lab</p>
+              <p class="proj-detail-title">Network intrusion detection lab</p>
+              <div class="flip-scroll">
                 <div class="proj-detail">
                   <p>Kali attacker and Ubuntu defender on an isolated network. Ran Nmap SYN and aggressive scans, plus an hping3 SYN flood, captured in Wireshark for signature analysis.</p>
                   <p>Authored 15 custom Suricata YAML rules with threshold tuning, then piped eve.json into Splunk to build correlation searches and alerts.</p>
@@ -428,13 +476,15 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front proj-face">
               <span class="proj-year">2025</span>
               <p class="proj-title">Web attack detection lab</p>
-              <p class="proj-desc">Confirmed four OWASP Top 10 attack classes against DVWA — SQLi, command injection, XSS, IDOR — each producing a validated alert.</p>
-              <p class="proj-stack">Wazuh · SQLMap · DVWA</p>
+              <div class="flip-scroll">
+                <p class="proj-desc">Confirmed four OWASP Top 10 attack classes against DVWA — SQLi, command injection, XSS, IDOR — each producing a validated alert.</p>
+                <p class="proj-stack">Wazuh · SQLMap · DVWA</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back proj-face">
-              <div class="flip-back-scroll">
-                <p class="proj-detail-title">Web attack detection lab</p>
+              <p class="proj-detail-title">Web attack detection lab</p>
+              <div class="flip-scroll">
                 <div class="proj-detail">
                   <p>Executed union-based and blind SQL injection with SQLMap, a whoami → uname command injection chain, reflected XSS via URL parameters, and user-ID enumeration for IDOR — all against DVWA.</p>
                   <p>Each attack was ingested into Wazuh for rule validation and documented with a full IOC listing and attack timeline.</p>
@@ -453,13 +503,15 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front proj-face">
               <span class="proj-year">2026</span>
               <p class="proj-title">Qrypta — IAM password vault</p>
-              <p class="proj-desc">Built a credential vault that enforces least-privilege access, combining AES-256, bcrypt, RBAC, and an immutable audit log.</p>
-              <p class="proj-stack">Python · Flask · MongoDB</p>
+              <div class="flip-scroll">
+                <p class="proj-desc">Built a credential vault that enforces least-privilege access, combining AES-256, bcrypt, RBAC, and an immutable audit log.</p>
+                <p class="proj-stack">Python · Flask · MongoDB</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back proj-face">
-              <div class="flip-back-scroll">
-                <p class="proj-detail-title">Qrypta</p>
+              <p class="proj-detail-title">Qrypta</p>
+              <div class="flip-scroll">
                 <div class="proj-detail">
                   <p>MCA capstone project. Vault-level AES-256 encryption, bcrypt password hashing with adaptive work factor, and role-based access enforcement.</p>
                   <p>SMTP-based OTP as a second factor for privileged operations, plus a tamper-evident audit log covering every access event.</p>
@@ -493,14 +545,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Endpoint</span>
               <p class="lab-title">Windows Event Log Cleared — SOC130</p>
-              <p class="lab-desc">EDR alert on an Exchange Server, verified as a false positive.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">EDR alert on an Exchange Server, verified as a false positive.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Windows Event Log Cleared — SOC130</p>
-              <p class="lab-detail">Verified the source IP against the host, checked the powershell.exe hash on VirusTotal and ANY.RUN, and correlated with endpoint context to reach a documented false-positive verdict.</p>
-              <p class="lab-mitre">T1070.001</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Event-Log-Cleared" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Windows Event Log Cleared — SOC130</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Verified the source IP against the host, checked the powershell.exe hash on VirusTotal and ANY.RUN, and correlated with endpoint context to reach a documented false-positive verdict.</p>
+                <p class="lab-mitre">T1070.001</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Event-Log-Cleared" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -512,14 +571,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Incident response</span>
               <p class="lab-title">Suspicious PowerShell — SOC153</p>
-              <p class="lab-desc">A PowerShell alert traced to RDP brute-force → Cobalt Strike → exfiltration.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">A PowerShell alert traced to RDP brute-force → Cobalt Strike → exfiltration.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Suspicious PowerShell — SOC153</p>
-              <p class="lab-detail">Decoded a Base64 PowerShell payload back to Cobalt Strike, then traced backward to an RDP brute-force entry point and forward through recon and a Netcat C2 channel to confirmed data exfiltration.</p>
-              <p class="lab-mitre">T1110 · T1059.001 · T1071</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Suspicious PowerShell — SOC153</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Decoded a Base64 PowerShell payload back to Cobalt Strike, then traced backward to an RDP brute-force entry point and forward through recon and a Netcat C2 channel to confirmed data exfiltration.</p>
+                <p class="lab-mitre">T1110 · T1059.001 · T1071</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -531,14 +597,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Attack simulation</span>
               <p class="lab-title">Nmap recon &amp; SYN flood</p>
-              <p class="lab-desc">Scan and flood patterns captured in Wireshark for signature ID.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">Scan and flood patterns captured in Wireshark for signature ID.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Nmap recon &amp; SYN flood</p>
-              <p class="lab-detail">Active Nmap scans and a SYN flood run from Kali against the defending VM, captured in Wireshark to identify probe and flood signatures.</p>
-              <p class="lab-mitre">T1595 · T1046</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Nmap recon &amp; SYN flood</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Active Nmap scans and a SYN flood run from Kali against the defending VM, captured in Wireshark to identify probe and flood signatures.</p>
+                <p class="lab-mitre">T1595 · T1046</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -550,14 +623,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Detection engineering</span>
               <p class="lab-title">Suricata custom rules</p>
-              <p class="lab-desc">15 custom YAML rules, tuned to cut false positives.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">15 custom YAML rules, tuned to cut false positives.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Suricata custom rules</p>
-              <p class="lab-detail">15 rules targeting scan patterns, SYN floods, and abnormal packet rates, with thresholds tuned down to reduce false-positive volume.</p>
-              <p class="lab-mitre">Custom detection</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Suricata custom rules</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">15 rules targeting scan patterns, SYN floods, and abnormal packet rates, with thresholds tuned down to reduce false-positive volume.</p>
+                <p class="lab-mitre">Custom detection</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -569,14 +649,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">SIEM</span>
               <p class="lab-title">Splunk SPL dashboards</p>
-              <p class="lab-desc">eve.json ingested into Splunk; SPL alerts surface IOCs.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">eve.json ingested into Splunk; SPL alerts surface IOCs.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Splunk SPL dashboards</p>
-              <p class="lab-detail">Ingested Suricata eve.json into Splunk and built correlation searches and dashboards to surface actionable IOCs from raw log volume.</p>
-              <p class="lab-mitre">Log correlation</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/splunk" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Splunk SPL dashboards</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Ingested Suricata eve.json into Splunk and built correlation searches and dashboards to surface actionable IOCs from raw log volume.</p>
+                <p class="lab-mitre">Log correlation</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/splunk" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -588,14 +675,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Web app</span>
               <p class="lab-title">SQL injection — DVWA + sqlmap</p>
-              <p class="lab-desc">Union-based and blind SQLi with a live Wazuh alert.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">Union-based and blind SQLi with a live Wazuh alert.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">SQL injection — DVWA + sqlmap</p>
-              <p class="lab-detail">Union-based and blind SQL injection with real-time Apache log monitoring, producing a validated Wazuh alert and a full case report with IOC listing.</p>
-              <p class="lab-mitre">T1190</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">SQL injection — DVWA + sqlmap</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Union-based and blind SQL injection with real-time Apache log monitoring, producing a validated Wazuh alert and a full case report with IOC listing.</p>
+                <p class="lab-mitre">T1190</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -607,14 +701,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Attack simulation</span>
               <p class="lab-title">Command injection — OS enumeration</p>
-              <p class="lab-desc">Full whoami → uname chain, documented step by step.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">Full whoami → uname chain, documented step by step.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Command injection — OS enumeration</p>
-              <p class="lab-detail">Documented the full whoami → uname → system enumeration chain via DVWA, with a structured case report and IOC listing.</p>
-              <p class="lab-mitre">T1059 · T1087</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/Command-Injection/Case-01-Whoami-Command-Detected" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Command injection — OS enumeration</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Documented the full whoami → uname → system enumeration chain via DVWA, with a structured case report and IOC listing.</p>
+                <p class="lab-mitre">T1059 · T1087</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/Command-Injection/Case-01-Whoami-Command-Detected" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -626,14 +727,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Analysis</span>
               <p class="lab-title">XSS — reflected payload</p>
-              <p class="lab-desc">Reflected XSS identified in HTTP logs, mapped to ATT&amp;CK.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">Reflected XSS identified in HTTP logs, mapped to ATT&amp;CK.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">XSS — reflected payload</p>
-              <p class="lab-detail">Identified a reflected XSS payload in URL parameters from HTTP logs, mapped it to ATT&amp;CK, and wrote alert-tuning notes to improve detection.</p>
-              <p class="lab-mitre">T1059.007</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting/Case-1_Javascript_code_Detected_in_URL" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">XSS — reflected payload</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Identified a reflected XSS payload in URL parameters from HTTP logs, mapped it to ATT&amp;CK, and wrote alert-tuning notes to improve detection.</p>
+                <p class="lab-mitre">T1059.007</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting/Case-1_Javascript_code_Detected_in_URL" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -645,14 +753,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Investigation</span>
               <p class="lab-title">IDOR investigation — SOC169</p>
-              <p class="lab-desc">User-ID enumeration against a public endpoint.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">User-ID enumeration against a public endpoint.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">IDOR investigation — SOC169</p>
-              <p class="lab-detail">Traced user-ID enumeration against a public web app through HTTP traffic patterns. Concluded likely successful IDOR exploitation, with no host-level compromise.</p>
-              <p class="lab-mitre">OWASP A01</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">IDOR investigation — SOC169</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Traced user-ID enumeration against a public web app through HTTP traffic patterns. Concluded likely successful IDOR exploitation, with no host-level compromise.</p>
+                <p class="lab-mitre">OWASP A01</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -664,14 +779,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Automation</span>
               <p class="lab-title">Bash log monitoring</p>
-              <p class="lab-desc">Scripts that parse eve.json alerts, cutting triage time.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">Scripts that parse eve.json alerts, cutting triage time.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">Bash log monitoring</p>
-              <p class="lab-detail">Bash scripts that automate Suricata log monitoring and parse eve.json alert fields to surface critical IOCs, reducing manual triage time.</p>
-              <p class="lab-mitre">Automation</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">Bash log monitoring</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Bash scripts that automate Suricata log monitoring and parse eve.json alert fields to surface critical IOCs, reducing manual triage time.</p>
+                <p class="lab-mitre">Automation</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -683,14 +805,21 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
             <div class="flip-face flip-front lab-face">
               <span class="lab-cat">Investigation</span>
               <p class="lab-title">LFI investigation — SOC170</p>
-              <p class="lab-desc">LFI attempt on /etc/passwd — confirmed true positive.</p>
+              <div class="flip-scroll">
+                <p class="lab-desc">LFI attempt on /etc/passwd — confirmed true positive.</p>
+              </div>
               <p class="flip-hint">Flip for details</p>
             </div>
             <div class="flip-face flip-back lab-face">
-              <p class="lab-title">LFI investigation — SOC170</p>
-              <p class="lab-detail">Investigated an LFI attempt targeting <code>/etc/passwd</code> via a manipulated URL parameter. Confirmed true positive, with no data exposure.</p>
-              <p class="lab-mitre">T1190</p>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/LFI-RFI/Case-01-LFI-Detection" target="_blank" rel="noopener" onclick="event.stopPropagation()">GitHub →</a>
+              <p class="lab-detail-title">LFI investigation — SOC170</p>
+              <div class="flip-scroll">
+                <p class="lab-detail">Investigated an LFI attempt targeting <code>/etc/passwd</code> via a manipulated URL parameter. Confirmed true positive, with no data exposure.</p>
+                <p class="lab-mitre">T1190</p>
+              </div>
+              <a class="lab-link" href="https://github.com/Isaacdidde/Portfolio/tree/main/Web-Attacks/LFI-RFI/Case-01-LFI-Detection" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>
@@ -740,6 +869,34 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
 
 <hr class="divider"/>
 
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="wrap">
+    <div class="section-head sr">
+      <h2 class="section-title">Experience</h2>
+      <p class="section-sub">Where the escalation discipline and queue mentality started.</p>
+    </div>
+    <div class="exp-list sr">
+      <div class="exp-card">
+        <div class="exp-top">
+          <div>
+            <p class="exp-role">Customer Support Executive</p>
+            <p class="exp-company">Niftel Communications (Blinkit Process)</p>
+          </div>
+          <p class="exp-dates">Mar 2023 – Jan 2024</p>
+        </div>
+        <ul class="exp-bullets">
+          <li>Sustained 100% SLA adherence across 11 months of 24x7 shift-based support by triaging and prioritizing 50 to 80+ tickets daily through priority-based routing and structured escalation.</li>
+          <li>Managed critical escalations and Tier 1–Tier 2 handoffs by conducting root-cause analysis on escalated cases and documenting findings in knowledge-base runbooks using defined escalation procedures.</li>
+          <li>Recognized by Blinkit's Customer Delight Head for precise ticket categorization and reliability in time-sensitive, stakeholder-facing work.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
 <!-- WRITEUPS -->
 <section id="writeups" class="section">
   <div class="wrap">
@@ -772,7 +929,8 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
     <div class="section-head sr">
       <h2 class="section-title">Credentials</h2>
     </div>
-    <div class="cred-row">
+    <div class="cred-list sr">
+      <div class="cred-row">
         <p class="cred-name">Master of Computer Applications — CSVTU, Durg</p>
         <p class="cred-when">July 2026</p>
       </div>
@@ -780,12 +938,10 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
         <p class="cred-name">B.Sc. Computer Science</p>
         <p class="cred-when">May 2024</p>
       </div>
-    <div class="cred-list sr">
       <div class="cred-row">
         <p class="cred-name">Google Cybersecurity Professional Certificate</p>
         <p class="cred-when">February 2026</p>
       </div>
-      
       <div class="cred-row">
         <p class="cred-name">IT Help Desk Practical Certificate</p>
         <p class="cred-when">May 2025</p>
@@ -794,8 +950,6 @@ Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wa
         <p class="cred-name">CompTIA Security+ (SY0-701)</p>
         <p class="cred-when pending">Exam scheduled - September 2026</p>
       </div>
-  
-      
     </div>
   </div>
 </section>
