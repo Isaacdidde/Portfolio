@@ -194,7 +194,11 @@ nav.scrolled{border-bottom-color:var(--border)}
    PROJECTS
 ============================================ */
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
-.proj-scene{min-height:290px}
+/* FIX: was min-height, which cannot be resolved by the flip-card's
+   height:100% below (percentage heights need an explicit height on
+   the containing block, not just a min-height). That's why the
+   flip cards rendered at 0px tall and nothing was visible. */
+.proj-scene{height:290px}
 .proj-face{padding:1.4rem 1.5rem}
 .proj-year{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
 .proj-title{font-size:1rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
@@ -210,7 +214,8 @@ nav.scrolled{border-bottom-color:var(--border)}
    LABS
 ============================================ */
 .labs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
-.lab-scene{min-height:190px}
+/* FIX: same issue as .proj-scene above — min-height → height */
+.lab-scene{height:190px}
 .lab-face{padding:1.05rem 1.15rem}
 .lab-cat{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
 .lab-title{font-size:.86rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
