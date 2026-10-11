@@ -3,1119 +3,638 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Didde Isaac · SOC Analyst</title>
+<title>Didde Isaac · SOC Analyst L1</title>
+<meta name="description" content="Didde Isaac — SOC Analyst L1 candidate. Threat detection, incident response, Splunk, Wazuh, Suricata."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ============================================
-   TOKENS
-============================================ */
 :root{
-  --bg:      #0a0d12;
-  --surface: #10141b;
-  --surface2:#161b24;
-  --border:  rgba(255,255,255,.09);
-  --border2: rgba(255,255,255,.16);
-  --ink:     #eef1f6;
-  --ink2:    #97a1b0;
-  --ink3:    #5b6577;
-  --accent:  #4f8cff;
-  --accent-soft: rgba(79,140,255,.10);
-  --good:    #34d399;
-  --nav-h:   60px;
-  --radius:  10px;
-  --measure: 1240px;
-  --prose:   620px;
+  --bg:#07090d; --bg2:#0b0e14; --surface:#0f131a; --surface2:#151a23;
+  --border:rgba(255,255,255,.07); --border2:rgba(255,255,255,.14);
+  --ink:#f2f4f8; --ink2:#9aa4b5; --ink3:#5f6a7d;
+  --accent:#5b8dff; --accent2:#8b6bff; --accent-soft:rgba(91,141,255,.12);
+  --good:#34d399; --warn:#e5ad4f;
+  --nav-h:68px; --radius:16px; --max:1180px;
+  --shadow:0 20px 50px -20px rgba(0,0,0,.6);
 }
 [data-theme="light"]{
-  --bg:      #fafbfd;
-  --surface: #ffffff;
-  --surface2:#f3f5f9;
-  --border:  rgba(15,20,30,.09);
-  --border2: rgba(15,20,30,.16);
-  --ink:     #12161f;
-  --ink2:    #58627a;
-  --ink3:    #8a93a6;
-  --accent:  #2f66e0;
-  --accent-soft: rgba(47,102,224,.08);
+  --bg:#fbfbfd; --bg2:#f4f6fa; --surface:#ffffff; --surface2:#f1f3f8;
+  --border:rgba(15,20,30,.08); --border2:rgba(15,20,30,.16);
+  --ink:#10141c; --ink2:#566077; --ink3:#8c95a8;
+  --accent:#2f66e0; --accent2:#6b4de0; --accent-soft:rgba(47,102,224,.09);
+  --shadow:0 20px 50px -25px rgba(20,30,60,.25);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);color:var(--ink);
-  font-family:'Inter',sans-serif;font-weight:300;
-  font-size:16px;line-height:1.7;
-  -webkit-font-smoothing:antialiased;
-}
+html{scroll-behavior:smooth;scroll-padding-top:var(--nav-h)}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-weight:300;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;font-family:'Inter',sans-serif}
-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--surface2);padding:1px 5px;border-radius:4px;color:var(--ink)}
-h1,h2,h3{font-family:'Sora',sans-serif}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3{font-family:'Sora',sans-serif;letter-spacing:-.02em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
+.section{padding:6rem 0}
+.alt{background:var(--bg2)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.sec-title{font-size:clamp(1.7rem,3.2vw,2.3rem);font-weight:600;margin-top:.5rem}
+.sec-sub{color:var(--ink2);margin-top:.7rem;max-width:560px;font-size:.98rem}
+.sec-head{margin-bottom:2.8rem}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
-/* focus visibility (accessibility, not decoration) */
-a:focus-visible,button:focus-visible,.flip-card:focus-visible{
-  outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;
-}
+/* NAV */
+nav{position:fixed;inset:0 0 auto 0;height:var(--nav-h);z-index:100;display:flex;align-items:center;transition:background .25s,border-color .25s,backdrop-filter .25s;border-bottom:1px solid transparent}
+nav.scrolled{background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--border)}
+.nav-in{width:100%;max-width:var(--max);margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.65rem;font-family:'Sora',sans-serif;font-weight:600;font-size:.95rem}
+.brand-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-size:.75rem;font-weight:700}
+.nav-links{display:flex;gap:.15rem;list-style:none;padding:.3rem;border:1px solid var(--border);border-radius:999px;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+.nav-links a{display:block;font-size:.8rem;color:var(--ink2);padding:.4rem .95rem;border-radius:999px;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--ink);background:var(--surface2)}
+.nav-right{display:flex;align-items:center;gap:.5rem}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:transparent;color:var(--ink2);display:grid;place-items:center;font-size:.95rem;transition:all .2s}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent)}
+.nav-cta{font-size:.78rem;font-weight:500;padding:.5rem 1rem;border-radius:999px;background:var(--ink);color:var(--bg);transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+.burger{display:none}
+.mnav{position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;background:var(--bg);border-bottom:1px solid var(--border);padding:.5rem 1.5rem 1rem;display:none;flex-direction:column}
+.mnav.open{display:flex}
+.mnav a{padding:.8rem 0;color:var(--ink2);border-bottom:1px solid var(--border);font-size:.95rem}
+.mnav a:last-child{border:none}
+@media(max-width:900px){.nav-links,.nav-cta{display:none}.burger{display:grid}}
 
-/* ============================================
-   NAV
-============================================ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:var(--nav-h);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;
-  background:rgba(10,13,18,.86);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid transparent;
-  transition:border-color .2s,background .2s;
-}
-[data-theme="light"] nav{background:rgba(250,251,253,.86)}
-nav.scrolled{border-bottom-color:var(--border)}
-.nav-brand{display:flex;align-items:center;gap:.55rem;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600}
-.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--good)}
-.nav-links{display:flex;gap:.1rem;list-style:none;position:absolute;left:50%;transform:translateX(-50%)}
-.nav-links a{font-size:.78rem;color:var(--ink2);padding:.4rem .8rem;border-radius:6px;transition:color .15s}
-.nav-links a:hover,.nav-links a.active{color:var(--ink)}
-.nav-right{display:flex;align-items:center;gap:.6rem}
-.nav-status{
-  display:none;
-  font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.03em;
-  color:var(--good);border:1px solid rgba(52,211,153,.25);
-  padding:.28rem .65rem;border-radius:20px;white-space:nowrap;
-}
-@media(min-width:560px){.nav-status{display:inline-flex;align-items:center;gap:.4rem}}
-.theme-toggle{
-  width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);
-  background:transparent;display:flex;align-items:center;justify-content:center;
-  font-size:.8rem;color:var(--ink2);transition:border-color .15s,color .15s;
-}
-.theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
-.nav-hamburger{
-  display:none;flex-direction:column;gap:4px;width:30px;height:30px;
-  border:1px solid var(--border2);background:transparent;border-radius:8px;
-  align-items:center;justify-content:center;
-}
-.nav-hamburger span{display:block;width:15px;height:1.5px;background:var(--ink2);transition:all .2s}
-.nav-hamburger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
-.nav-hamburger.open span:nth-child(2){opacity:0}
-.nav-hamburger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
-.mobile-nav{
-  position:fixed;top:var(--nav-h);left:0;right:0;z-index:199;
-  background:var(--bg);border-bottom:1px solid var(--border);
-  padding:.6rem 1.4rem 1rem;display:flex;flex-direction:column;
-  transform:translateY(-8px);opacity:0;pointer-events:none;transition:transform .2s,opacity .2s;
-}
-.mobile-nav.open{transform:translateY(0);opacity:1;pointer-events:all}
-.mobile-nav a{font-size:.88rem;color:var(--ink2);padding:.65rem 0;border-bottom:1px solid var(--border)}
-.mobile-nav a:last-child{border-bottom:none}
+/* HERO */
+#home{min-height:100vh;display:flex;align-items:center;padding:calc(var(--nav-h) + 2rem) 0 4rem;position:relative;overflow:hidden}
+#home::before{content:"";position:absolute;width:640px;height:640px;top:-200px;right:-160px;border-radius:50%;background:radial-gradient(circle,rgba(91,141,255,.16),transparent 65%);pointer-events:none}
+#home::after{content:"";position:absolute;width:520px;height:520px;bottom:-240px;left:-180px;border-radius:50%;background:radial-gradient(circle,rgba(139,107,255,.10),transparent 65%);pointer-events:none}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:4rem;align-items:center;position:relative;z-index:1}
+.status{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--good);border:1px solid rgba(52,211,153,.28);background:rgba(52,211,153,.07);padding:.35rem .85rem;border-radius:999px}
+.status i{width:6px;height:6px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);font-weight:700;line-height:1.05;margin-top:1.3rem}
+.hero h1 span{background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.looking{margin-top:1.1rem;font-size:1.05rem;color:var(--ink2);display:flex;flex-wrap:wrap;gap:.4rem;align-items:baseline}
+.rotator{display:inline-block;min-width:min(100%,20ch);color:var(--ink);font-weight:500;transition:opacity .5s ease,transform .5s ease}
+.rotator.out{opacity:0;transform:translateY(8px)}
+.hero-bio{margin-top:1.2rem;color:var(--ink2);max-width:540px;font-size:.98rem}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.3rem;border-radius:999px;font-size:.85rem;font-weight:500;border:1px solid var(--border2);background:transparent;color:var(--ink);transition:all .2s}
+.btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(120deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.btn-primary:hover{color:#fff;opacity:.92;box-shadow:0 10px 30px -10px var(--accent)}
+.hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
+.chip{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--ink2);padding:.5rem .9rem;border:1px solid var(--border);border-radius:999px;background:var(--surface);transition:all .2s}
+.chip:hover{color:var(--accent);border-color:var(--accent)}
+.chip svg{width:15px;height:15px;fill:currentColor}
+.photo-wrap{position:relative;justify-self:center}
+.photo-wrap::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 180deg,var(--accent),var(--accent2),transparent 60%,var(--accent));opacity:.55;filter:blur(18px)}
+.photo{position:relative;width:clamp(220px,28vw,320px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:1px solid var(--border2);background:var(--surface);box-shadow:var(--shadow)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.photo .fallback{position:absolute;inset:0;display:grid;place-items:center;font-family:'Sora',sans-serif;font-size:4rem;font-weight:700;color:var(--ink3);z-index:-1}
+.stats{display:flex;gap:2rem;margin-top:2.4rem;padding-top:1.6rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat b{display:block;font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:600}
+.stat span{font-size:.75rem;color:var(--ink3)}
+@media(max-width:860px){.hero{grid-template-columns:1fr;gap:2.5rem;text-align:left}.photo-wrap{order:-1;justify-self:start}.photo{width:170px}}
 
-/* ============================================
-   LAYOUT
-============================================ */
-.wrap{max-width:var(--measure);margin:0 auto;padding:0 1.6rem}
-.section{padding:4.5rem 0}
-.divider{border:none;height:1px;background:var(--border)}
-.section-head{margin-bottom:2.2rem;padding-left:.85rem;border-left:2px solid var(--accent)}
-.section-title{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
-.section-sub{margin-top:.5rem;font-size:.9rem;color:var(--ink2);line-height:1.8;max-width:520px}
+/* EDUCATION */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem}
+.panel h3{font-size:1rem;font-weight:600;display:flex;align-items:center;gap:.6rem;margin-bottom:1.3rem}
+.panel h3 em{font-style:normal;width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:.85rem}
+.tl{list-style:none;position:relative;padding-left:1.4rem}
+.tl::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:1px;background:var(--border2)}
+.tl li{position:relative;padding-bottom:1.5rem}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:"";position:absolute;left:-1.4rem;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--bg2);border:2px solid var(--accent)}
+.tl .t{font-weight:500;font-size:.95rem;color:var(--ink)}
+.tl .s{font-size:.84rem;color:var(--ink2);margin-top:.1rem}
+.tl .m{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink3);margin-top:.35rem;display:flex;gap:.8rem;flex-wrap:wrap}
+.tag-pend{color:var(--warn)}
+.tag-ok{color:var(--good)}
 
-.sr{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
-.sr.vis{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.sr{opacity:1;transform:none;transition:none}}
+/* PROJECTS */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+@media(max-width:980px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.pgrid{grid-template-columns:1fr}}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;flex-direction:column;transition:border-color .25s,transform .25s,box-shadow .25s;animation:cardIn .5s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.pcard:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--shadow)}
+.ptop{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.ptype{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:.22rem .6rem;border-radius:999px}
+.ptype.project{color:var(--accent);background:var(--accent-soft)}
+.ptype.lab{color:var(--accent2);background:rgba(139,107,255,.12)}
+.pyear{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink3)}
+.pcard h3{font-size:1.02rem;font-weight:600;margin-top:1rem;line-height:1.35}
+.pcard p{font-size:.86rem;color:var(--ink2);margin-top:.6rem;flex:1}
+.ptags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
+.ptags span{font-size:.7rem;color:var(--ink2);border:1px solid var(--border);padding:.15rem .55rem;border-radius:6px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--border)}
+.pmitre{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink3)}
+.plink{font-size:.8rem;color:var(--accent);font-weight:500}
+.plink:hover{text-decoration:underline}
+.pctrl{display:flex;flex-direction:column;align-items:center;gap:.9rem;margin-top:2.4rem}
+.pctrl-btns{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.pcount{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace}
+[hidden]{display:none!important}
 
-/* ============================================
-   HERO
-============================================ */
-#hero{padding-top:calc(var(--nav-h) + 3.5rem);padding-bottom:3.5rem;position:relative;overflow:hidden}
-#hero::before{
-  content:"";position:absolute;top:-120px;left:-120px;width:420px;height:420px;border-radius:50%;
-  background:radial-gradient(circle,var(--accent-soft) 0%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
-.hero-row{display:flex;gap:2.5rem;align-items:center;position:relative;z-index:1}
-.hero-photo{
-  width:112px;height:112px;border-radius:50%;overflow:hidden;flex-shrink:0;
-  border:1px solid var(--border2);background:var(--surface);
-  box-shadow:0 0 0 4px var(--accent-soft);
-}
-.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
-.hero-text{min-width:0}
-.hero-name{font-size:clamp(1.7rem,4vw,2.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.15}
-.hero-role{font-size:.85rem;color:var(--accent);margin-top:.3rem;font-weight:500}
-.hero-bio{margin-top:1.1rem;font-size:.95rem;color:var(--ink2);line-height:1.85;max-width:560px}
-.hero-actions{display:flex;gap:.6rem;margin-top:1.4rem;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.05rem;border-radius:8px;
-  font-size:.8rem;font-weight:500;border:1px solid var(--border2);transition:all .15s;
-}
-.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--ink)}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
-@media(max-width:560px){.hero-row{flex-direction:column;align-items:flex-start;text-align:left}.hero-photo{width:88px;height:88px}}
+/* SKILLS */
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.8rem}
+.fbtn{font-size:.78rem;padding:.45rem 1rem;border-radius:999px;border:1px solid var(--border2);background:transparent;color:var(--ink2);transition:all .2s}
+.fbtn:hover{color:var(--ink)}
+.fbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.skills{display:flex;flex-wrap:wrap;gap:.65rem}
+.skill{font-size:.86rem;color:var(--ink);padding:.6rem 1.05rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);display:inline-flex;align-items:center;gap:.5rem;transition:all .2s}
+.skill:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 24px -14px var(--accent)}
+.skill small{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--ink3);background:var(--surface2);padding:.05rem .4rem;border-radius:5px}
+.hint{font-size:.78rem;color:var(--ink3);margin-top:1.4rem}
 
-/* ============================================
-   FLIP CARDS (shared: projects + labs)
-============================================ */
-.flip-scene{perspective:1600px}
-.flip-card{position:relative;width:100%;height:100%;cursor:pointer;transform-style:preserve-3d}
-.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1)}
-.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
-.flip-face{
-  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  display:flex;flex-direction:column;border-radius:var(--radius);
-  border:1px solid var(--border);background:var(--surface);
-  transition:border-color .15s,box-shadow .15s;
-  overflow:hidden;
-}
-.flip-card:hover .flip-face{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
-.flip-back{transform:rotateY(180deg)}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:1rem}
+.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);animation:fade .2s ease}
+.modal-card{position:relative;width:min(560px,100%);max-height:84vh;overflow:auto;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:2rem;box-shadow:var(--shadow);animation:pop .25s ease}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.modal-x{position:absolute;top:1rem;right:1rem}
+.modal-card h3{font-size:1.35rem;font-weight:600}
+.modal-cat{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.use-list{list-style:none;margin-top:1.4rem;display:flex;flex-direction:column;gap:.9rem}
+.use-list li{padding:1rem 1.1rem;border:1px solid var(--border);border-radius:12px;background:var(--surface2)}
+.use-list b{display:block;font-size:.88rem;font-weight:600}
+.use-list p{font-size:.84rem;color:var(--ink2);margin-top:.3rem}
+.use-list a{font-size:.76rem;color:var(--accent);display:inline-block;margin-top:.45rem}
+.use-list a:hover{text-decoration:underline}
 
-/* scrollable content region shared by front + back faces, so long copy
-   never collides with the hint/link pinned at the bottom */
-.flip-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:2px}
-.flip-scroll::-webkit-scrollbar{width:4px}
-.flip-scroll::-webkit-scrollbar-track{background:transparent}
-.flip-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+/* RESUME MODAL */
+.rcard{width:min(860px,100%);height:min(90vh,1100px);padding:0;display:flex;flex-direction:column;overflow:hidden}
+.rbar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.1rem;border-bottom:1px solid var(--border);background:var(--surface2);gap:1rem}
+.rbar span{font-size:.85rem;font-weight:600}
+.rbar div{display:flex;gap:.5rem}
+.rbtn{font-size:.78rem;padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--ink2)}
+.rbtn.dl{background:var(--accent);border-color:var(--accent);color:#fff}
+.rbody{flex:1;background:var(--bg);position:relative}
+.rbody iframe{width:100%;height:100%;border:none;display:block}
+.rfb{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:2rem;color:var(--ink2);font-size:.9rem;z-index:-1}
+.rfb a{color:var(--accent);text-decoration:underline}
 
-.flip-hint{flex-shrink:0;font-size:.68rem;color:var(--ink3);padding-top:.75rem}
-.flip-card:hover .flip-hint{color:var(--accent)}
-@media(prefers-reduced-motion:reduce){
-  .flip-inner{transition:none}
-  .flip-face{position:relative;transition:opacity .2s}
-  .flip-back{position:absolute;opacity:0;pointer-events:none;transform:none}
-  .flip-card.flipped .flip-front{opacity:0;position:absolute;pointer-events:none}
-  .flip-card.flipped .flip-back{opacity:1;position:relative;pointer-events:auto}
-}
+/* CONTACT */
+.cgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:1.2rem}
+@media(max-width:860px){.cgrid{grid-template-columns:1fr}}
+.cinfo{display:flex;flex-direction:column;gap:.9rem}
+.crow{display:flex;align-items:center;gap:1rem;padding:1.05rem 1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;transition:all .2s}
+a.crow:hover{border-color:var(--accent);transform:translateX(4px)}
+.cico{width:40px;height:40px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+.cico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.crow small{display:block;font-size:.7rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.crow span{font-size:.92rem;color:var(--ink);word-break:break-word}
+form.panel{display:flex;flex-direction:column;gap:1rem}
+form label{font-size:.76rem;color:var(--ink2);display:flex;flex-direction:column;gap:.4rem}
+form input,form textarea{font:inherit;font-size:.9rem;color:var(--ink);background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:.75rem .9rem;transition:border-color .2s}
+form input:focus,form textarea:focus{outline:none;border-color:var(--accent)}
+form textarea{resize:vertical;min-height:120px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:560px){.frow{grid-template-columns:1fr}}
+.fnote{font-size:.74rem;color:var(--ink3)}
 
-/* ============================================
-   PROJECTS
-============================================ */
-.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
-/* FIX: was min-height, which cannot be resolved by the flip-card's
-   height:100% below (percentage heights need an explicit height on
-   the containing block, not just a min-height). That's why the
-   flip cards rendered at 0px tall and nothing was visible. */
-.proj-scene{height:290px}
-.proj-face{padding:1.4rem 1.5rem}
-.proj-year{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
-.proj-title{font-size:1rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
-.proj-desc{font-size:.85rem;color:var(--ink2);line-height:1.75;margin-top:.6rem}
-.proj-stack{font-size:.72rem;color:var(--ink3);margin-top:.85rem}
-.proj-detail-title{font-size:.95rem;font-weight:600;margin-bottom:.55rem;flex-shrink:0}
-.proj-detail p{font-size:.83rem;color:var(--ink2);line-height:1.8}
-.proj-detail p + p{margin-top:.6rem}
-.proj-link{font-size:.76rem;color:var(--accent);margin-top:.85rem;display:inline-block;flex-shrink:0}
-.proj-link:hover{text-decoration:underline}
-
-/* ============================================
-   LABS
-============================================ */
-.labs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
-/* FIX: same issue as .proj-scene above — min-height → height */
-.lab-scene{height:190px}
-.lab-face{padding:1.05rem 1.15rem}
-.lab-cat{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
-.lab-title{font-size:.86rem;font-weight:600;margin-top:.35rem;line-height:1.35;flex-shrink:0}
-.lab-desc{font-size:.78rem;color:var(--ink2);line-height:1.7;margin-top:.4rem}
-.lab-detail-title{font-size:.86rem;font-weight:600;margin-bottom:.4rem;flex-shrink:0}
-.lab-detail{font-size:.78rem;color:var(--ink2);line-height:1.75}
-.lab-mitre{font-size:.65rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:.6rem;flex-shrink:0}
-.lab-link{
-  font-size:.72rem;color:var(--accent);margin-top:.6rem;display:inline-flex;align-items:center;gap:.3rem;
-  flex-shrink:0;
-}
-.lab-link:hover{text-decoration:underline}
-.lab-link svg{width:12px;height:12px;flex-shrink:0}
-
-/* ============================================
-   SKILLS
-============================================ */
-.skills-list{display:flex;flex-direction:column;gap:1.25rem}
-.skill-row{display:grid;grid-template-columns:170px 1fr;gap:1.2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
-.skill-row:last-child{border-bottom:none;padding-bottom:0}
-.skill-cat{font-size:.85rem;font-weight:600}
-.skill-items{font-size:.85rem;color:var(--ink2);line-height:1.9}
-@media(max-width:560px){.skill-row{grid-template-columns:1fr;gap:.3rem}}
-
-/* ============================================
-   EXPERIENCE
-============================================ */
-.exp-list{display:flex;flex-direction:column;gap:1rem}
-.exp-card{
-  border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem 1.5rem;
-  transition:border-color .15s,box-shadow .15s;
-}
-.exp-card:hover{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
-.exp-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem}
-.exp-role{font-size:.98rem;font-weight:600}
-.exp-company{font-size:.83rem;color:var(--accent);margin-top:.25rem}
-.exp-dates{font-size:.72rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
-.exp-bullets{margin-top:.9rem;display:flex;flex-direction:column;gap:.55rem}
-.exp-bullets li{
-  list-style:none;position:relative;padding-left:1rem;
-  font-size:.85rem;color:var(--ink2);line-height:1.75;
-}
-.exp-bullets li::before{
-  content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--accent);
-}
-
-/* ============================================
-   WRITEUPS
-============================================ */
-.write-list{display:flex;flex-direction:column;gap:1rem}
-.write-card{
-  border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.5rem;
-  transition:border-color .15s,box-shadow .15s;
-}
-.write-card:hover{border-color:var(--border2);box-shadow:0 6px 22px rgba(0,0,0,.18)}
-.write-meta{font-size:.68rem;color:var(--ink3);font-family:'JetBrains Mono',monospace}
-.write-title{font-size:.95rem;font-weight:600;margin-top:.4rem}
-.write-desc{font-size:.84rem;color:var(--ink2);line-height:1.8;margin-top:.55rem}
-.write-link{font-size:.76rem;color:var(--accent);margin-top:.7rem;display:inline-block}
-.write-link:hover{text-decoration:underline}
-
-/* ============================================
-   CREDENTIALS
-============================================ */
-.cred-list{display:flex;flex-direction:column}
-.cred-row{
-  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
-  padding:.85rem 0;border-bottom:1px solid var(--border);
-}
-.cred-row:last-child{border-bottom:none}
-.cred-name{font-size:.87rem;font-weight:500}
-.cred-when{font-size:.72rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
-.cred-when.pending{color:#e0a94f}
-
-/* ============================================
-   CONTACT
-============================================ */
-.contact-body{font-size:.9rem;color:var(--ink2);line-height:1.85;max-width:520px}
-.contact-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.3rem}
-.contact-links a{
-  font-size:.8rem;padding:.5rem 1rem;border:1px solid var(--border2);border-radius:8px;
-  transition:border-color .15s,color .15s,transform .15s;
-}
-.contact-links a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
-
-/* ============================================
-   RESUME OVERLAY
-============================================ */
-.r-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem}
-.r-overlay[hidden]{display:none}
-.r-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}
-.r-modal{
-  position:relative;z-index:1;width:min(820px,100%);height:min(90vh,1050px);
-  background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.r-toolbar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-bottom:1px solid var(--border);background:var(--surface2)}
-.r-title{font-size:.82rem;font-weight:600}
-.r-toolbar-right{display:flex;gap:.4rem}
-.r-btn{
-  height:30px;padding:0 .7rem;border-radius:6px;border:1px solid var(--border2);background:transparent;
-  color:var(--ink2);font-size:.75rem;transition:all .15s;
-}
-.r-btn:hover{color:var(--ink);border-color:var(--border2);background:var(--surface2)}
-.r-btn-dl{background:var(--accent);color:#fff;border-color:var(--accent)}
-.r-body{flex:1;overflow-y:auto;background:var(--bg);display:flex;justify-content:center;padding:1.2rem}
-.r-frame{width:100%;max-width:740px;height:1150px;border:none;border-radius:6px;display:block}
-.r-loading{display:flex;flex-direction:column;align-items:center;gap:.7rem;padding:3rem;color:var(--ink3);font-size:.75rem}
-.r-spinner{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--accent);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.r-fallback{padding:2rem;text-align:center;color:var(--ink2);font-size:.85rem;line-height:1.7}
-.r-fallback a{color:var(--accent);text-decoration:underline}
-
-/* ============================================
-   FOOTER
-============================================ */
-footer{
-  border-top:1px solid var(--border);padding:1.3rem 1.6rem;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;
-}
-.footer-copy{font-size:.72rem;color:var(--ink3)}
-.footer-links{display:flex;gap:1.1rem}
-.footer-links a{font-size:.72rem;color:var(--ink3);transition:color .15s}
-.footer-links a:hover{color:var(--accent)}
-
-/* ============================================
-   RESPONSIVE
-============================================ */
-@media(max-width:820px){
-  nav{padding:0 1.2rem}
-  .nav-links{display:none}
-  .nav-hamburger{display:flex}
-}
+/* FOOTER */
+footer{border-top:1px solid var(--border);background:var(--bg2);padding:4rem 0 2rem}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2.5rem}
+@media(max-width:860px){.fgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.fgrid{grid-template-columns:1fr}}
+.fgrid p{font-size:.86rem;color:var(--ink2);margin-top:.9rem;max-width:300px}
+.fgrid h4{font-size:.72rem;font-family:'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:1rem}
+.fgrid ul{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.fgrid li a{font-size:.88rem;color:var(--ink2);transition:color .2s}
+.fgrid li a:hover{color:var(--accent)}
+.fbot{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--ink3)}
+.totop{color:var(--ink2)}
+.totop:hover{color:var(--accent)}
 </style>
 </head>
 <body>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DXWG78EWFQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DXWG78EWFQ', { page_title: 'SOC Portfolio — Didde Isaac', send_page_view: true });
-</script>
-
-<nav id="mainNav">
-  <a class="nav-brand" href="#hero"><span class="nav-dot"></span>Didde Isaac</a>
-  <ul class="nav-links">
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#labs">Labs</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#writeups">Writeups</a></li>
-    <li><a href="#credentials">Credentials</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <span class="nav-status">Open to offers</span>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀</button>
-    <button class="nav-hamburger" id="navHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#home" class="brand"><span class="brand-mark">DI</span>Didde Isaac</a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="icon-btn" id="theme" aria-label="Toggle theme">☀</button>
+      <button class="nav-cta" id="navResume">Resume</button>
+      <button class="icon-btn burger" id="burger" aria-label="Menu">☰</button>
+    </div>
   </div>
 </nav>
-<div class="mobile-nav" id="mobileNav">
-  <a href="#projects">Projects</a>
-  <a href="#labs">Labs</a>
-  <a href="#skills">Skills</a>
-  <a href="#experience">Experience</a>
-  <a href="#writeups">Writeups</a>
-  <a href="#credentials">Credentials</a>
-  <a href="#contact">Contact</a>
+<div class="mnav" id="mnav">
+  <a href="#home">Home</a><a href="#education">Education</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
 </div>
 
 <!-- HERO -->
-<section id="hero">
+<header id="home">
   <div class="wrap">
-    <div class="hero-row sr">
-      <div class="hero-photo">
-        <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac" onerror="this.style.display='none'"/>
-      </div>
-      <div class="hero-text">
-        <h1 class="hero-name">Didde Isaac</h1>
-        <p class="hero-role">SOC Analyst</p>
-        <p class="hero-bio">SOC Analyst & Defensive Security Practitioner. Hands-on experience engineering threat detection pipelines (Suricata, Splunk, Wazuh) and triaging multi-stage attack scenarios mapped to MITRE ATT&CK. Backed by 11 months of 24x7 operational support experience with 100% SLA adherence, bringing proven queue discipline and structured escalation to security operations.</p>
+    <div class="hero">
+      <div class="reveal">
+        <span class="status"><i></i>Available immediately</span>
+        <h1>Hi, I'm <span>Didde Isaac</span></h1>
+        <p class="looking">Looking for roles as <span class="rotator" id="rotator">SOC Analyst L1</span></p>
+        <p class="hero-bio">Defensive security practitioner with hands-on experience in alert triage, log analysis and detection engineering using Splunk, Wazuh and Suricata — backed by 11 months of 24x7 support with 100% SLA adherence.</p>
         <div class="hero-actions">
-          <button class="btn btn-primary" id="resumeBtn">Resume</button>
-          <a class="btn btn-ghost" href="mailto:diddeisaac@gmail.com">Email</a>
-          <a class="btn btn-ghost" href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a>
+          <button class="btn btn-primary" id="viewResume">View Resume</button>
+          <a class="btn" href="Assets/IsaacDidde_Resume.pdf" download="IsaacDidde_Resume.pdf">Download Resume ↓</a>
+        </div>
+        <div class="hero-links">
+          <a class="chip" href="mailto:diddeisaac@gmail.com"><svg viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm1.6 2L12 12.4 19.4 7H4.6Z"/></svg>Gmail</a>
+          <a class="chip" href="#contact"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1Z"/></svg>Contact</a>
+          <a class="chip" href="https://github.com/Isaacdidde" target="_blank" rel="noopener"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>GitHub</a>
+          <a class="chip" href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4V21H3V9.5Zm7 0h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.1c0-1.2-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.7V21h-4V9.5Z"/></svg>LinkedIn</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>11 mo</b><span>24x7 operations</span></div>
+          <div class="stat"><b>100%</b><span>SLA adherence</span></div>
+          <div class="stat"><b>15+</b><span>custom Suricata rules</span></div>
+          <div class="stat"><b>10+</b><span>documented SOC cases</span></div>
+        </div>
+      </div>
+      <div class="photo-wrap reveal">
+        <div class="photo">
+          <span class="fallback">DI</span>
+          <img src="Assets/Isaac_Profile.jpeg" alt="Didde Isaac" onerror="this.style.display='none'"/>
         </div>
       </div>
     </div>
   </div>
-</section>
+</header>
 
-<hr class="divider"/>
-
-<!-- PROJECTS -->
-<section id="projects" class="section">
+<!-- EDUCATION -->
+<section id="education" class="section alt">
   <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Projects</h2>
-      <p class="section-sub">Built, deployed, and documented end to end.</p>
+    <div class="sec-head reveal">
+      <p class="eyebrow">01 — Background</p>
+      <h2 class="sec-title">Education &amp; Certifications</h2>
+      <p class="sec-sub">Formal computer science training, backed by security-focused certification.</p>
     </div>
-    <div class="proj-grid">
-
-      <div class="flip-scene proj-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="IR Copilot, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front proj-face">
-              <span class="proj-year">2026</span>
-              <p class="proj-title">IR Copilot — grounded incident response assistant</p>
-              <div class="flip-scroll">
-                <p class="proj-desc">Gives an analyst a cited next step instead of a guess. Retrieval-verified against MITRE, Sigma, and NIST evidence — it says "insufficient evidence" rather than invent one.</p>
-                <p class="proj-stack">FastAPI · ChromaDB · Groq</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back proj-face">
-              <p class="proj-detail-title">IR Copilot</p>
-              <div class="flip-scroll">
-                <div class="proj-detail">
-                  <p>Hybrid dense + keyword retrieval over ~4,600 chunks of MITRE ATT&CK, Sigma, NIST SP 800-61, and internal playbooks, reranked before the model sees anything.</p>
-                  <p>A deterministic confidence score, computed from retrieval signal alone, gates whether generation runs at all — below threshold, no model call is made.</p>
-                  <p>Every MITRE ID and cited source is checked against what was actually retrieved after generation; unverified claims are stripped rather than shown.</p>
-                </div>
-              </div>
-              <a class="proj-link" href="https://github.com/Isaacdidde/IR-Copilot" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub →</a>
-            </div>
-          </div>
-        </div>
+    <div class="grid2">
+      <div class="panel reveal">
+        <h3><em>🎓</em>Education</h3>
+        <ul class="tl">
+          <li>
+            <p class="t">Master of Computer Applications (MCA)</p>
+            <p class="s">CSVTU, Durg</p>
+            <p class="m"><span>Jul 2026</span><span>CGPA 8.2</span></p>
+          </li>
+          <li>
+            <p class="t">B.Sc. Computer Science</p>
+            <p class="s">HYV, Durg</p>
+            <p class="m"><span>May 2024</span><span>CGPA 6.7</span></p>
+          </li>
+        </ul>
       </div>
-
-      <div class="flip-scene proj-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Network Intrusion Detection Lab, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front proj-face">
-              <span class="proj-year">2025</span>
-              <p class="proj-title">Network intrusion detection lab</p>
-              <div class="flip-scroll">
-                <p class="proj-desc">Detected 200+ simulated scan and flood events with zero false negatives, by writing 15 custom Suricata rules and correlating them in Splunk.</p>
-                <p class="proj-stack">Suricata · Splunk SPL · Wireshark</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back proj-face">
-              <p class="proj-detail-title">Network intrusion detection lab</p>
-              <div class="flip-scroll">
-                <div class="proj-detail">
-                  <p>Kali attacker and Ubuntu defender on an isolated network. Ran Nmap SYN and aggressive scans, plus an hping3 SYN flood, captured in Wireshark for signature analysis.</p>
-                  <p>Authored 15 custom Suricata YAML rules with threshold tuning, then piped eve.json into Splunk to build correlation searches and alerts.</p>
-                  <p>Mapped to MITRE T1595 (Active Scanning) and T1046 (Network Service Discovery).</p>
-                </div>
-              </div>
-              <a class="proj-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene proj-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Web Attack Detection Lab, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front proj-face">
-              <span class="proj-year">2025</span>
-              <p class="proj-title">Web attack detection lab</p>
-              <div class="flip-scroll">
-                <p class="proj-desc">Confirmed four OWASP Top 10 attack classes against DVWA — SQLi, command injection, XSS, IDOR — each producing a validated alert.</p>
-                <p class="proj-stack">Wazuh · SQLMap · DVWA</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back proj-face">
-              <p class="proj-detail-title">Web attack detection lab</p>
-              <div class="flip-scroll">
-                <div class="proj-detail">
-                  <p>Executed union-based and blind SQL injection with SQLMap, a whoami → uname command injection chain, reflected XSS via URL parameters, and user-ID enumeration for IDOR — all against DVWA.</p>
-                  <p>Each attack was ingested into Wazuh for rule validation and documented with a full IOC listing and attack timeline.</p>
-                  <p>Mapped to MITRE T1190 (Exploit Public-Facing Application) and T1059 (Command and Scripting Interpreter).</p>
-                </div>
-              </div>
-              <a class="proj-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene proj-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Qrypta, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front proj-face">
-              <span class="proj-year">2026</span>
-              <p class="proj-title">Qrypta — IAM password vault</p>
-              <div class="flip-scroll">
-                <p class="proj-desc">Built a credential vault that enforces least-privilege access, combining AES-256, bcrypt, RBAC, and an immutable audit log.</p>
-                <p class="proj-stack">Python · Flask · MongoDB</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back proj-face">
-              <p class="proj-detail-title">Qrypta</p>
-              <div class="flip-scroll">
-                <div class="proj-detail">
-                  <p>MCA capstone project. Vault-level AES-256 encryption, bcrypt password hashing with adaptive work factor, and role-based access enforcement.</p>
-                  <p>SMTP-based OTP as a second factor for privileged operations, plus a tamper-evident audit log covering every access event.</p>
-                  <p>Python and Flask backend with an encrypted MongoDB store.</p>
-                </div>
-              </div>
-              <a class="proj-link" href="https://github.com/Isaacdidde/Qrypta" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- LABS -->
-<section id="labs" class="section">
-  <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Labs</h2>
-      <p class="section-sub">Individual cases from the home lab, each with its source and MITRE reference.</p>
-    </div>
-    <div class="labs-grid">
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Windows Event Log Cleared, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Endpoint</span>
-              <p class="lab-title">Windows Event Log Cleared — SOC130</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">EDR alert on an Exchange Server, verified as a false positive.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Windows Event Log Cleared — SOC130</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Verified the source IP against the host, checked the powershell.exe hash on VirusTotal and ANY.RUN, and correlated with endpoint context to reach a documented false-positive verdict.</p>
-                <p class="lab-mitre">T1070.001</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Event-Log-Cleared" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Suspicious PowerShell Script, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Incident response</span>
-              <p class="lab-title">Suspicious PowerShell — SOC153</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">A PowerShell alert traced to RDP brute-force → Cobalt Strike → exfiltration.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Suspicious PowerShell — SOC153</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Decoded a Base64 PowerShell payload back to Cobalt Strike, then traced backward to an RDP brute-force entry point and forward through recon and a Netcat C2 channel to confirmed data exfiltration.</p>
-                <p class="lab-mitre">T1110 · T1059.001 · T1071</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Nmap Recon and SYN Flood Simulation, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Attack simulation</span>
-              <p class="lab-title">Nmap recon &amp; SYN flood</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">Scan and flood patterns captured in Wireshark for signature ID.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Nmap recon &amp; SYN flood</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Active Nmap scans and a SYN flood run from Kali against the defending VM, captured in Wireshark to identify probe and flood signatures.</p>
-                <p class="lab-mitre">T1595 · T1046</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Suricata Custom Rule Engineering, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Detection engineering</span>
-              <p class="lab-title">Suricata custom rules</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">15 custom YAML rules, tuned to cut false positives.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Suricata custom rules</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">15 rules targeting scan patterns, SYN floods, and abnormal packet rates, with thresholds tuned down to reduce false-positive volume.</p>
-                <p class="lab-mitre">Custom detection</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/suricata" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Splunk SPL Dashboards, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">SIEM</span>
-              <p class="lab-title">Splunk SPL dashboards</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">eve.json ingested into Splunk; SPL alerts surface IOCs.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Splunk SPL dashboards</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Ingested Suricata eve.json into Splunk and built correlation searches and dashboards to surface actionable IOCs from raw log volume.</p>
-                <p class="lab-mitre">Log correlation</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/splunk" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="SQL Injection with DVWA and sqlmap, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Web app</span>
-              <p class="lab-title">SQL injection — DVWA + sqlmap</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">Union-based and blind SQLi with a live Wazuh alert.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">SQL injection — DVWA + sqlmap</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Union-based and blind SQL injection with real-time Apache log monitoring, producing a validated Wazuh alert and a full case report with IOC listing.</p>
-                <p class="lab-mitre">T1190</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Command Injection OS Enumeration Chain, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Attack simulation</span>
-              <p class="lab-title">Command injection — OS enumeration</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">Full whoami → uname chain, documented step by step.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Command injection — OS enumeration</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Documented the full whoami → uname → system enumeration chain via DVWA, with a structured case report and IOC listing.</p>
-                <p class="lab-mitre">T1059 · T1087</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Command-Injection" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Reflected XSS in URL Parameters, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Analysis</span>
-              <p class="lab-title">XSS — reflected payload</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">Reflected XSS identified in HTTP logs, mapped to ATT&amp;CK.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">XSS — reflected payload</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Identified a reflected XSS payload in URL parameters from HTTP logs, mapped it to ATT&amp;CK, and wrote alert-tuning notes to improve detection.</p>
-                <p class="lab-mitre">T1059.007</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="SOC169 IDOR Attack Investigation, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Investigation</span>
-              <p class="lab-title">IDOR investigation — SOC169</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">User-ID enumeration against a public endpoint.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">IDOR investigation — SOC169</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Traced user-ID enumeration against a public web app through HTTP traffic patterns. Concluded likely successful IDOR exploitation, with no host-level compromise.</p>
-                <p class="lab-mitre">OWASP A01</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Bash Log Monitoring and Alert Parsing, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Automation</span>
-              <p class="lab-title">Bash log monitoring</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">Scripts that parse eve.json alerts, cutting triage time.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">Bash log monitoring</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Bash scripts that automate Suricata log monitoring and parse eve.json alert fields to surface critical IOCs, reducing manual triage time.</p>
-                <p class="lab-mitre">Automation</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/Suricata-Splunk-SOC-Lab/tree/main/bash-scripts" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-scene lab-scene sr" data-flip>
-        <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="SOC170 LFI Attack Investigation, press to flip for details">
-          <div class="flip-inner">
-            <div class="flip-face flip-front lab-face">
-              <span class="lab-cat">Investigation</span>
-              <p class="lab-title">LFI investigation — SOC170</p>
-              <div class="flip-scroll">
-                <p class="lab-desc">LFI attempt on /etc/passwd — confirmed true positive.</p>
-              </div>
-              <p class="flip-hint">Flip for details</p>
-            </div>
-            <div class="flip-face flip-back lab-face">
-              <p class="lab-detail-title">LFI investigation — SOC170</p>
-              <div class="flip-scroll">
-                <p class="lab-detail">Investigated an LFI attempt targeting <code>/etc/passwd</code> via a manipulated URL parameter. Confirmed true positive, with no data exposure.</p>
-                <p class="lab-mitre">T1190</p>
-              </div>
-              <a class="lab-link" href="https://github.com/Isaacdidde/SOC_Portfolio/tree/main/Web-Attacks/LFI-RFI" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- SKILLS -->
-<section id="skills" class="section">
-  <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Skills</h2>
-      <p class="section-sub">Applied in production home labs, not just studied.</p>
-    </div>
-    <div class="skills-list sr">
-      <div class="skill-row">
-        <p class="skill-cat">SIEM &amp; detection</p>
-        <p class="skill-items">Splunk (SPL, dashboards), Wazuh (agents, rule tuning), Suricata (custom IDS/IPS rules), VirusTotal</p>
-      </div>
-      <div class="skill-row">
-        <p class="skill-cat">Network forensics</p>
-        <p class="skill-items">Wireshark, TCPdump, Nmap</p>
-      </div>
-      <div class="skill-row">
-        <p class="skill-cat">Incident response</p>
-        <p class="skill-items">Alert triage, IOC extraction, Windows Event Logs, Sysmon, incident documentation</p>
-      </div>
-      <div class="skill-row">
-        <p class="skill-cat">Threat intelligence</p>
-        <p class="skill-items">MITRE ATT&amp;CK mapping, Cyber Kill Chain, OSINT</p>
-      </div>
-      <div class="skill-row">
-        <p class="skill-cat">Web attacks</p>
-        <p class="skill-items">SQL injection, SQLMap, DVWA, Apache log analysis, OWASP Top 10, CVE identification</p>
-      </div>
-      <div class="skill-row">
-        <p class="skill-cat">Engineering</p>
-        <p class="skill-items">Python, Bash, Flask, MongoDB, RBAC, AES-256, 2FA, audit logging</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- EXPERIENCE -->
-<section id="experience" class="section">
-  <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Experience</h2>
-      <p class="section-sub">Where the escalation discipline and queue mentality started.</p>
-    </div>
-    <div class="exp-list sr">
-      <div class="exp-card">
-        <div class="exp-top">
-          <div>
-            <p class="exp-role">Customer Support Executive</p>
-            <p class="exp-company">Niftel Communications (Blinkit Process)</p>
-          </div>
-          <p class="exp-dates">Mar 2023 – Jan 2024</p>
-        </div>
-        <ul class="exp-bullets">
-          <li>Sustained 100% SLA adherence across 11 months of 24x7 shift-based support by triaging and prioritizing 50 to 80+ tickets daily through priority-based routing and structured escalation.</li>
-          <li>Managed critical escalations and Tier 1–Tier 2 handoffs by conducting root-cause analysis on escalated cases and documenting findings in knowledge-base runbooks using defined escalation procedures.</li>
-          <li>Recognized by Blinkit's Customer Delight Head for precise ticket categorization and reliability in time-sensitive, stakeholder-facing work.</li>
+      <div class="panel reveal">
+        <h3><em>🛡</em>Certifications</h3>
+        <ul class="tl">
+          <li>
+            <p class="t">Google Cybersecurity Professional Certificate</p>
+            <p class="s">Coursera</p>
+            <p class="m"><span class="tag-ok">Completed</span><span>Feb 2026</span></p>
+          </li>
+          <li>
+            <p class="t">IT Help Desk Practical Certificate</p>
+            <p class="s">Practical certificate</p>
+            <p class="m"><span class="tag-ok">Completed</span><span>May 2025</span></p>
+          </li>
+          <li>
+            <p class="t">CompTIA Security+ (SY0-701)</p>
+            <p class="s">In preparation</p>
+            <p class="m"><span class="tag-pend">Exam scheduled</span><span>Sep 2026</span></p>
+          </li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
-
-<!-- WRITEUPS -->
-<section id="writeups" class="section">
+<!-- PROJECTS & LABS -->
+<section id="projects" class="section">
   <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Writeups</h2>
-      <p class="section-sub">Published on Medium.</p>
+    <div class="sec-head reveal">
+      <p class="eyebrow">02 — Work</p>
+      <h2 class="sec-title">Projects &amp; Labs</h2>
+      <p class="sec-sub">Prioritised highlights first. Use “Show more” to explore every project and lab case.</p>
     </div>
-    <div class="write-list sr">
-      <div class="write-card">
-        <p class="write-meta">LetsDefend · Commissioned · High severity</p>
-        <p class="write-title">SOC168 — Whoami command detected in an HTTP request body</p>
-        <p class="write-desc">A commonly misclassified alert. Traced OS command injection from <code>whoami</code> to <code>cat /etc/shadow</code> within minutes, confirmed by HTTP 200 responses with file-sized payloads and EDR terminal history.</p>
-        <a class="write-link" href="https://medium.com/@diddeisaac/soc168-walkthrough-how-i-investigated-a-real-command-injection-attack-whoami-in-http-request-body-11b1f060efad" target="_blank" rel="noopener">Read on Medium →</a>
+    <div class="pgrid" id="pgrid"></div>
+    <div class="pctrl">
+      <div class="pctrl-btns">
+        <button class="btn" id="showMore">Show more ↓</button>
+        <button class="btn" id="showLess" hidden>Show less ↑</button>
       </div>
-      <div class="write-card">
-        <p class="write-meta">Personal project · Build log</p>
-        <p class="write-title">I built a security tool that's allowed to say "I don't know"</p>
-        <p class="write-desc">Covers the IR Copilot retrieval pipeline, the deterministic guard-rails that strip unverified claims before they reach the analyst, and a false-positive trap that exposed a real flaw in the first version.</p>
-        <a class="write-link" href="https://medium.com/@diddeisaac/i-built-a-security-tool-thats-allowed-to-say-i-don-t-know-ec15771af65d" target="_blank" rel="noopener">Read on Medium →</a>
-      </div>
+      <span class="pcount" id="pcount"></span>
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
-
-<!-- CREDENTIALS -->
-<section id="credentials" class="section">
+<!-- SKILLS -->
+<section id="skills" class="section alt">
   <div class="wrap">
-    <div class="section-head sr">
-      <h2 class="section-title">Credentials</h2>
+    <div class="sec-head reveal">
+      <p class="eyebrow">03 — Toolkit</p>
+      <h2 class="sec-title">Skills</h2>
+      <p class="sec-sub">Click any skill to see exactly where I've used it.</p>
     </div>
-    <div class="cred-list sr">
-      <div class="cred-row">
-        <p class="cred-name">Master of Computer Applications — CSVTU, Durg</p>
-        <p class="cred-when">July 2026</p>
-      </div>
-      <div class="cred-row">
-        <p class="cred-name">B.Sc. Computer Science</p>
-        <p class="cred-when">May 2024</p>
-      </div>
-      <div class="cred-row">
-        <p class="cred-name">Google Cybersecurity Professional Certificate</p>
-        <p class="cred-when">February 2026</p>
-      </div>
-      <div class="cred-row">
-        <p class="cred-name">IT Help Desk Practical Certificate</p>
-        <p class="cred-when">May 2025</p>
-      </div>
-      <div class="cred-row">
-        <p class="cred-name">CompTIA Security+ (SY0-701)</p>
-        <p class="cred-when pending">Exam scheduled - September 2026</p>
-      </div>
-    </div>
+    <div class="filters reveal" id="filters"></div>
+    <div class="skills reveal" id="skills"></div>
+    <p class="hint">Tip: each skill opens a card with the projects and labs where it was applied.</p>
   </div>
 </section>
-
-<hr class="divider"/>
 
 <!-- CONTACT -->
 <section id="contact" class="section">
   <div class="wrap">
-    <div class="sr">
-      <h2 class="section-title">Contact</h2>
-      <p class="contact-body" style="margin-top:.8rem">Open to SOC Analyst roles across India and fully remote positions with global teams. Available immediately.</p>
-      <div class="contact-links">
-        <a href="mailto:diddeisaac@gmail.com">diddeisaac@gmail.com</a>
-        <a href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a>
+    <div class="sec-head reveal">
+      <p class="eyebrow">04 — Get in touch</p>
+      <h2 class="sec-title">Let's talk</h2>
+      <p class="sec-sub">Open to SOC Analyst L1, IT Support and Service Desk roles across India and fully remote positions with global teams.</p>
+    </div>
+    <div class="cgrid">
+      <div class="cinfo reveal">
+        <a class="crow" href="mailto:diddeisaac@gmail.com"><div class="cico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div><div><small>Email</small><span>diddeisaac@gmail.com</span></div></a>
+        <a class="crow" href="tel:+917223967442"><div class="cico"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></div><div><small>Phone</small><span>+91 72239 67442</span></div></a>
+        <div class="crow"><div class="cico"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg></div><div><small>Location</small><span>Bhilai, India · Open to remote</span></div></div>
+        <a class="crow" href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener"><div class="cico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5m0 2a2 2 0 0 1 4 0v3"/></svg></div><div><small>LinkedIn</small><span>linkedin.com/in/didde-isaac</span></div></a>
+        <a class="crow" href="https://github.com/Isaacdidde" target="_blank" rel="noopener"><div class="cico"><svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></div><div><small>GitHub</small><span>github.com/Isaacdidde</span></div></a>
+        <a class="crow" href="https://medium.com/@diddeisaac" target="_blank" rel="noopener"><div class="cico"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div><div><small>Writeups</small><span>medium.com/@diddeisaac</span></div></a>
       </div>
+      <form class="panel reveal" id="cform">
+        <h3 style="margin-bottom:.2rem"><em>✉</em>Send a message</h3>
+        <div class="frow">
+          <label>Your name<input type="text" id="fName" required placeholder="Jane Doe"/></label>
+          <label>Your email<input type="email" id="fEmail" required placeholder="jane@company.com"/></label>
+        </div>
+        <label>Subject<input type="text" id="fSub" placeholder="SOC Analyst L1 opportunity"/></label>
+        <label>Message<textarea id="fMsg" required placeholder="Tell me about the role or team…"></textarea></label>
+        <button class="btn btn-primary" type="submit" style="align-self:flex-start">Send message →</button>
+        <p class="fnote">This opens your email app with the message pre-filled, addressed to me.</p>
+      </form>
     </div>
   </div>
 </section>
 
-<!-- RESUME OVERLAY -->
-<div id="resumeOverlay" class="r-overlay" aria-modal="true" role="dialog" aria-label="Resume viewer" hidden>
-  <div class="r-backdrop" id="resumeBackdrop"></div>
-  <div class="r-modal">
-    <div class="r-toolbar">
-      <p class="r-title">Resume — Didde Isaac</p>
-      <div class="r-toolbar-right">
-        <a class="r-btn r-btn-dl" id="resumeDownload" href="#" download="IsaacDidde_Resume.pdf">Download</a>
-        <button class="r-btn" id="resumeClose">Close</button>
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a href="#home" class="brand"><span class="brand-mark">DI</span>Didde Isaac</a>
+        <p>SOC Analyst L1 — threat detection &amp; incident response. Building defensive skills one investigation at a time.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul><li><a href="#home">Home</a></li><li><a href="#education">Education</a></li><li><a href="#projects">Projects &amp; Labs</a></li><li><a href="#skills">Skills</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div>
+        <h4>Elsewhere</h4>
+        <ul><li><a href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://medium.com/@diddeisaac" target="_blank" rel="noopener">Medium</a></li><li><a href="https://github.com/Isaacdidde/SOC_Portfolio" target="_blank" rel="noopener">SOC Portfolio repo</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul><li><a href="mailto:diddeisaac@gmail.com">diddeisaac@gmail.com</a></li><li><a href="tel:+917223967442">+91 72239 67442</a></li><li><a href="#contact">Bhilai, India</a></li></ul>
       </div>
     </div>
-    <div class="r-body" id="resumeBody">
-      <iframe id="resumeFrame" class="r-frame" title="Resume PDF"></iframe>
+    <div class="fbot">
+      <span>© <span id="yr">2026</span> Didde Isaac. All rights reserved.</span>
+      <a class="totop" href="#home">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<!-- SKILL MODAL -->
+<div class="modal" id="skillModal" hidden>
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <p class="modal-cat" id="smCat"></p>
+    <h3 id="smTitle"></h3>
+    <ul class="use-list" id="smList"></ul>
+  </div>
+</div>
+
+<!-- RESUME MODAL -->
+<div class="modal" id="resumeModal" hidden>
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card rcard" role="dialog" aria-modal="true" aria-label="Resume">
+    <div class="rbar">
+      <span>Resume — Didde Isaac</span>
+      <div>
+        <a class="rbtn dl" href="Assets/IsaacDidde_Resume.pdf" download="IsaacDidde_Resume.pdf">Download</a>
+        <button class="rbtn" data-close>Close</button>
+      </div>
+    </div>
+    <div class="rbody">
+      <div class="rfb">Preview unavailable on this device.&nbsp;<a href="Assets/IsaacDidde_Resume.pdf" target="_blank" rel="noopener">Open the PDF</a></div>
+      <iframe id="rFrame" title="Resume PDF"></iframe>
     </div>
   </div>
 </div>
 
-<footer>
-  <span class="footer-copy">© 2026 · isaacdidde.github.io/Portfolio</span>
-  <div class="footer-links">
-    <a href="https://github.com/Isaacdidde" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://linkedin.com/in/didde-isaac" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="mailto:diddeisaac@gmail.com">Email</a>
-  </div>
-</footer>
-
 <script>
-/* THEME */
-const html = document.documentElement;
-const themeBtn = document.getElementById('themeToggle');
-const saved = localStorage.getItem('theme') || 'dark';
-html.setAttribute('data-theme', saved);
-themeBtn.textContent = saved === 'dark' ? '☀' : '☾';
-themeBtn.addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  themeBtn.textContent = next === 'dark' ? '☀' : '☾';
-});
+/* ---------- DATA ---------- */
+const GH = 'https://github.com/Isaacdidde/';
+const ITEMS = [
+  {type:'project',year:'2026',title:'IR Copilot — grounded incident response assistant',
+   desc:'Gives an analyst a cited next step instead of a guess. Retrieval-verified against MITRE, Sigma and NIST evidence, and replies "insufficient evidence" rather than inventing an answer.',
+   tags:['FastAPI','ChromaDB','Groq'],mitre:'MITRE · Sigma · NIST 800-61',link:GH+'IR-Copilot'},
+  {type:'project',year:'2026',title:'Network intrusion detection lab — Suricata & Splunk',
+   desc:'Kali-to-Ubuntu lab with 15 custom Suricata rules detecting SYN scans, floods and recon. Alerts correlated in Splunk with tuned thresholds to cut false positives.',
+   tags:['Suricata','Splunk SPL','Wireshark'],mitre:'T1595 · T1046',link:GH+'Suricata-Splunk-SOC-Lab'},
+  {type:'lab',year:'2026',title:'SOC153 — Suspicious PowerShell investigation',
+   desc:'Decoded a Base64 PowerShell payload to Cobalt Strike, then traced back to an RDP brute-force entry and forward through recon and Netcat C2 to exfiltration.',
+   tags:['EDR','Sysmon','Incident response'],mitre:'T1110 · T1059.001 · T1071',link:GH+'SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script'},
+  {type:'project',year:'2025',title:'Web attack detection lab — DVWA & Wazuh',
+   desc:'Executed SQLi, command injection, XSS and IDOR against DVWA; each attack ingested into Wazuh, validated as an alert and documented with IOCs and timelines.',
+   tags:['Wazuh','SQLMap','DVWA'],mitre:'T1190 · T1059',link:GH+'SOC_Portfolio/tree/main/Web-Attacks'},
+  {type:'lab',year:'2026',title:'SOC130 — Windows event log cleared',
+   desc:'EDR alert on an Exchange Server. Validated the source IP, checked the powershell.exe hash on VirusTotal and ANY.RUN, and reached a documented false-positive verdict.',
+   tags:['Windows Logs','VirusTotal','ANY.RUN'],mitre:'T1070.001',link:GH+'SOC_Portfolio/tree/main/Windows/Event-Log-Cleared'},
+  {type:'project',year:'2026',title:'Qrypta — IAM password vault',
+   desc:'MCA capstone: credential vault enforcing least privilege with AES-256 encryption, bcrypt hashing, RBAC, SMTP OTP second factor and a tamper-evident audit log.',
+   tags:['Python','Flask','MongoDB'],mitre:'IAM · Cryptography',link:GH+'Qrypta'},
+  {type:'lab',year:'2026',title:'SOC168 — command injection in HTTP body',
+   desc:'Traced OS command injection from whoami to cat /etc/shadow within minutes, confirmed by HTTP 200 responses and EDR terminal history. Published on Medium.',
+   tags:['HTTP logs','EDR','LetsDefend'],mitre:'T1059 · T1190',link:'https://medium.com/@diddeisaac/soc168-walkthrough-how-i-investigated-a-real-command-injection-attack-whoami-in-http-request-body-11b1f060efad'},
+  {type:'lab',year:'2026',title:'SOC169 — IDOR attack investigation',
+   desc:'Traced user-ID enumeration against a public web app via HTTP traffic patterns. Concluded likely IDOR exploitation with no host-level compromise.',
+   tags:['HTTP traffic','OWASP A01'],mitre:'OWASP A01',link:GH+'SOC_Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected'},
+  {type:'lab',year:'2026',title:'SOC170 — LFI attempt on /etc/passwd',
+   desc:'Investigated a manipulated URL parameter targeting /etc/passwd. Confirmed true positive with no data exposure.',
+   tags:['Web logs','LFI'],mitre:'T1190',link:GH+'SOC_Portfolio/tree/main/Web-Attacks/LFI-RFI'},
+  {type:'lab',year:'2025',title:'SQL injection — DVWA + SQLMap',
+   desc:'Union-based and blind SQL injection with live Apache log monitoring, producing a validated Wazuh alert and a full case report with IOC listing.',
+   tags:['SQLMap','Wazuh','Apache logs'],mitre:'T1190',link:GH+'SOC_Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab'},
+  {type:'lab',year:'2025',title:'Splunk SPL dashboards & correlation',
+   desc:'Ingested Suricata eve.json and Ubuntu logs; built SPL searches, correlation rules and alerts including SSH brute-force followed by successful login.',
+   tags:['Splunk','SPL','Correlation'],mitre:'T1110',link:GH+'Suricata-Splunk-SOC-Lab/tree/main/splunk'},
+  {type:'lab',year:'2025',title:'Suricata custom rule engineering',
+   desc:'15 custom rules covering scan patterns, SYN floods and abnormal packet rates, with thresholds tuned to reduce false-positive volume.',
+   tags:['Suricata','IDS/IPS'],mitre:'Custom detection',link:GH+'Suricata-Splunk-SOC-Lab/tree/main/suricata'},
+  {type:'lab',year:'2025',title:'Nmap recon & SYN flood simulation',
+   desc:'Active Nmap scans and an hping3 SYN flood run from Kali against the defending VM, captured in Wireshark to identify probe and flood signatures.',
+   tags:['Nmap','hping3','Wireshark'],mitre:'T1595 · T1046',link:GH+'Suricata-Splunk-SOC-Lab/tree/main/suricata'},
+  {type:'lab',year:'2025',title:'Command injection — OS enumeration chain',
+   desc:'Documented the whoami → uname → system enumeration chain via DVWA with a structured case report and IOC listing.',
+   tags:['DVWA','Case report'],mitre:'T1059 · T1087',link:GH+'SOC_Portfolio/tree/main/Web-Attacks/Command-Injection'},
+  {type:'lab',year:'2025',title:'Reflected XSS — log analysis',
+   desc:'Identified a reflected XSS payload in URL parameters from HTTP logs, mapped it to ATT&CK and wrote alert-tuning notes.',
+   tags:['HTTP logs','XSS'],mitre:'T1059.007',link:GH+'SOC_Portfolio/tree/main/Web-Attacks/Cross-Site-Scripting'},
+  {type:'lab',year:'2025',title:'Bash log monitoring & alert parsing',
+   desc:'Bash scripts that monitor Suricata logs and parse eve.json alert fields to surface IOCs, reducing manual triage time.',
+   tags:['Bash','eve.json'],mitre:'Automation',link:GH+'Suricata-Splunk-SOC-Lab/tree/main/bash-scripts'}
+];
 
-/* MOBILE NAV */
-const hamburger = document.getElementById('navHamburger');
-const mobileNav = document.getElementById('mobileNav');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileNav.classList.toggle('open');
-});
-mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  hamburger.classList.remove('open');
-  mobileNav.classList.remove('open');
-}));
+const L = (t,u)=>({t,u});
+const NET='Network intrusion detection lab', WEB='Web attack detection lab', PORT='SOC analyst lab portfolio', IRC='IR Copilot', QRY='Qrypta';
+const SKILLS = [
+ {n:'Splunk',c:'SIEM & Detection',u:[[NET,'Ingested Suricata EVE JSON and Ubuntu logs into Splunk for investigation and alerting.',GH+'Suricata-Splunk-SOC-Lab/tree/main/splunk'],[PORT,'Validated detection rules and correlated events to rebuild attack timelines.',GH+'SOC_Portfolio']]},
+ {n:'SPL',c:'SIEM & Detection',u:[[NET,'Wrote SPL searches, correlation rules and alerts for SSH brute-force and successful logins after repeated failures.',GH+'Suricata-Splunk-SOC-Lab/tree/main/splunk']]},
+ {n:'Wazuh',c:'SIEM & Detection',u:[[WEB,'Ingested SQLi, command injection, XSS and IDOR events and validated rule alerts.',GH+'SOC_Portfolio/tree/main/Web-Attacks'],[PORT,'Developed and validated custom detection rules for documented case studies.',GH+'SOC_Portfolio']]},
+ {n:'Suricata IDS/IPS',c:'SIEM & Detection',u:[[NET,'Wrote and tuned 15 custom rules to detect and block SYN scans, floods, UDP scans, ICMP recon and directory enumeration.',GH+'Suricata-Splunk-SOC-Lab/tree/main/suricata']]},
+ {n:'EDR',c:'SIEM & Detection',u:[[PORT,'Used EDR telemetry and terminal history in SOC130, SOC153 and SOC168 investigations.',GH+'SOC_Portfolio']]},
+ {n:'Log Analysis',c:'SIEM & Detection',u:[[PORT,'Correlated Windows, web and network logs to confirm true versus false positives.',GH+'SOC_Portfolio'],[WEB,'Monitored Apache logs in real time while attacks ran.',GH+'SOC_Portfolio/tree/main/Web-Attacks']]},
+ {n:'Alert Triage',c:'Incident Response',u:[[PORT,'Triaged alerts across Windows, web and network cases, separating true positives from false positives using baselines.',GH+'SOC_Portfolio'],['Niftel Communications','Built the triage habit through priority-based ticket routing, 40–50+ tickets a day.','#']]},
+ {n:'Incident Response',c:'Incident Response',u:[[PORT,'Documented end-to-end investigations, attack timelines, findings and containment recommendations.',GH+'SOC_Portfolio'],[IRC,'Built an assistant that suggests cited next steps aligned to NIST SP 800-61.',GH+'IR-Copilot']]},
+ {n:'IOC Analysis',c:'Incident Response',u:[[PORT,'Extracted IOCs in each case, such as payload hashes, source IPs and malicious URLs.',GH+'SOC_Portfolio'],[WEB,'Produced full IOC listings and attack timelines per attack class.',GH+'SOC_Portfolio/tree/main/Web-Attacks']]},
+ {n:'Windows Event Logs',c:'Incident Response',u:[[PORT,'Investigated log tampering in SOC130 (event log cleared, T1070.001).',GH+'SOC_Portfolio/tree/main/Windows/Event-Log-Cleared']]},
+ {n:'Sysmon',c:'Incident Response',u:[[PORT,'Used Sysmon telemetry to follow malicious PowerShell and process activity in SOC153.',GH+'SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script']]},
+ {n:'Phishing Analysis',c:'Incident Response',u:[[PORT,'Indicator-reputation checks (hash, URL, IP) carried out during alert triage and listed as a core resume skill.',GH+'SOC_Portfolio']]},
+ {n:'MITRE ATT&CK',c:'Frameworks & Intel',u:[[PORT,'Mapped attacker TTPs across cases, e.g. T1110, T1059.001, T1071, T1070.001.',GH+'SOC_Portfolio'],[NET,'Mapped findings to T1595 and T1046.',GH+'Suricata-Splunk-SOC-Lab'],[IRC,'Verifies every MITRE ID cited against retrieved evidence.',GH+'IR-Copilot']]},
+ {n:'NIST CSF',c:'Frameworks & Intel',u:[[IRC,'NIST SP 800-61 playbooks form part of the retrieval corpus.',GH+'IR-Copilot'],[PORT,'Investigation write-ups follow detect, respond and recover thinking from the framework.',GH+'SOC_Portfolio']]},
+ {n:'Cyber Kill Chain',c:'Frameworks & Intel',u:[[PORT,'Used to structure multi-stage incidents like SOC153, from brute-force entry to exfiltration.',GH+'SOC_Portfolio/tree/main/Windows/Suspicious-PowerShell-Script']]},
+ {n:'OWASP Top 10',c:'Frameworks & Intel',u:[[WEB,'Covered injection, XSS and broken access control (IDOR).',GH+'SOC_Portfolio/tree/main/Web-Attacks'],['SOC169 IDOR case','Classified under OWASP A01 broken access control.',GH+'SOC_Portfolio/tree/main/Web-Attacks/IDOR/case-01-IDOR-Attack-Detected']]},
+ {n:'VirusTotal',c:'Frameworks & Intel',u:[['SOC130 case','Checked the powershell.exe hash for reputation.',GH+'SOC_Portfolio/tree/main/Windows/Event-Log-Cleared']]},
+ {n:'ANY.RUN',c:'Frameworks & Intel',u:[['SOC130 case','Sandboxed the suspicious binary to confirm benign behaviour.',GH+'SOC_Portfolio/tree/main/Windows/Event-Log-Cleared']]},
+ {n:'TCP/IP',c:'Network Analysis',u:[[NET,'Analysed SYN, UDP and ICMP traffic patterns to build detection signatures.',GH+'Suricata-Splunk-SOC-Lab']]},
+ {n:'DNS',c:'Network Analysis',u:[[NET,'DNS and network traffic analysis during packet captures, listed as a core resume skill.',GH+'Suricata-Splunk-SOC-Lab']]},
+ {n:'Wireshark',c:'Network Analysis',u:[[NET,'Captured Nmap scans and hping3 floods to identify probe and flood signatures.',GH+'Suricata-Splunk-SOC-Lab/tree/main/suricata']]},
+ {n:'Nmap',c:'Network Analysis',u:[[NET,'Ran SYN and aggressive scans as controlled attack traffic to validate detections.',GH+'Suricata-Splunk-SOC-Lab']]},
+ {n:'hping3',c:'Network Analysis',u:[[NET,'Generated SYN flood traffic to test threshold-based Suricata rules.',GH+'Suricata-Splunk-SOC-Lab']]},
+ {n:'SQL Injection',c:'Web Security',u:[[WEB,'Executed union-based and blind SQLi, then validated the Wazuh alert.',GH+'SOC_Portfolio/tree/main/Web-Attacks/SQL-Injection/Case-02-dvwa-sql-injection-lab']]},
+ {n:'SQLMap',c:'Web Security',u:[[WEB,'Automated union-based and blind injection against DVWA.',GH+'SOC_Portfolio/tree/main/Web-Attacks']]},
+ {n:'DVWA',c:'Web Security',u:[[WEB,'Target application for SQLi, command injection, XSS and IDOR labs.',GH+'SOC_Portfolio/tree/main/Web-Attacks']]},
+ {n:'Linux',c:'Systems & Scripting',u:[[NET,'Ubuntu defender VM running Suricata and log forwarding.',GH+'Suricata-Splunk-SOC-Lab'],[WEB,'Apache log monitoring on a Linux host.',GH+'SOC_Portfolio/tree/main/Web-Attacks']]},
+ {n:'Kali Linux',c:'Systems & Scripting',u:[[NET,'Attacker machine for Nmap, hping3 and scan generation.',GH+'Suricata-Splunk-SOC-Lab']]},
+ {n:'Python',c:'Systems & Scripting',u:[[QRY,'Backend logic for the vault, hashing, OTP and audit logging.',GH+'Qrypta'],[IRC,'Retrieval, confidence gating and claim verification pipeline.',GH+'IR-Copilot']]},
+ {n:'Bash',c:'Systems & Scripting',u:[[NET,'Scripts that monitor Suricata logs and parse eve.json alert fields to cut triage time.',GH+'Suricata-Splunk-SOC-Lab/tree/main/bash-scripts']]},
+ {n:'Flask',c:'Systems & Scripting',u:[[QRY,'Web backend for the vault, RBAC and OTP flows.',GH+'Qrypta']]},
+ {n:'MongoDB',c:'Systems & Scripting',u:[[QRY,'Encrypted credential and audit-log store.',GH+'Qrypta']]},
+ {n:'AES-256 & bcrypt',c:'Systems & Scripting',u:[[QRY,'Vault-level AES-256 encryption and bcrypt password hashing.',GH+'Qrypta']]},
+ {n:'RBAC',c:'Systems & Scripting',u:[[QRY,'Role-based access enforcing least privilege for vault operations.',GH+'Qrypta']]}
+];
 
-/* NAV SCROLL + ACTIVE LINK */
-(function(){
-  const nav = document.getElementById('mainNav');
-  const links = document.querySelectorAll('.nav-links a, .mobile-nav a');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 12);
-    let current = '';
-    document.querySelectorAll('section[id]').forEach(s => {
-      if(window.scrollY >= s.offsetTop - 100) current = s.id;
-    });
-    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-  }, {passive:true});
-})();
+/* ---------- HELPERS ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const root = document.documentElement;
 
-/* SCROLL REVEAL — single, uniform, no cascade */
-const srObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
-}, {threshold:0.08});
-document.querySelectorAll('.sr').forEach(n => srObserver.observe(n));
+/* ---------- THEME ---------- */
+const themeBtn = $('#theme');
+let theme = 'dark';
+try{theme = localStorage.getItem('theme') || 'dark'}catch(e){}
+function applyTheme(t){root.setAttribute('data-theme',t);themeBtn.textContent = t==='dark'?'☀':'☾'}
+applyTheme(theme);
+themeBtn.addEventListener('click',()=>{theme = root.getAttribute('data-theme')==='dark'?'light':'dark';applyTheme(theme);try{localStorage.setItem('theme',theme)}catch(e){}});
 
-/* FLIP CARDS */
-document.querySelectorAll('[data-flip]').forEach(scene => {
-  const card = scene.querySelector('.flip-card');
-  function toggle(){
-    const flipped = card.classList.toggle('flipped');
-    card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
-  }
-  card.addEventListener('click', e => { if(!e.target.closest('a')) toggle(); });
-  card.addEventListener('keydown', e => {
-    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
-  });
-});
-
-/* RESUME OVERLAY */
-const RESUME_URL = 'Assets/IsaacDidde_Resume.pdf';
-const overlay = document.getElementById('resumeOverlay');
-const frame = document.getElementById('resumeFrame');
-const dlBtn = document.getElementById('resumeDownload');
-const resBody = document.getElementById('resumeBody');
-let loaded = false;
-
-function openResume(){
-  overlay.hidden = false;
-  document.body.style.overflow = 'hidden';
-  dlBtn.href = RESUME_URL;
-  if(!loaded){
-    frame.style.opacity = '0';
-    const loading = document.createElement('div');
-    loading.className = 'r-loading'; loading.id = 'rLoading';
-    loading.innerHTML = '<div class="r-spinner"></div><span>Loading resume…</span>';
-    resBody.prepend(loading);
-    frame.src = RESUME_URL + '#toolbar=0&navpanes=0';
-    let fbTimer = setTimeout(() => {
-      if(!loaded){
-        document.getElementById('rLoading')?.remove();
-        frame.style.display = 'none';
-        const fb = document.createElement('div');
-        fb.className = 'r-fallback';
-        fb.innerHTML = 'Preview unavailable. <a href="' + RESUME_URL + '" download>Download the resume PDF</a>.';
-        resBody.appendChild(fb);
-      }
-    }, 3500);
-    frame.onload = () => {
-      clearTimeout(fbTimer);
-      document.getElementById('rLoading')?.remove();
-      frame.style.opacity = '1';
-      loaded = true;
-    };
-    frame.onerror = () => {
-      clearTimeout(fbTimer);
-      document.getElementById('rLoading')?.remove();
-      frame.style.display = 'none';
-      const fb = document.createElement('div');
-      fb.className = 'r-fallback';
-      fb.innerHTML = 'Could not load PDF. <a href="' + RESUME_URL + '" download>Download it directly</a>.';
-      resBody.appendChild(fb);
-    };
-  }
+/* ---------- NAV ---------- */
+const nav = $('#nav'), burger = $('#burger'), mnav = $('#mnav');
+burger.addEventListener('click',()=>mnav.classList.toggle('open'));
+mnav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mnav.classList.remove('open')));
+const links = document.querySelectorAll('.nav-links a');
+const secs = [...links].map(a=>$(a.getAttribute('href')));
+function onScroll(){
+  nav.classList.toggle('scrolled',scrollY>12);
+  let cur=0; secs.forEach((s,i)=>{ if(scrollY+140>=s.offsetTop) cur=i; });
+  links.forEach((a,i)=>a.classList.toggle('active',i===cur));
 }
-function closeResume(){
-  overlay.hidden = true;
-  document.body.style.overflow = '';
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+$('#yr').textContent = new Date().getFullYear();
+
+/* ---------- REVEAL ---------- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+
+/* ---------- ROLE ROTATOR (fade in / fade out) ---------- */
+const roles = ['SOC Analyst L1','Tier 1 SOC Analyst','Threat Detection Analyst','Incident Response Analyst','IT Support / Service Desk'];
+const rot = $('#rotator'); let ri = 0;
+setInterval(()=>{
+  rot.classList.add('out');
+  setTimeout(()=>{ri=(ri+1)%roles.length;rot.textContent=roles[ri];rot.classList.remove('out')},500);
+},2800);
+
+/* ---------- PROJECTS: show more / show less ---------- */
+const STEP = 3; let shown = STEP;
+const grid = $('#pgrid'), more = $('#showMore'), less = $('#showLess'), count = $('#pcount');
+function card(p,i){
+  return `<article class="pcard" style="animation-delay:${(i%STEP)*80}ms">
+    <div class="ptop"><span class="ptype ${p.type}">${p.type}</span><span class="pyear">${esc(p.year)}</span></div>
+    <h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>
+    <div class="ptags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>
+    <div class="pfoot"><span class="pmitre">${esc(p.mitre)}</span><a class="plink" href="${esc(p.link)}" target="_blank" rel="noopener">View →</a></div>
+  </article>`;
 }
-document.getElementById('resumeBtn').addEventListener('click', openResume);
-document.getElementById('resumeClose').addEventListener('click', closeResume);
-document.getElementById('resumeBackdrop').addEventListener('click', closeResume);
-document.addEventListener('keydown', e => { if(e.key === 'Escape' && !overlay.hidden) closeResume(); });
+function renderProjects(prevShown){
+  if(prevShown===undefined || shown<prevShown){
+    grid.innerHTML = ITEMS.slice(0,shown).map(card).join('');
+  } else {
+    grid.insertAdjacentHTML('beforeend',ITEMS.slice(prevShown,shown).map((p,i)=>card(p,i)).join(''));
+  }
+  more.hidden = shown>=ITEMS.length;
+  less.hidden = shown<=STEP;
+  count.textContent = `Showing ${Math.min(shown,ITEMS.length)} of ${ITEMS.length}`;
+}
+more.addEventListener('click',()=>{const p=shown;shown=Math.min(shown+STEP,ITEMS.length);renderProjects(p)});
+less.addEventListener('click',()=>{const p=shown;const rem=shown%STEP||STEP;shown=Math.max(STEP,shown-(shown===ITEMS.length?rem:STEP));renderProjects(p);if(shown===STEP)$('#projects').scrollIntoView({behavior:'smooth'})});
+renderProjects();
+
+/* ---------- SKILLS ---------- */
+const cats = ['All',...new Set(SKILLS.map(s=>s.c))];
+const fEl = $('#filters'), sEl = $('#skills'); let curCat='All';
+function renderFilters(){fEl.innerHTML = cats.map(c=>`<button class="fbtn ${c===curCat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}
+function renderSkills(){
+  sEl.innerHTML = SKILLS.map((s,i)=>({s,i})).filter(o=>curCat==='All'||o.s.c===curCat)
+    .map(o=>`<button class="skill" data-i="${o.i}">${esc(o.s.n)}<small>${o.s.u.length}</small></button>`).join('');
+}
+fEl.addEventListener('click',e=>{const b=e.target.closest('.fbtn');if(!b)return;curCat=b.dataset.c;renderFilters();renderSkills()});
+sEl.addEventListener('click',e=>{const b=e.target.closest('.skill');if(!b)return;openSkill(SKILLS[b.dataset.i])});
+renderFilters(); renderSkills();
+
+/* ---------- MODALS ---------- */
+const sm = $('#skillModal'), rm = $('#resumeModal'); let lastFocus=null;
+function openModal(m){lastFocus=document.activeElement;m.hidden=false;document.body.style.overflow='hidden';const c=m.querySelector('[data-close]:not(.modal-bg)');c&&c.focus()}
+function closeModal(m){m.hidden=true;document.body.style.overflow='';lastFocus&&lastFocus.focus&&lastFocus.focus()}
+function openSkill(s){
+  $('#smCat').textContent = s.c; $('#smTitle').textContent = s.n;
+  $('#smList').innerHTML = s.u.map(u=>`<li><b>${esc(u[0])}</b><p>${esc(u[1])}</p>${u[2]&&u[2]!=='#'?`<a href="${esc(u[2])}" target="_blank" rel="noopener">View on GitHub →</a>`:''}</li>`).join('');
+  openModal(sm);
+}
+[sm,rm].forEach(m=>m.addEventListener('click',e=>{if(e.target.closest('[data-close]'))closeModal(m)}));
+addEventListener('keydown',e=>{if(e.key==='Escape'){if(!sm.hidden)closeModal(sm);if(!rm.hidden)closeModal(rm)}});
+let rLoaded=false;
+function openResume(){ if(!rLoaded){$('#rFrame').src='Assets/IsaacDidde_Resume.pdf#toolbar=0&navpanes=0';rLoaded=true} openModal(rm) }
+$('#viewResume').addEventListener('click',openResume);
+$('#navResume').addEventListener('click',openResume);
+
+/* ---------- CONTACT FORM (mailto) ---------- */
+$('#cform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=$('#fName').value.trim(), em=$('#fEmail').value.trim(), sub=$('#fSub').value.trim()||'Portfolio enquiry', msg=$('#fMsg').value.trim();
+  const body = `${msg}\n\n— ${n} (${em})`;
+  location.href = `mailto:diddeisaac@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+});
 </script>
-
 </body>
 </html>
